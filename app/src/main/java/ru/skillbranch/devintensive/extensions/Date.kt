@@ -6,7 +6,69 @@ import java.util.*
 
 enum class TimeUnits
 {
-    SECOND, MINUTE, HOUR, DAY
+    SECOND, MINUTE, HOUR, DAY;
+
+    fun plural(value: Int) : String?
+    {
+        var _value: Int = value
+        var result: String =""
+
+        when(this)
+        {
+            SECOND -> when (_value% 10)
+                    {
+                        1->if (_value%100!= 11)
+                        {
+                            result = "$_value секунду"
+                        } else result = "$_value секунд"
+                        2,3,4-> if (_value%100 !in 12..14)
+                        {
+                            result = "$_value секунды"
+                        } else result = "$_value секунд"
+                        else-> result = "$_value секунд"
+                    }
+
+            MINUTE-> when (_value%10)
+            {
+                1->if (_value%100!= 11)
+                {
+                    result = "$_value минуту"
+                } else result = "$_value минут"
+                2,3,4->if (_value%100 !in 12..14)
+                {
+                    result = "$_value минуты"
+                } else result = "$_value минут"
+                else -> result = "$_value минут"
+            }
+
+            HOUR-> when (_value%10)
+            {
+                1->if (_value%100!= 11)
+                {
+                    result = "$_value час"
+                } else result = "$_value часов"
+                2,3,4->if (_value%100 !in 12..14)
+                {
+                    result = "$_value часа"
+                } else result = "$_value часов"
+                else -> result = "$_value часов"
+            }
+
+            DAY-> when (_value%10)
+            {
+                1->if (_value%100!= 11)
+                {
+                    result = "$_value день"
+                } else result = "$_value дней"
+                2,3,4->if (_value%100 !in 12..14)
+                {
+                    result = "$_value дня"
+                } else result = "$_value дней"
+                else -> result = "$_value дней"
+            }
+        }
+        return "$result"
+    }
 }
 
 const val SECOND = 1000L
