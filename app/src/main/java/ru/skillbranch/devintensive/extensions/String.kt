@@ -23,17 +23,6 @@ fun String.truncate(value: Int = 16) : String?
     }
 }
 
-//fun String.stripHtml() : String?
-//{
-//    var result = this
-//    result = result.replace(Regex("\\<[^>]*>"),"")
-//    //result = result.replace(Regex("&\\d+;|&\\w+"),"")
-//    result = result.replace(Regex("&[^ а-я]{1,4}?;"),"")
-//    result = result.replace(Regex("&lt;[^&gt;]*"),"")
-//
-//    return "$result"
-//}
-
 fun String.stripHtml(): String? = this.replace(Regex("\\<[^>]*>"), "").
     replace(Regex("&[^ а-я]{1,4}?;"), "").
     replace(Regex("[^\\S\\r\\n]+"), " ")
