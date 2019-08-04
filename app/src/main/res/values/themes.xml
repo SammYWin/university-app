@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
@@ -8,7 +9,9 @@
         <item name="colorAccent">@color/color_accent</item>
 
         <item name="colorAccentedSurface">@color/color_primary_light</item>
-        <item name="ColorIcon">@color/color_grey</item>
+        <item name="colorIcon">@color/color_grey</item>
         <item name="colorDivider">@color/color_divider_dark</item>
+
     </style>
+
 </resources>

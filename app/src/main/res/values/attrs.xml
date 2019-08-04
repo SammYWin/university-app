@@ -6,5 +6,5 @@
 
     <attr name="colorAccentedSurface" format="reference"/>
     <attr name="colorDivider" format="reference"/>
-    <attr name="ColorIcon" format="reference"/>
+    <attr name="colorIcon" format="reference"/>
 </resources>
