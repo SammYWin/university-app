@@ -1,6 +1,8 @@
 package ru.skillbranch.devintensive.utils
 
+import android.content.res.Resources
 import android.service.voice.AlwaysOnHotwordDetector
+import androidx.annotation.Px
 
 object Utils
 {
@@ -122,4 +124,7 @@ object Utils
         }
         return name
     }
+
+    fun convertDpToPx(dp : Int) = (dp * Resources.getSystem().displayMetrics.density).toInt()
+    fun convertPxToDp(px : Int) = (px / Resources.getSystem().displayMetrics.density).toInt()
 }
