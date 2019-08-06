@@ -13,4 +13,8 @@
         <item name="android:statusBarColor">@android:color/black</item>
 
     </style>
+
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/ic_splash</item>
+    </style>
 </resources>
