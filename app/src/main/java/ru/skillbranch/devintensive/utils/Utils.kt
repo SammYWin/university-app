@@ -125,6 +125,6 @@ object Utils
         return name
     }
 
-    fun convertDpToPx(dp : Int) = (dp * Resources.getSystem().displayMetrics.density).toInt()
+    fun convertDpToPx(dp : Float) = (dp * Resources.getSystem().displayMetrics.density).toInt()
     fun convertPxToDp(px : Int) = (px / Resources.getSystem().displayMetrics.density).toInt()
 }
