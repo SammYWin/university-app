@@ -1,12 +1,13 @@
 package ru.skillbranch.devintensive.ui.profile
 
-import android.graphics.Color
-import android.graphics.ColorFilter
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
+import android.app.ActionBar
+import android.graphics.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -20,6 +21,7 @@ import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.extensions.hideKeyboard
 import ru.skillbranch.devintensive.models.Bender
 import ru.skillbranch.devintensive.models.Profile
+import ru.skillbranch.devintensive.utils.Utils
 import ru.skillbranch.devintensive.viewmodels.ProfileViewModel
 import java.lang.IllegalStateException
 
@@ -80,28 +82,6 @@ class ProfileActivity : AppCompatActivity()
         outState.putBoolean(IS_EDIT_MODE, isEditMode)
     }
 
-    private fun initViewModel()
-    {
-        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-        viewModel.getProfileData().observe(this, Observer { updateUI(it) })
-        viewModel.getTheme().observe(this, Observer { updateTheme(it) })
-    }
-
-    private fun updateTheme(mode: Int) {
-        delegate.setLocalNightMode(mode)
-        Log.d("M_ProfileActivity", "updatedTheme")
-    }
-
-    private fun updateUI(profile: Profile)
-    {
-        profile.toMap().also{
-            for((k,v) in viewFields)
-            {
-                v.text = it[k].toString()
-            }
-        }
-    }
-
     private fun initViews(savedInstanceState: Bundle?)
     {
         viewFields = mapOf(
@@ -119,14 +99,26 @@ class ProfileActivity : AppCompatActivity()
         showCurrentMode(isEditMode)
 
         btn_edit.setOnClickListener{
+            viewModel.onRepoEditCompleted(wr_repository.isErrorEnabled)
+
             if(isEditMode) saveProfileInfo()
             isEditMode = !isEditMode
             showCurrentMode(isEditMode)
+
         }
 
         btn_switch_theme.setOnClickListener{
             viewModel.switchTheme()
         }
+
+        et_repository.addTextChangedListener(object: TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun afterTextChanged(p0: Editable?)
+            {
+                viewModel.onRepositoryChanged(p0.toString())
+            }
+        })
     }
 
     private fun showCurrentMode(isEdit: Boolean)
@@ -166,6 +158,77 @@ class ProfileActivity : AppCompatActivity()
 
     }
 
+    private fun initViewModel()
+    {
+        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        viewModel.getProfileData().observe(this, Observer { updateUI(it) })
+        viewModel.getTheme().observe(this, Observer { updateTheme(it) })
+        viewModel.getRepositoryError().observe(this, Observer { updateRepoError(it) })
+        viewModel.getIsRepoError().observe(this, Observer { updateRepository(it) })
+    }
+
+    private fun updateRepository(isError: Boolean) {
+        if (isError) et_repository.text.clear()
+    }
+
+    private fun updateRepoError(isError: Boolean) {
+        wr_repository.isErrorEnabled = isError
+        wr_repository.error = if (isError) "Невалидный адрес репозитория" else null
+    }
+
+    private fun updateTheme(mode: Int) {
+        delegate.setLocalNightMode(mode)
+        Log.d("M_ProfileActivity", "updatedTheme")
+    }
+
+    private fun updateUI(profile: Profile)
+    {
+        profile.toMap().also{
+            for((k,v) in viewFields)
+            {
+                v.text = it[k].toString()
+            }
+        }
+
+        updateAvatar(profile)
+    }
+
+    private fun updateAvatar(profile: Profile)
+    {
+        Utils.toInitials(profile.firstName, profile.lastName)?.let {
+            val avatar = getTextAvatar(it)
+            iv_avatar.setImageBitmap(avatar)
+        }?: iv_avatar.setImageResource(R.drawable.avatar_default)
+    }
+
+    private fun getTextAvatar(text: String): Bitmap
+    {
+        val color = TypedValue()
+        theme.resolveAttribute(R.attr.colorAccent, color,true)
+
+        var bitmap: Bitmap = Bitmap.createBitmap(ic_avatar.layoutParams.width,ic_avatar.layoutParams.height,
+            Bitmap.Config.ARGB_8888)
+
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        paint.textSize = 38f
+        paint.color = Color.WHITE
+        paint.textAlign = Paint.Align.CENTER
+
+        val canvas = Canvas(bitmap)
+        canvas.drawColor(color.data)
+
+        if (text.isNotEmpty())
+        {
+            val textBounds = Rect()
+            paint.getTextBounds(text,0,text.length,textBounds)
+
+            canvas.drawText(text,ic_avatar.layoutParams.width/2f,
+                ic_avatar.layoutParams.height/2f + textBounds.height()/2f, paint)
+        }
+
+        return bitmap
+    }
+
     private fun saveProfileInfo()
     {
         Profile(
@@ -177,6 +240,7 @@ class ProfileActivity : AppCompatActivity()
             viewModel.saveProfileData(this)
         }
     }
+
 
 
 }

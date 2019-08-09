@@ -3,11 +3,14 @@ package ru.skillbranch.devintensive.ui.custom
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.widget.ImageView
 import androidx.annotation.ColorRes
 import androidx.annotation.Dimension
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.view.drawToBitmap
+import kotlinx.android.synthetic.main.activity_main.view.*
 import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.utils.Utils
 import kotlin.math.min
@@ -59,18 +62,24 @@ class CircleImageView @JvmOverloads constructor(
         invalidate()
     }
 
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        super.onLayout(changed, left, top, right, bottom)
+
+
+    }
+
     override fun onDraw(canvas: Canvas)
     {
         var bitmap = getBitmapFromDrawable() ?: return
-
-          bitmap = getScaledBitmap(bitmap, width)
-          //bitmap = cropCenterBitmap(bitmap)
-          bitmap = makeCircleBitmap(bitmap)
+        bitmap = getScaledBitmap(bitmap, width)
+        bitmap = cropCenterBitmap(bitmap)
+        bitmap = makeCircleBitmap(bitmap)
 
         if (borderWidth > 0)
             bitmap = createRoundBorderBitmap(bitmap, borderWidth, borderColor)
 
         canvas.drawBitmap(bitmap,0f,0f, null)
+
     }
 
     private fun getBitmapFromDrawable(): Bitmap?
@@ -99,9 +108,9 @@ class CircleImageView @JvmOverloads constructor(
         val newHeight = (bitmap.height) / 2
 
         if(bitmap.height >= bitmap.width) {
-            return Bitmap.createBitmap(bitmap, newHeight - newWidth, 0, bitmap.height, bitmap.height)
+            return Bitmap.createBitmap(bitmap, 0, newHeight - newWidth, bitmap.width, bitmap.width)
         }else{
-            return Bitmap.createBitmap(bitmap, 0 , newWidth - newHeight, bitmap.width, bitmap.width)
+            return Bitmap.createBitmap(bitmap,  newWidth - newHeight, 0, bitmap.height, bitmap.height)
         }
     }
 
