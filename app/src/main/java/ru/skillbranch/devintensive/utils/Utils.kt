@@ -41,87 +41,89 @@ object Utils
 
     fun transliteration(payload: String, divider: String = " "): String
     {
-        var name : String = payload
-        var map : HashMap<String, String> = hashMapOf(
-            "а" to "a",
+        var name: String = payload
+        if(!name.isNullOrBlank())
+        {
+            var map: HashMap<String, String> = hashMapOf(
+                "а" to "a",
 
-            "б" to "b",
+                "б" to "b",
 
-            "в" to "v",
+                "в" to "v",
 
-            "г" to "g",
+                "г" to "g",
 
-            "д" to "d",
+                "д" to "d",
 
-            "е" to "e",
+                "е" to "e",
 
-            "ё" to "e",
+                "ё" to "e",
 
-            "ж" to "zh",
+                "ж" to "zh",
 
-            "з" to "z",
+                "з" to "z",
 
-            "и" to "i",
+                "и" to "i",
 
-            "й" to "i",
+                "й" to "i",
 
-            "к" to "k",
+                "к" to "k",
 
-            "л" to "l",
+                "л" to "l",
 
-            "м" to "m",
+                "м" to "m",
 
-            "н" to "n",
+                "н" to "n",
 
-            "о" to "o",
+                "о" to "o",
 
-            "п" to "p",
+                "п" to "p",
 
-            "р" to "r",
+                "р" to "r",
 
-            "с" to "s",
+                "с" to "s",
 
-            "т" to "t",
+                "т" to "t",
 
-            "у" to "u",
+                "у" to "u",
 
-            "ф" to "f",
+                "ф" to "f",
 
-            "х" to "h",
+                "х" to "h",
 
-            "ц" to "c",
+                "ц" to "c",
 
-            "ч" to "ch",
+                "ч" to "ch",
 
-            "ш" to "sh",
+                "ш" to "sh",
 
-            "щ" to "sh'",
+                "щ" to "sh'",
 
-            "ъ" to "",
+                "ъ" to "",
 
-            "ы" to "i",
+                "ы" to "i",
 
-            "ь" to "",
+                "ь" to "",
 
-            "э" to "e",
+                "э" to "e",
 
-            "ю" to "yu",
+                "ю" to "yu",
 
-            "я" to "ya"
-        )
+                "я" to "ya"
+            )
 
-        name = name.replace(" ", divider)
+            name = name.replace(" ", divider)
 
-        name.forEach{
-            if(map[it.toLowerCase().toString()] != null)
-            {
-                if (it.isUpperCase())
-                {
-                    val tempIt = it.toLowerCase()
-                    name = name.replace(it.toString(), map[tempIt.toString()].toString().capitalize())
-                } else name = name.replace(it.toString(), map[it.toString()].toString())
+            name.forEach {
+                if (map[it.toLowerCase().toString()] != null) {
+                    if (it.isUpperCase()) {
+                        val tempIt = it.toLowerCase()
+                        name = name.replace(it.toString(), map[tempIt.toString()].toString().capitalize())
+                    } else name = name.replace(it.toString(), map[it.toString()].toString())
+                }
             }
         }
+        else name = ""
         return name
     }
 

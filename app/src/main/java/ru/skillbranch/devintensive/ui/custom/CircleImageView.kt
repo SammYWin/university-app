@@ -21,7 +21,7 @@ class CircleImageView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : ImageView(context ,attrs,defStyleAttr)
 {
-    companion object{
+    companion object {
         private const val DEFAULT_BORDER_COLOR = Color.WHITE
         private const val DEFAULT_BORDER_WIDTH = 2F
     }
@@ -66,7 +66,9 @@ class CircleImageView @JvmOverloads constructor(
         super.onLayout(changed, left, top, right, bottom)
 
 
+
     }
+
 
     override fun onDraw(canvas: Canvas)
     {
@@ -77,20 +79,18 @@ class CircleImageView @JvmOverloads constructor(
 
         if (borderWidth > 0)
             bitmap = createRoundBorderBitmap(bitmap, borderWidth, borderColor)
-
         canvas.drawBitmap(bitmap,0f,0f, null)
-
     }
 
-    private fun getBitmapFromDrawable(): Bitmap?
+    private fun getBitmapFromDrawable(): Bitmap ?
     {
         if (drawable != null)
-        {
+       {
             if(drawable is BitmapDrawable)
                 return (drawable as BitmapDrawable).bitmap
             else return drawable.toBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
-        }
-        else return null
+       }
+       else return null
     }
 
     private fun getScaledBitmap(bitmap: Bitmap, size: Int) : Bitmap
