@@ -14,6 +14,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.graphics.drawable.toDrawable
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_main.*
@@ -34,6 +35,7 @@ class ProfileActivity : AppCompatActivity()
 
     private lateinit var viewModel: ProfileViewModel
     var isEditMode = false
+    var isAvatarSet = true
     lateinit var viewFields: Map<String, TextView>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -189,16 +191,17 @@ class ProfileActivity : AppCompatActivity()
                 v.text = it[k].toString()
             }
         }
-
-        updateAvatar(profile)
+        if(!isAvatarSet)
+            updateDefaultAvatar(profile)
     }
 
-    private fun updateAvatar(profile: Profile)
+    private fun updateDefaultAvatar(profile: Profile)
     {
         Utils.toInitials(profile.firstName, profile.lastName)?.let {
             val avatar = getTextAvatar(it)
             iv_avatar.setImageBitmap(avatar)
-        }?: iv_avatar.setImageResource(R.drawable.avatar_default)
+        } ?: iv_avatar.setImageResource(R.drawable.avatar_default)
+
     }
 
     private fun getTextAvatar(text: String): Bitmap
@@ -217,14 +220,12 @@ class ProfileActivity : AppCompatActivity()
         val canvas = Canvas(bitmap)
         canvas.drawColor(color.data)
 
-        if (text.isNotEmpty())
-        {
-            val textBounds = Rect()
-            paint.getTextBounds(text,0,text.length,textBounds)
+        val textBounds = Rect()
+        paint.getTextBounds(text,0,text.length,textBounds)
 
-            canvas.drawText(text,ic_avatar.layoutParams.width/2f,
-                ic_avatar.layoutParams.height/2f + textBounds.height()/2f, paint)
-        }
+        canvas.drawText(text,ic_avatar.layoutParams.width/2f,
+            ic_avatar.layoutParams.height/2f + textBounds.height()/2f, paint)
+
 
         return bitmap
     }
