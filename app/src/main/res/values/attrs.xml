@@ -9,6 +9,12 @@
         <attr name="cv_borderWidth" format="dimension"/>
     </declare-styleable>
 
+    <declare-styleable name="AvatarImageView">
+        <attr name="av_borderColor" format="color"/>
+        <attr name="av_borderWidth" format="dimension"/>
+        <attr name="av_initials" format="string"/>
+    </declare-styleable>
+
     <attr name="colorAccentedSurface" format="reference"/>
     <attr name="colorDivider" format="reference"/>
     <attr name="colorIcon" format="reference"/>

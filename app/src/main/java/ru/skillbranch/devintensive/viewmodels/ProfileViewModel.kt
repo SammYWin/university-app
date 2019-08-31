@@ -49,6 +49,7 @@ class ProfileViewModel : ViewModel()
             appTheme.value = AppCompatDelegate.MODE_NIGHT_YES
         }
         repository.saveAppTheme(appTheme.value!!)
+
     }
 
     fun onRepositoryChanged(repoText: String)

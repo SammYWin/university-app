@@ -1,6 +1,5 @@
 package ru.skillbranch.devintensive.ui.profile
 
-import android.app.ActionBar
 import android.graphics.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,23 +7,17 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.util.TypedValue
-import android.view.KeyEvent
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.graphics.drawable.toDrawable
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_profile.*
 import ru.skillbranch.devintensive.R
-import ru.skillbranch.devintensive.extensions.hideKeyboard
-import ru.skillbranch.devintensive.models.Bender
 import ru.skillbranch.devintensive.models.Profile
 import ru.skillbranch.devintensive.utils.Utils
+import ru.skillbranch.devintensive.utils.Utils.convertSpToPx
 import ru.skillbranch.devintensive.viewmodels.ProfileViewModel
-import java.lang.IllegalStateException
 
 class ProfileActivity : AppCompatActivity()
 {
@@ -41,7 +34,7 @@ class ProfileActivity : AppCompatActivity()
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_profile)
         initViews(savedInstanceState)
         initViewModel()
         Log.d("M_MainActivity", "onCreate")
@@ -213,7 +206,7 @@ class ProfileActivity : AppCompatActivity()
             Bitmap.Config.ARGB_8888)
 
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-        paint.textSize = 38f
+        paint.textSize = convertSpToPx(16)
         paint.color = Color.WHITE
         paint.textAlign = Paint.Align.CENTER
 

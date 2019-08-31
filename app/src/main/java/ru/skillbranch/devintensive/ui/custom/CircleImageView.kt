@@ -10,12 +10,12 @@ import androidx.annotation.ColorRes
 import androidx.annotation.Dimension
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.drawToBitmap
-import kotlinx.android.synthetic.main.activity_main.view.*
+import kotlinx.android.synthetic.main.activity_profile.view.*
 import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.utils.Utils
 import kotlin.math.min
 
-class CircleImageView @JvmOverloads constructor(
+open class CircleImageView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
@@ -62,14 +62,6 @@ class CircleImageView @JvmOverloads constructor(
         invalidate()
     }
 
-    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
-        super.onLayout(changed, left, top, right, bottom)
-
-
-
-    }
-
-
     override fun onDraw(canvas: Canvas)
     {
         var bitmap = getBitmapFromDrawable() ?: return
@@ -114,7 +106,7 @@ class CircleImageView @JvmOverloads constructor(
         }
     }
 
-    private fun makeCircleBitmap(bitmap: Bitmap): Bitmap
+    fun makeCircleBitmap(bitmap: Bitmap): Bitmap
     {
         val smallest = min(bitmap.width, bitmap.height)
         val outputBmp = Bitmap.createBitmap(smallest, smallest, Bitmap.Config.ARGB_8888)
@@ -123,12 +115,12 @@ class CircleImageView @JvmOverloads constructor(
 
         canvas.drawCircle(smallest / 2F, smallest / 2F, smallest.toFloat() / 2F, paint)
         paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
-        canvas.drawBitmap(bitmap, 0F, 0F,  paint)
+        canvas.drawBitmap(bitmap, 0F, 0F, paint)
 
         return outputBmp
     }
 
-    private fun createRoundBorderBitmap(bitmap: Bitmap, borderWidth: Int, borderColor: Int): Bitmap
+    fun createRoundBorderBitmap(bitmap: Bitmap, borderWidth: Int, borderColor: Int): Bitmap
     {
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint.style = Paint.Style.STROKE
