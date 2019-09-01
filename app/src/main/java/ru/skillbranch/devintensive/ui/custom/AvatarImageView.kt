@@ -59,7 +59,8 @@ class AvatarImageView @JvmOverloads constructor(
                 layoutParams.height/2f + textBounds.height()/2f, paint)
 
             subCanvas.drawBitmap(bitmap, 0f, 0f, null)
-            iv_avatar_single.setImageBitmap(bitmap)
+
+            this.setImageBitmap(bitmap)
         }
         super.onDraw(canvas)
     }
