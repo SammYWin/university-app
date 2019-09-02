@@ -37,10 +37,9 @@ class AvatarImageView @JvmOverloads constructor(
     }
 
     override fun onDraw(canvas: Canvas) {
-        if(drawable == null){
+        if(drawable == null && initials != null){
             val rand = Random.nextInt(bgColors.size)
-            val color = bgColors[rand].toColorInt() //TypedValue()
-            //context.theme.resolveAttribute(R.attr.colorAccent, color,true)
+            val color = bgColors[rand].toColorInt()
 
             var bitmap: Bitmap = Bitmap.createBitmap(width,height,Bitmap.Config.ARGB_8888)
 
@@ -55,8 +54,7 @@ class AvatarImageView @JvmOverloads constructor(
             val textBounds = Rect()
             paint.getTextBounds(initials,0,initials!!.length,textBounds)
 
-            subCanvas.drawText(initials,width/2f,
-                layoutParams.height/2f + textBounds.height()/2f, paint)
+            subCanvas.drawText(initials,width/2f, layoutParams.height/2f + textBounds.height()/2f, paint)
 
             subCanvas.drawBitmap(bitmap, 0f, 0f, null)
 

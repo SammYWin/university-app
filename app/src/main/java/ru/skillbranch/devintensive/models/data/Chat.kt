@@ -5,7 +5,6 @@ import ru.skillbranch.devintensive.extensions.shortFormat
 import ru.skillbranch.devintensive.models.BaseMessage
 import ru.skillbranch.devintensive.utils.Utils
 import java.util.*
-import ru.skillbranch.devintensive.models.data.ChatItem as ChatItem1
 
 data class Chat(
     val id: String,
@@ -34,10 +33,10 @@ data class Chat(
 
     private fun isSingle(): Boolean = members.size == 1
 
-    fun toChatItem(): ChatItem1 {
+    fun toChatItem(): ChatItem {
         return if (isSingle()) {
             val user = members.first()
-            ChatItem1(
+            ChatItem(
                 id,
                 user.avatar,
                 Utils.toInitials(user.firstName, user.lastName) ?: "??",
@@ -48,7 +47,7 @@ data class Chat(
                 user.isOnline
             )
         } else {
-            val chatItem = ChatItem1(
+            ChatItem(
                 id,
                 null,
                 "",
@@ -60,7 +59,6 @@ data class Chat(
                 ChatType.GROUP,
                 lastMessageShort().second
             )
-            chatItem
         }
     }
 }
