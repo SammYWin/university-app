@@ -85,8 +85,7 @@ class ChatAdapter(val listener : (ChatItem)->Unit) : RecyclerView.Adapter<ChatAd
 
         override fun bind(item: ChatItem, listener : (ChatItem)->Unit) {
             if (item.avatar == null) {
-                Glide.with(itemView)
-                    .clear(iv_avatar_single)
+                Glide.with(itemView).clear(iv_avatar_single)
                 iv_avatar_single.setInitials(item.initials)
             } else {
                 Glide.with(itemView)
