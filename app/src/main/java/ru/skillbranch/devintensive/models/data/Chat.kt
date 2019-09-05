@@ -2,7 +2,7 @@ package ru.skillbranch.devintensive.models.data
 
 import androidx.annotation.VisibleForTesting
 import ru.skillbranch.devintensive.extensions.shortFormat
-import ru.skillbranch.devintensive.models.BaseMessage
+import ru.skillbranch.devintensive.models.data.BaseMessage
 import ru.skillbranch.devintensive.utils.Utils
 import java.util.*
 
