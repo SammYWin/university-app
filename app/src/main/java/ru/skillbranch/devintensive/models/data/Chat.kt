@@ -1,13 +1,11 @@
 package ru.skillbranch.devintensive.models.data
 
-import android.app.Activity
-import android.content.res.Resources
 import androidx.annotation.VisibleForTesting
-import org.w3c.dom.Text
 import ru.skillbranch.devintensive.App
 import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.extensions.shortFormat
-import ru.skillbranch.devintensive.models.data.BaseMessage
+import ru.skillbranch.devintensive.models.BaseMessage
+import ru.skillbranch.devintensive.models.TextMessage
 import ru.skillbranch.devintensive.utils.Utils
 import java.util.*
 
