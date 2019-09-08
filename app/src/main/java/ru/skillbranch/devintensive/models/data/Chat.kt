@@ -1,6 +1,11 @@
 package ru.skillbranch.devintensive.models.data
 
+import android.app.Activity
+import android.content.res.Resources
 import androidx.annotation.VisibleForTesting
+import org.w3c.dom.Text
+import ru.skillbranch.devintensive.App
+import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.extensions.shortFormat
 import ru.skillbranch.devintensive.models.data.BaseMessage
 import ru.skillbranch.devintensive.utils.Utils
@@ -14,21 +19,23 @@ data class Chat(
     var isArchived: Boolean = false
 ) {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    fun unreadableMessageCount(): Int {
-        //TODO implement me
-        return 0
-    }
+    fun unreadableMessageCount(): Int = messages.filter{ message -> !message.isReaded }.count()
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    fun lastMessageDate(): Date? {
-        //TODO implement me
-        return Date()
-    }
+    fun lastMessageDate(): Date? = if(messages.isEmpty()) null else messages.last().date
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun lastMessageShort(): Pair<String, String?>{
-        //TODO implement me
-        return "Сообщение ещё нет" to "Лох"
+        val lastMessage = messages.lastOrNull()
+        var first =  App.applicationContext().resources.getString(R.string.chat_no_messages)
+        val second = lastMessage?.from?.firstName
+
+        if (lastMessage != null) {
+            first = if(lastMessage is TextMessage) lastMessage.text!!
+                    else "${lastMessage.from.firstName} - ${App.applicationContext().resources.getString(R.string.send_photo)}"
+        }
+
+        return first to second
     }
 
     private fun isSingle(): Boolean = members.size == 1
