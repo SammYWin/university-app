@@ -11,7 +11,7 @@ import java.util.*
 
 data class Chat(
     val id: String,
-    val title: String,
+    val title: String = "title",
     val members: List<User> = listOf(),
     var messages: MutableList<BaseMessage> = mutableListOf(),
     var isArchived: Boolean = false
@@ -26,7 +26,7 @@ data class Chat(
     fun lastMessageShort(): Pair<String, String?>{
         val lastMessage = messages.lastOrNull()
         var first =  App.applicationContext().resources.getString(R.string.chat_no_messages)
-        val second = lastMessage?.from?.firstName
+        val second = "@" + lastMessage?.from?.firstName
 
         if (lastMessage != null) {
             first = if(lastMessage is TextMessage) lastMessage.text!!

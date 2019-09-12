@@ -10,4 +10,5 @@
     <string name="snack_bar_undo">ОТМЕНА</string>
     <string name="chat_no_messages">Сообщение ещё нет</string>
     <string name="send_photo">отправил фото</string>
+    <string name="title_create_group">Создание группы</string>
 </resources>

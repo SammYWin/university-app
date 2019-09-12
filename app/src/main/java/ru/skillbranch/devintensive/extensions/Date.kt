@@ -115,34 +115,40 @@ fun Date.humanizeDiff(date: Date = Date()): String {
     when (value) {
         in 75 * SECOND..45 * MINUTE ->
             when (value / MINUTE % 10) {
-                1L -> if (value % 100 != 11L) {
+                1L -> if (value / MINUTE % 100 != 11L) {
                     result = "${(value / MINUTE).toInt()} минуту"
-                }
-                2L, 3L, 4L -> if (value % 100 !in 12L..14L) {
+                } else result = "${(value / MINUTE).toInt()} минут"
+
+                2L, 3L, 4L -> if (value / MINUTE % 100 !in 12L..14L) {
                     result = "${(value / MINUTE).toInt()} минуты"
-                }
+                } else result = "${(value / MINUTE).toInt()} минут"
+
                 else -> result = "${(value / MINUTE).toInt()} минут"
             }
         in 45 * MINUTE..75 * MINUTE -> result = "час"
         in 75 * MINUTE..22 * HOUR ->
             when (value / HOUR % 10) {
-                1L -> if (value % 100 != 11L) {
+                1L -> if (value / HOUR % 100 != 11L) {
                     result = "${(value / HOUR).toInt()} час"
-                }
-                2L, 3L, 4L -> if (value % 100 !in 12L..14L) {
+                } else result = "${(value / HOUR).toInt()} часов"
+
+                2L, 3L, 4L -> if (value / HOUR % 100 !in 12L..14L) {
                     result = "${(value / HOUR).toInt()} часа"
-                }
+                } else result = "${(value / HOUR).toInt()} часов"
+
                 else -> result = "${(value / HOUR).toInt()} часов"
             }
         in 22 * HOUR..26 * HOUR -> result = "день"
         in 22 * HOUR..360 * DAY ->
             when (value / DAY % 10) {
-                1L -> if (value % 100 != 11L) {
+                1L -> if (value / DAY % 100 != 11L) {
                     result = "${(value / DAY).toInt()} день"
-                }
-                2L, 3L, 4L -> if (value % 100 !in 12L..14L) {
+                } else result = "${(value / DAY).toInt()} дней"
+
+                2L, 3L, 4L -> if (value / DAY % 100 !in 12L..14L) {
                     result = "${(value / DAY).toInt()} дня"
-                }
+                }else result = "${(value / DAY).toInt()} дней"
+
                 else -> result = "${(value / DAY).toInt()} дней"
             }
         in 360 * DAY..Int.MAX_VALUE * DAY -> return if (inFuture) "более чем через год" else "более года назад"
