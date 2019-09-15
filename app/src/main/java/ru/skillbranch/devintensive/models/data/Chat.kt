@@ -6,12 +6,14 @@ import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.extensions.shortFormat
 import ru.skillbranch.devintensive.models.BaseMessage
 import ru.skillbranch.devintensive.models.TextMessage
+import ru.skillbranch.devintensive.repositories.ChatRepository
 import ru.skillbranch.devintensive.utils.Utils
+import ru.skillbranch.devintensive.viewmodels.MainViewModel
 import java.util.*
 
 data class Chat(
     val id: String,
-    val title: String = "title",
+    val title: String,
     val members: List<User> = listOf(),
     var messages: MutableList<BaseMessage> = mutableListOf(),
     var isArchived: Boolean = false
@@ -38,8 +40,9 @@ data class Chat(
 
     private fun isSingle(): Boolean = members.size == 1
 
+
     fun toChatItem(): ChatItem {
-        return if (isSingle()) {
+        return if (isSingle() && !isArchived) {
             val user = members.first()
             ChatItem(
                 id,
@@ -51,7 +54,7 @@ data class Chat(
                 lastMessageDate()?.shortFormat(),
                 user.isOnline
             )
-        } else {
+        } else if(!isArchived){
             ChatItem(
                 id,
                 null,
@@ -64,7 +67,35 @@ data class Chat(
                 ChatType.GROUP,
                 lastMessageShort().second
             )
+        } else{
+            val archivedChats = ChatRepository.loadChats().value!!
+                .filter { isArchived }
+                .sortedBy { lastMessageDate()}
+            ChatItem(
+                "-1",
+                null,
+                "",
+                App.applicationContext().resources.getString(R.string.item_archive_title),
+                archivedChats.last().lastMessageShort().first,
+                archivedChats.sumBy { unreadableMessageCount() },
+                archivedChats.last().lastMessageDate()?.shortFormat(),
+                chatType = ChatType.ARCHIVE,
+                author = archivedChats.last().lastMessageShort().second
+            )
         }
+    }
+
+    fun toArchiveChatItem() : ChatItem{
+        return ChatItem(
+            id,
+            null,
+            "",
+            "",
+            lastMessageShort().first,
+            unreadableMessageCount(),
+            lastMessageDate()?.shortFormat(),
+            chatType = ChatType.ARCHIVE
+        )
     }
 }
 

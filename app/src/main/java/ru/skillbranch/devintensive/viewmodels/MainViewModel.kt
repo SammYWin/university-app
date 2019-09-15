@@ -6,17 +6,31 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import ru.skillbranch.devintensive.extensions.mutableLiveData
+import ru.skillbranch.devintensive.models.data.Chat
 import ru.skillbranch.devintensive.models.data.ChatItem
+import ru.skillbranch.devintensive.models.data.ChatType
 import ru.skillbranch.devintensive.repositories.ChatRepository
 import ru.skillbranch.devintensive.utils.DataGenerator
 
 class MainViewModel : ViewModel() {
     private val query = mutableLiveData("")
     private val chatRepository = ChatRepository
+    private val archivedChats = mutableListOf<ChatItem>()
     private val chats = Transformations.map(chatRepository.loadChats()){ chats->
-        return@map chats.filter { !it.isArchived }
-            .map{it.toChatItem()}
-            .sortedBy { it.id.toInt() }
+            val archivedChats = chats
+                .filter { it.isArchived }
+                .map { it.toChatItem() }
+                .sortedBy { it.lastMessageDate }
+            if(archivedChats.isEmpty()){
+                return@map chats
+                    .map { it.toChatItem() }
+                    .sortedBy { it.id.toInt() }
+            } else{
+                val chatsWithArchiveItem = mutableListOf<ChatItem>()
+                chatsWithArchiveItem.add(0, archivedChats.last())
+                chatsWithArchiveItem.addAll((chats.filter { !it.isArchived }.map { it.toChatItem() }))
+                return@map chatsWithArchiveItem
+            }
     }
 
     fun getChatData() : LiveData<List<ChatItem>>{
@@ -28,6 +42,7 @@ class MainViewModel : ViewModel() {
 
             result.value = if(queryStr.isEmpty()) resChats
                             else resChats.filter { it.title.contains(queryStr, true) }
+
         }
 
         result.addSource(chats){FilterF.invoke()}
@@ -35,6 +50,10 @@ class MainViewModel : ViewModel() {
 
         return result
     }
+
+//    private fun getLastArchivedChatItem() : ChatItem? {
+//
+//    }
 
     fun addToArchive(id: String) {
         val chat = chatRepository.find(id)
