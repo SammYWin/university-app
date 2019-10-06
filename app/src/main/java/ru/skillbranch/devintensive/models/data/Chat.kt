@@ -42,7 +42,7 @@ data class Chat(
 
 
     fun toChatItem(): ChatItem {
-        return if (isSingle() && !isArchived) {
+        return if (isSingle()) {
             val user = members.first()
             ChatItem(
                 id,
@@ -54,7 +54,7 @@ data class Chat(
                 lastMessageDate()?.shortFormat(),
                 user.isOnline
             )
-        } else if(!isArchived){
+        } else {
             ChatItem(
                 id,
                 null,
@@ -67,34 +67,23 @@ data class Chat(
                 ChatType.GROUP,
                 lastMessageShort().second
             )
-        } else{
-            val archivedChats = ChatRepository.loadChats().value!!
-                .filter { isArchived }
-                .sortedBy { lastMessageDate()}
-            ChatItem(
-                "-1",
-                null,
-                "",
-                App.applicationContext().resources.getString(R.string.item_archive_title),
-                archivedChats.last().lastMessageShort().first,
-                archivedChats.sumBy { unreadableMessageCount() },
-                archivedChats.last().lastMessageDate()?.shortFormat(),
-                chatType = ChatType.ARCHIVE,
-                author = archivedChats.last().lastMessageShort().second
-            )
         }
     }
 
-    fun toArchiveChatItem() : ChatItem{
+    fun toArchiveChatItem(chats : List<Chat>) : ChatItem{
+        val archivedChats = chats
+            .filter { it.isArchived }
+            .sortedBy { it.lastMessageDate()}
         return ChatItem(
-            id,
+            "-1",
             null,
             "",
-            "",
-            lastMessageShort().first,
-            unreadableMessageCount(),
-            lastMessageDate()?.shortFormat(),
-            chatType = ChatType.ARCHIVE
+            App.applicationContext().resources.getString(R.string.item_archive_title),
+            archivedChats.last().lastMessageShort().first,
+            archivedChats.sumBy { it.unreadableMessageCount() },
+            archivedChats.last().lastMessageDate()?.shortFormat(),
+            chatType = ChatType.ARCHIVE,
+            author = archivedChats.last().lastMessageShort().second
         )
     }
 }

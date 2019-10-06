@@ -15,11 +15,10 @@ import ru.skillbranch.devintensive.utils.DataGenerator
 class MainViewModel : ViewModel() {
     private val query = mutableLiveData("")
     private val chatRepository = ChatRepository
-    private val archivedChats = mutableListOf<ChatItem>()
     private val chats = Transformations.map(chatRepository.loadChats()){ chats->
             val archivedChats = chats
                 .filter { it.isArchived }
-                .map { it.toChatItem() }
+                .map { it.toArchiveChatItem(chats) }
                 .sortedBy { it.lastMessageDate }
             if(archivedChats.isEmpty()){
                 return@map chats
@@ -50,10 +49,6 @@ class MainViewModel : ViewModel() {
 
         return result
     }
-
-//    private fun getLastArchivedChatItem() : ChatItem? {
-//
-//    }
 
     fun addToArchive(id: String) {
         val chat = chatRepository.find(id)
