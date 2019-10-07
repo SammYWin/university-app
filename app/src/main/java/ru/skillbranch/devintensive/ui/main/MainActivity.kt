@@ -75,10 +75,10 @@ class MainActivity : AppCompatActivity() {
 
         val touchCallback = ChatItemTouchHelperCallback(chatAdapter){
             viewModel.addToArchive(it.id)
-            Snackbar.make(rv_chat_list, "Вы точно хотите добавить ${it.title} в архив?", Snackbar.LENGTH_LONG)
-                .setAction(getString(R.string.snack_bar_undo)) {_-> viewModel.restoreFromArchive(it.id)}
-                .setActionTextColor(resources.getColor(R.color.color_accent , theme)).apply {
+            Snackbar.make(rv_chat_list, "Вы точно хотите добавить ${it.title}в архив?", Snackbar.LENGTH_LONG).apply {
                 view.setBackgroundColor(resources.getColor(R.color.color_primary, theme))}
+                .setAction(getString(R.string.snack_bar_undo)) {_-> viewModel.restoreFromArchive(it.id)}
+                .setActionTextColor(resources.getColor(R.color.color_accent , theme))
                 .show()
         }
         val touchHelper = ItemTouchHelper(touchCallback)

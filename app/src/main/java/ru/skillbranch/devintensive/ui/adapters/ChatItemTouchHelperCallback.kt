@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.models.data.ChatItem
+import ru.skillbranch.devintensive.repositories.ChatRepository
 
-class ChatItemTouchHelperCallback(val adapter: ChatAdapter, val swipeListener: (ChatItem) -> Unit) :
-    ItemTouchHelper.Callback() {
+class ChatItemTouchHelperCallback(val adapter: ChatAdapter, val swipeListener: (ChatItem) -> Unit) : ItemTouchHelper.Callback() {
 
     private val bgRect = RectF()
     private val iconBounds = Rect()
@@ -59,9 +59,10 @@ class ChatItemTouchHelperCallback(val adapter: ChatAdapter, val swipeListener: (
         isCurrentlyActive: Boolean
     ) {
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+            val isArchive : Boolean = recyclerView.id == R.id.rv_archive_list
             val itemView = viewHolder.itemView
             drawBackground(canvas, itemView, dX)
-            drawIcon(canvas, itemView, dX)
+            drawIcon(canvas, itemView, dX, isArchive)
         }
         super.onChildDraw(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
     }
@@ -81,8 +82,8 @@ class ChatItemTouchHelperCallback(val adapter: ChatAdapter, val swipeListener: (
         canvas.drawRect(bgRect, bgPaint)
     }
 
-    private fun drawIcon(canvas: Canvas, itemView: View, dX: Float) {
-        val icon = itemView.resources.getDrawable(R.drawable.ic_archive_black_24dp, itemView.context.theme)
+    private fun drawIcon(canvas: Canvas, itemView: View, dX: Float, isArchive : Boolean) {
+        val icon = itemView.resources.getDrawable( if(!isArchive) R.drawable.ic_archive_black_24dp else R.drawable.ic_unarchive_black_24dp, itemView.context.theme)
         val iconSize = itemView.resources.getDimensionPixelSize(R.dimen.icon_size)
         val space = itemView.resources.getDimensionPixelSize(R.dimen.spacing_normal_16)
         val margin = (itemView.bottom - itemView.top - iconSize) / 2
