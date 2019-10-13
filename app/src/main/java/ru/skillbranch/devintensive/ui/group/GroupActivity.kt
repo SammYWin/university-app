@@ -5,6 +5,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -104,14 +105,20 @@ class GroupActivity : AppCompatActivity() {
     }
 
     private fun addChipToGroup(user: UserItem) {
+        val closeIconColor = TypedValue()
+        val bgColor = TypedValue()
+        theme.resolveAttribute(R.attr.colorChipClose, closeIconColor, true)
+        theme.resolveAttribute(R.attr.colorChipBackground, bgColor, true)
+
+
         val chip = Chip(this).apply {
             text = user.fullName
             chipIcon = resources.getDrawable(R.drawable.avatar_default, theme)
             isCloseIconVisible = true
             tag = user.id
             isClickable = true
-            closeIconTint = ColorStateList.valueOf(Color.WHITE)
-            chipBackgroundColor = ColorStateList.valueOf(getColor(R.color.color_primary_light))
+            closeIconTint = ColorStateList.valueOf(closeIconColor.data)
+            chipBackgroundColor = ColorStateList.valueOf(bgColor.data)
 
             setTextColor(Color.WHITE)
             setOnCloseIconClickListener{viewModel.handleRemoveChip(tag.toString())}

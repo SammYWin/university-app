@@ -2,14 +2,9 @@
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
 android:color="@color/color_accent_secondary">
 
-    <item android:id="@android:id/mask">
-        <shape android:shape="oval">
-            <solid android:color="@color/color_accent_secondary"/>
-        </shape>
-    </item>
     <item android:id="@android:id/background">
         <shape android:shape="oval">
-            <solid android:color="#9CA9BA"/>
+            <solid android:color="@color/color_grey"/>
         </shape>
     </item>
 </ripple>

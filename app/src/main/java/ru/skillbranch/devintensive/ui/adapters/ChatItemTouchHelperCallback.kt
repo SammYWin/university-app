@@ -1,12 +1,19 @@
 package ru.skillbranch.devintensive.ui.adapters
 
+import android.app.Activity
+import android.app.Application
+import android.content.Context
+import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
+import android.util.TypedValue
 import android.view.View
+import androidx.appcompat.view.menu.MenuView
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import ru.skillbranch.devintensive.App
 import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.models.data.ChatItem
 import ru.skillbranch.devintensive.repositories.ChatRepository
@@ -68,6 +75,9 @@ class ChatItemTouchHelperCallback(val adapter: ChatAdapter, val swipeListener: (
     }
 
     private fun drawBackground(canvas: Canvas, itemView: View, dX: Float) {
+        val newColor = TypedValue()
+        itemView.context.theme.resolveAttribute(R.attr.colorSwipeBackground, newColor,true)
+
         with(bgRect) {
             left = itemView.right.toFloat() + dX
             top = itemView.top.toFloat()
@@ -76,14 +86,15 @@ class ChatItemTouchHelperCallback(val adapter: ChatAdapter, val swipeListener: (
         }
 
         with(bgPaint) {
-            color = itemView.resources.getColor(R.color.color_primary_dark, itemView.context.theme)
+            color = newColor.data
         }
 
         canvas.drawRect(bgRect, bgPaint)
     }
 
     private fun drawIcon(canvas: Canvas, itemView: View, dX: Float, isArchive : Boolean) {
-        val icon = itemView.resources.getDrawable( if(!isArchive) R.drawable.ic_archive_black_24dp else R.drawable.ic_unarchive_black_24dp, itemView.context.theme)
+        val icon = itemView.resources.getDrawable( if(!isArchive) R.drawable.ic_archive_black_24dp
+                            else R.drawable.ic_unarchive_black_24dp, itemView.context.theme)
         val iconSize = itemView.resources.getDimensionPixelSize(R.dimen.icon_size)
         val space = itemView.resources.getDimensionPixelSize(R.dimen.spacing_normal_16)
         val margin = (itemView.bottom - itemView.top - iconSize) / 2

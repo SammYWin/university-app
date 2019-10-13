@@ -11,8 +11,16 @@
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
         <item name="colorAccent">@color/color_accent</item>
 
+        <item name="colorBackgroundSurface">@android:color/white</item>
         <item name="colorAccentedSurface">@color/color_primary_light</item>
+        <item name="colorText">@color/color_grey_dark</item>
         <item name="colorIcon">@color/color_grey</item>
+        <item name="colorToolbar">@color/color_primary</item>
+        <item name="colorSwipeBackground">@color/color_primary</item>
+        <item name="colorItemSelected">@color/color_grey_light</item>
+        <item name="colorChipClose">@android:color/white</item>
+        <item name="colorChipBackground">@color/color_primary_light</item>
+        <item name="colorSnackBarText">@android:color/white</item>
         <item name="colorDivider">@color/color_divider_dark</item>
     </style>
 

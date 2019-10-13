@@ -1,7 +1,10 @@
 package ru.skillbranch.devintensive.ui.adapters
 
+import android.content.Context
+import android.content.res.Resources
 import android.graphics.Color
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -79,9 +82,19 @@ class ChatAdapter(val listener : (ChatItem)->Unit) : RecyclerView.Adapter<ChatAd
     inner class SingleViewHolder(convertView: View) : ChatItemViewHolder(convertView),
         ChatItemTouchHelperCallback.ItemTouchViewHolder {
 
-        override fun onItemSelected() = itemView.setBackgroundColor(Color.LTGRAY)
+        override fun onItemSelected(){
+            val color = TypedValue()
+            itemView.context.theme.resolveAttribute(R.attr.colorItemSelected, color, true)
 
-        override fun onItemCleared() = itemView.setBackgroundColor(Color.WHITE)
+            itemView.setBackgroundColor(color.data)
+        }
+
+        override fun onItemCleared(){
+            val color = TypedValue()
+            itemView.context.theme.resolveAttribute(R.attr.colorBackgroundSurface, color, true)
+
+            itemView.setBackgroundColor(color.data)
+        }
 
 
         override fun bind(item: ChatItem, listener : (ChatItem)->Unit) {
@@ -118,9 +131,19 @@ class ChatAdapter(val listener : (ChatItem)->Unit) : RecyclerView.Adapter<ChatAd
     inner class GroupViewHolder(convertView: View) : ChatItemViewHolder(convertView),
         ChatItemTouchHelperCallback.ItemTouchViewHolder {
 
-        override fun onItemSelected() = itemView.setBackgroundColor(Color.LTGRAY)
+        override fun onItemSelected(){
+            val color = TypedValue()
+            itemView.context.theme.resolveAttribute(R.attr.colorItemSelected, color, true)
 
-        override fun onItemCleared() = itemView.setBackgroundColor(Color.WHITE)
+            itemView.setBackgroundColor(color.data)
+        }
+
+        override fun onItemCleared(){
+            val color = TypedValue()
+            itemView.context.theme.resolveAttribute(R.attr.colorBackgroundSurface, color, true)
+
+            itemView.setBackgroundColor(color.data)
+        }
 
 
         override fun bind(item: ChatItem, listener : (ChatItem)->Unit) {

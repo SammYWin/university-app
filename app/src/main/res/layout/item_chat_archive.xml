@@ -6,13 +6,13 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/item_size"
         android:padding="@dimen/spacing_normal_16"
-        android:background="@android:color/white">
+        android:background="?attr/colorBackgroundSurface">
 
     <ImageView
             android:id="@+id/iv_archive_icon"
             android:layout_width="@dimen/avatar_item_size"
             android:layout_height="@dimen/avatar_item_size"
-            android:background="@drawable/archive_item_round_bg"
+            android:background="@drawable/bg_archive_item_round"
             android:src="@drawable/ic_archive_black_24dp"
             android:scaleType="center"/>
 
@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/item_archive_title"
-            android:textColor="@color/color_primary"
+            android:textColor="?attr/colorPrimary"
             android:fontFamily="sans-serif-medium"
             android:textSize="14sp"
             android:layout_toEndOf="@+id/iv_archive_icon"
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="\@John_Silverhand"
-            android:textColor="@color/color_primary"
+            android:textColor="?attr/colorPrimary"
             android:textSize="14sp"
             android:layout_below="@+id/tv_title_archive"
             android:layout_toEndOf="@+id/iv_archive_icon"
@@ -50,7 +50,7 @@
             android:layout_marginStart="@dimen/spacing_tiny_4"
             android:layout_marginEnd="@dimen/spacing_normal_16"
             tools:text="Wake the fuck up Samurai"
-            android:textColor="@color/color_grey_dark"
+            android:textColor="?attr/colorText"
             android:textSize="14sp"/>
 
     <TextView
@@ -61,7 +61,7 @@
             android:layout_alignParentTop="true"
             tools:text="18:56"
             android:textSize="10sp"
-            android:textColor="@color/color_grey_dark"/>
+            android:textColor="?attr/colorText"/>
 
     <TextView
             android:id="@+id/tv_counter_archive"

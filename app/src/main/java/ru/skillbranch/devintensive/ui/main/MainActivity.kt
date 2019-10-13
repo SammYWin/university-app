@@ -3,7 +3,9 @@ package ru.skillbranch.devintensive.ui.main
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.Menu
+import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -74,13 +76,25 @@ class MainActivity : AppCompatActivity() {
         val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
 
         val touchCallback = ChatItemTouchHelperCallback(chatAdapter){
+            val bgColor = TypedValue()
+            val actionTextColor = TypedValue()
+            val textColor = TypedValue()
+            theme.resolveAttribute(R.attr.colorPrimary, bgColor, true)
+            theme.resolveAttribute(R.attr.colorAccent, actionTextColor, true)
+            theme.resolveAttribute(R.attr.colorSnackBarText, textColor, true)
+
             viewModel.addToArchive(it.id)
-            Snackbar.make(rv_chat_list, "Вы точно хотите добавить ${it.title}в архив?", Snackbar.LENGTH_LONG).apply {
-                view.setBackgroundColor(resources.getColor(R.color.color_primary, theme))}
+            val snack = Snackbar.make(rv_chat_list, "Вы точно хотите добавить ${it.title}в архив?", Snackbar.LENGTH_LONG).apply {
+                view.setBackgroundColor(bgColor.data)}
                 .setAction(getString(R.string.snack_bar_undo)) {_-> viewModel.restoreFromArchive(it.id)}
-                .setActionTextColor(resources.getColor(R.color.color_accent , theme))
-                .show()
+                .setActionTextColor(actionTextColor.data)
+
+            val textView = snack.view.findViewById(R.id.snackbar_text) as TextView
+            textView.setTextColor(textColor.data)
+
+            snack.show()
         }
+
         val touchHelper = ItemTouchHelper(touchCallback)
         touchHelper.attachToRecyclerView(rv_chat_list)
 

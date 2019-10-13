@@ -4,7 +4,7 @@
                 xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
                 android:layout_height="@dimen/item_size"
                 android:padding="@dimen/spacing_normal_16"
-                android:background="@android:color/white">
+                android:background="?attr/colorBackgroundSurface">
 
     <ru.skillbranch.devintensive.ui.custom.AvatarImageView
             android:id="@+id/iv_avatar_group"
@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="chat title"
-            android:textColor="@color/color_primary"
+            android:textColor="?attr/colorPrimary"
             android:fontFamily="sans-serif-medium"
             android:textSize="14sp"
             android:layout_toEndOf="@+id/iv_avatar_group"
@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="\@John_Wick"
-            android:textColor="@color/color_primary"
+            android:textColor="?attr/colorPrimary"
             android:textSize="14sp"
             android:layout_toEndOf="@+id/iv_avatar_group"
             android:layout_marginRight="@dimen/spacing_tiny_4"
@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="You are breathtaking!"
-            android:textColor="@color/color_grey_dark"
+            android:textColor="?attr/colorText"
             android:textSize="14sp"
             android:layout_toEndOf="@+id/tv_message_author"
             android:layout_toStartOf="@+id/tv_counter_group"
@@ -55,7 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="10sp"
-            android:textColor="@color/color_grey_dark"
+            android:textColor="?attr/colorText"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             tools:text="18:56"/>
