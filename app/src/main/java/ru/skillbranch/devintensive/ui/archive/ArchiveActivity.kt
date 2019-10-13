@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_archive.*
 import ru.skillbranch.devintensive.R
+import ru.skillbranch.devintensive.extensions.config
 import ru.skillbranch.devintensive.ui.adapters.ChatAdapter
 import ru.skillbranch.devintensive.ui.adapters.ChatItemTouchHelperCallback
 import ru.skillbranch.devintensive.viewmodels.ArchiveViewModel
@@ -77,21 +78,19 @@ class ArchiveActivity : AppCompatActivity() {
         val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
 
         val touchCallback = ChatItemTouchHelperCallback(chatAdapter){
-            val bgColor = TypedValue()
             val actionTextColor = TypedValue()
             val textColor = TypedValue()
-            theme.resolveAttribute(R.attr.colorPrimary, bgColor, true)
             theme.resolveAttribute(R.attr.colorAccent, actionTextColor, true)
             theme.resolveAttribute(R.attr.colorSnackBarText, textColor, true)
 
             viewModel.restoreFromArchive(it.id)
-            val snack = Snackbar.make(rv_archive_list, "Восстановить чат с ${it.title}из архива?", Snackbar.LENGTH_LONG).apply {
-                view.setBackgroundColor(bgColor.data)}
+            val snack = Snackbar.make(rv_archive_list, "Восстановить чат с ${it.title}из архива?", Snackbar.LENGTH_LONG)
                     .setAction(getString(R.string.snack_bar_undo)) {_-> viewModel.addToArchive(it.id)}
                     .setActionTextColor(actionTextColor.data)
 
             val textView = snack.view.findViewById(R.id.snackbar_text) as TextView
             textView.setTextColor(textColor.data)
+            snack.config(this)
 
             snack.show()
         }
