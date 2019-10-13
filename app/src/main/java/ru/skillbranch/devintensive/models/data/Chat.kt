@@ -28,7 +28,7 @@ data class Chat(
     fun lastMessageShort(): Pair<String, String?>{
         val lastMessage = messages.lastOrNull()
         var first =  App.applicationContext().resources.getString(R.string.chat_no_messages)
-        val second = "@" + lastMessage?.from?.firstName
+        val second = lastMessage?.from?.firstName
 
         if (lastMessage != null) {
             first = if(lastMessage is TextMessage) lastMessage.text!!
