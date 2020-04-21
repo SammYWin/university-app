@@ -17,7 +17,7 @@
             android:visibility="gone"
             tools:visibility="visible"/>
 
-    <ru.skillbranch.devintensive.ui.custom.AvatarImageView
+    <ru.bgtu.diploma.ui.custom.AvatarImageView
             tools:src="@drawable/test3"
             android:id="@+id/iv_avatar_user"
             android:layout_width="@dimen/avatar_item_size"

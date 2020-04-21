@@ -6,12 +6,12 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.profile.ProfileActivity"
+        tools:context="ru.bgtu.diploma.ui.profile.ProfileActivity"
         android:orientation="vertical">
 
     <FrameLayout android:layout_width="match_parent"
                  android:layout_height="wrap_content">
-        <ru.skillbranch.devintensive.ui.custom.AspectRatioImageView
+        <ru.bgtu.diploma.ui.custom.AspectRatioImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:src="@drawable/profile_bg"
@@ -35,7 +35,7 @@
                     android:layout_marginRight="@dimen/spacing_huge_32"
                     android:layout_marginTop="36dp"/>
 
-            <ru.skillbranch.devintensive.ui.custom.CircleImageView
+            <ru.bgtu.diploma.ui.custom.CircleImageView
                     android:id="@+id/iv_avatar"
                     android:layout_width="@dimen/avatar_round_size"
                     android:layout_height="@dimen/avatar_round_size"
