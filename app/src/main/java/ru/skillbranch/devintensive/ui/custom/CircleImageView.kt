@@ -19,11 +19,11 @@ open class CircleImageView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : ImageView(context ,attrs,defStyleAttr)
+) : androidx.appcompat.widget.AppCompatImageView(context ,attrs,defStyleAttr)
 {
     companion object {
         private const val DEFAULT_BORDER_COLOR = Color.WHITE
-        private const val DEFAULT_BORDER_WIDTH = 2F
+        private const val DEFAULT_BORDER_WIDTH = 2
     }
 
     private var borderColor = DEFAULT_BORDER_COLOR
@@ -34,17 +34,17 @@ open class CircleImageView @JvmOverloads constructor(
         {
             val a = context.obtainStyledAttributes(attrs, R.styleable.CircleImageView)
             borderColor = a.getColor(R.styleable.CircleImageView_cv_borderColor, DEFAULT_BORDER_COLOR)
-            borderWidth = a.getDimensionPixelSize(R.styleable.CircleImageView_cv_borderWidth, borderWidth)
+            //borderWidth = a.getDimensionPixelSize(R.styleable.CircleImageView_cv_borderWidth, borderWidth)
             a.recycle()
         }
     }
 
     @Dimension
-    fun getBorderWidth():Int = Utils.convertPxToDp(borderWidth)
+    fun getBorderWidth():Int = Utils.convertPxToDp(borderWidth.toInt())
 
     fun setBorderWidth(@Dimension dp:Int)
     {
-        borderWidth = Utils.convertDpToPx(dp.toFloat())
+        borderWidth = Utils.convertDpToPx(dp)
         invalidate()
     }
 
@@ -70,7 +70,7 @@ open class CircleImageView @JvmOverloads constructor(
         bitmap = makeCircleBitmap(bitmap)
 
         if (borderWidth > 0)
-            bitmap = createRoundBorderBitmap(bitmap, borderWidth, borderColor)
+            bitmap = createRoundBorderBitmap(bitmap, borderWidth.toInt(), borderColor)
         canvas.drawBitmap(bitmap,0f,0f, null)
     }
 
