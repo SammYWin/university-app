@@ -11,6 +11,9 @@
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
         <item name="colorAccent">@color/color_accent</item>
 
+        <item name="colorSecondary">@color/color_accent</item>
+        <item name="colorOnSecondary">@android:color/white</item>
+
         <item name="colorBackgroundSurface">@android:color/white</item>
         <item name="colorAccentedSurface">@color/color_primary_light</item>
         <item name="colorText">@color/color_grey_dark</item>

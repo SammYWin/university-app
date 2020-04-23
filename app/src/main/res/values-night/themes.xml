@@ -10,6 +10,9 @@
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
         <item name="colorAccent">@color/color_accent_night</item>
 
+        <item name="colorSecondary">@color/color_accent_night</item>
+        <item name="colorOnSecondary">@android:color/white</item>
+
         <item name="colorBackgroundSurface">@color/color_grey_surface_dark</item>
         <item name="colorAccentedSurface">@color/color_divider_light</item>
         <item name="colorText">@color/color_grey</item>

@@ -43,9 +43,6 @@ data class User
         avatar= null
         )
 
-    constructor(id: String) : this
-        ( id, "John", "Doe" )
-
     companion object Factory
     {
         private var lastId : Int = -1
