@@ -2,47 +2,46 @@ package ru.bgtu.diploma.ui.archive
 
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.Menu
-import android.view.MenuItem
+import android.view.*
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_archive.*
+import kotlinx.android.synthetic.main.fragment_archive.*
 import ru.bgtu.diploma.R
 import ru.bgtu.diploma.extensions.config
 import ru.bgtu.diploma.ui.adapters.ChatAdapter
 import ru.bgtu.diploma.ui.adapters.ChatItemTouchHelperCallback
 import ru.bgtu.diploma.viewmodels.ArchiveViewModel
 
-class ArchiveActivity : AppCompatActivity() {
+class ArchiveFragment : Fragment() {
     private lateinit var chatAdapter : ChatAdapter
     private lateinit var viewModel : ArchiveViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_archive)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val v: View = inflater.inflate(R.layout.fragment_archive, container, false)
+        setHasOptionsMenu(true)
+        return v
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         initToolbar()
         initViewModel()
         initViews()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if(item?.itemId == android.R.id.home){
-            finish()
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_search, menu)
-        val searchItem = menu?.findItem(R.id.action_search)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_search, menu)
+        val searchItem = menu.findItem(R.id.action_search)
         val searchView = searchItem?.actionView as SearchView
         searchView.queryHint = "Введите имя пользователя"
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -57,17 +56,16 @@ class ArchiveActivity : AppCompatActivity() {
             }
         })
 
-        return super.onCreateOptionsMenu(menu)
+        return super.onCreateOptionsMenu(menu, inflater)
     }
 
     private fun initToolbar() {
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
     }
 
     private fun initViewModel() {
-        viewModel = ViewModelProviders.of(this).get(ArchiveViewModel::class.java)
-        viewModel.getChatData().observe(this, Observer{chatAdapter.updateData(it)})
+        viewModel = ViewModelProvider(this).get(ArchiveViewModel::class.java)
+        viewModel.getChatData().observe(viewLifecycleOwner, Observer{chatAdapter.updateData(it)})
     }
 
     private fun initViews() {
@@ -75,13 +73,13 @@ class ArchiveActivity : AppCompatActivity() {
             Snackbar.make(rv_archive_list,"Click on ${it.title}and he is ${if (it.isOnline) "online" else "not online"}", Snackbar.LENGTH_LONG).show()
         }
 
-        val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+        val divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
 
         val touchCallback = ChatItemTouchHelperCallback(chatAdapter){
             val actionTextColor = TypedValue()
             val textColor = TypedValue()
-            theme.resolveAttribute(R.attr.colorAccent, actionTextColor, true)
-            theme.resolveAttribute(R.attr.colorSnackBarText, textColor, true)
+            requireNotNull(activity).theme.resolveAttribute(R.attr.colorAccent, actionTextColor, true)
+            requireNotNull(activity).theme.resolveAttribute(R.attr.colorSnackBarText, textColor, true)
 
             viewModel.restoreFromArchive(it.id)
             val snack = Snackbar.make(rv_archive_list, "Восстановить чат с ${it.title}из архива?", Snackbar.LENGTH_LONG)
@@ -90,7 +88,7 @@ class ArchiveActivity : AppCompatActivity() {
 
             val textView = snack.view.findViewById(R.id.snackbar_text) as TextView
             textView.setTextColor(textColor.data)
-            snack.config(this)
+            snack.config(snack.context)
 
             snack.show()
         }
@@ -98,7 +96,7 @@ class ArchiveActivity : AppCompatActivity() {
         touchHelper.attachToRecyclerView(rv_archive_list)
 
         with(rv_archive_list){
-            layoutManager = LinearLayoutManager(this@ArchiveActivity)
+            layoutManager = LinearLayoutManager(context)
             adapter = chatAdapter
             addItemDecoration(divider)
         }

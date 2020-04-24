@@ -5,39 +5,49 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.children
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
-import kotlinx.android.synthetic.main.activity_group.*
-import kotlinx.android.synthetic.main.activity_group.chip_group
+import kotlinx.android.synthetic.main.fragment_chat.*
+import kotlinx.android.synthetic.main.fragment_group.*
+import kotlinx.android.synthetic.main.fragment_group.chip_group
+import kotlinx.android.synthetic.main.fragment_group.fab
+import kotlinx.android.synthetic.main.fragment_group.toolbar
 import ru.bgtu.diploma.R
 import ru.bgtu.diploma.models.data.UserItem
 import ru.bgtu.diploma.ui.adapters.UserAdapter
 import ru.bgtu.diploma.viewmodels.GroupViewModel
+import java.util.function.ToDoubleBiFunction
 
-class GroupActivity : AppCompatActivity() {
+class GroupFragment : Fragment() {
 
     private lateinit var usersAdapter: UserAdapter
     private lateinit var viewModel: GroupViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_group)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val v: View = inflater.inflate(R.layout.fragment_group, container, false)
+        setHasOptionsMenu(true)
+        return v
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         initToolbar()
         initViews()
         initViewModel()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_search, menu)
-        val searchItem = menu?.findItem(R.id.action_search)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_search, menu)
+        val searchItem = menu.findItem(R.id.action_search)
         val searchView = searchItem?.actionView as SearchView
         searchView.queryHint = "Введите имя пользователя"
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
@@ -53,42 +63,33 @@ class GroupActivity : AppCompatActivity() {
 
         })
 
-        return super.onCreateOptionsMenu(menu)
+        return super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item?.itemId == android.R.id.home) {
-            finish()
-            //overridePendingTransition(R.anim.idle, R.anim.bottom_down)
-        }
-        return super.onOptionsItemSelected(item)
-    }
 
     private fun initToolbar() {
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
     }
 
     private fun initViews() {
         usersAdapter = UserAdapter { viewModel.handleSelectedItem(it.id) }
-        val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+        val divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         with(rv_user_list) {
             adapter = usersAdapter
-            layoutManager = LinearLayoutManager(this@GroupActivity)
+            layoutManager = LinearLayoutManager(context)
             addItemDecoration(divider)
         }
 
         fab.setOnClickListener {
             viewModel.handleCreateGroup()
-            finish()
-            overridePendingTransition(R.anim.idle, R.anim.bottom_down)
+            TODO("navigate back to Chat Fragment")
         }
     }
 
     private fun initViewModel() {
-        viewModel = ViewModelProviders.of(this).get(GroupViewModel::class.java)
-        viewModel.getUsersData().observe(this, Observer { usersAdapter.updateData(it) })
-        viewModel.getSelectedData().observe(this, Observer {
+        viewModel = ViewModelProvider(this).get(GroupViewModel::class.java)
+        viewModel.getUsersData().observe(viewLifecycleOwner, Observer { usersAdapter.updateData(it) })
+        viewModel.getSelectedData().observe(viewLifecycleOwner, Observer {
             updateChips(it)
             toggleFab(it.size > 1)
         })
@@ -102,13 +103,13 @@ class GroupActivity : AppCompatActivity() {
     private fun addChipToGroup(user: UserItem) {
         val closeIconColor = TypedValue()
         val bgColor = TypedValue()
-        theme.resolveAttribute(R.attr.colorChipClose, closeIconColor, true)
-        theme.resolveAttribute(R.attr.colorChipBackground, bgColor, true)
+        requireNotNull(activity).theme.resolveAttribute(R.attr.colorChipClose, closeIconColor, true)
+        requireNotNull(activity).theme.resolveAttribute(R.attr.colorChipBackground, bgColor, true)
 
 
-        val chip = Chip(this).apply {
+        val chip = Chip(context).apply {
             text = user.fullName
-            chipIcon = resources.getDrawable(R.drawable.avatar_default, theme)
+            chipIcon = resources.getDrawable(R.drawable.avatar_default, requireNotNull(activity).theme)
             isCloseIconVisible = true
             tag = user.id
             isClickable = true

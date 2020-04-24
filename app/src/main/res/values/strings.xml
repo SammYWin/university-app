@@ -13,4 +13,5 @@
     <string name="title_create_group">Создание группы</string>
     <string name="item_archive_title">Архив чатов</string>
     <string name="title_archive">Архив чатов</string>
+    <string name="title_chats_bgtu">Сообщения</string>
 </resources>

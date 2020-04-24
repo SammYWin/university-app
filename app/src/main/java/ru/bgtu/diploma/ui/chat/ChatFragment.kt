@@ -10,12 +10,9 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_chat.*
 import ru.bgtu.diploma.R
@@ -23,8 +20,7 @@ import ru.bgtu.diploma.extensions.config
 import ru.bgtu.diploma.models.data.ChatType
 import ru.bgtu.diploma.ui.adapters.ChatAdapter
 import ru.bgtu.diploma.ui.adapters.ChatItemTouchHelperCallback
-import ru.bgtu.diploma.ui.archive.ArchiveActivity
-import ru.bgtu.diploma.ui.group.GroupActivity
+import ru.bgtu.diploma.ui.archive.ArchiveFragment
 import ru.bgtu.diploma.viewmodels.MainViewModel
 
 
@@ -69,14 +65,13 @@ class ChatFragment : Fragment() {
     }
 
     private fun initToolbar() {
-        (activity as AppCompatActivity).setSupportActionBar(view?.findViewById(R.id.toolbar))
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
     }
 
     private fun initViews() {
         chatAdapter = ChatAdapter {
             if(it.chatType == ChatType.ARCHIVE) {
-                val intent = Intent(context, ArchiveActivity::class.java)
-                startActivity(intent)
+                TODO("Navigate to archive fragment")
             }
             else
                 Snackbar.make(rv_chat_list, "Click on ${it.title}and he is ${if (it.isOnline) "online" else "not online"}", Snackbar.LENGTH_LONG).show()
@@ -104,16 +99,16 @@ class ChatFragment : Fragment() {
         val touchHelper = ItemTouchHelper(touchCallback)
         touchHelper.attachToRecyclerView(rv_chat_list)
 
-        val rv = view?.findViewById<RecyclerView>(R.id.rv_chat_list)
-        rv?.let{
-            it.adapter = chatAdapter
-            it.addItemDecoration(divider)
+
+       with(rv_chat_list){
+           layoutManager = LinearLayoutManager(context)
+           adapter = chatAdapter
+           addItemDecoration(divider)
         }
 
-        val fab = view?.findViewById<FloatingActionButton>(R.id.fab)
-            fab?.setOnClickListener{
-            val intent = Intent(context, GroupActivity::class.java)
-            startActivity(intent)
+
+        fab.setOnClickListener{
+            TODO("Navigate to Group Fragment")
         }
     }
 

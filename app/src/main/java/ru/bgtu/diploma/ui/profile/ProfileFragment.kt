@@ -7,22 +7,26 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import kotlinx.android.synthetic.main.activity_profile.*
+import kotlinx.android.synthetic.main.fragment_profile.*
 import ru.bgtu.diploma.R
 import ru.bgtu.diploma.models.Profile
 import ru.bgtu.diploma.utils.Utils
 import ru.bgtu.diploma.utils.Utils.convertSpToPx
 import ru.bgtu.diploma.viewmodels.ProfileViewModel
 
-class ProfileActivity : AppCompatActivity()
-{
-    companion object
-    {
+class ProfileFragment : Fragment() {
+
+    companion object {
         const val IS_EDIT_MODE = "IS_EDIT_MODE"
     }
 
@@ -31,54 +35,25 @@ class ProfileActivity : AppCompatActivity()
     var isAvatarSet = true
     lateinit var viewFields: Map<String, TextView>
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.AppTheme)
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profile)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        activity?.setTheme(R.style.AppTheme)
+        val v: View = inflater.inflate(R.layout.fragment_profile, container, false)
+        return v
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         initViews(savedInstanceState)
         initViewModel()
-        Log.d("M_MainActivity", "onCreate")
     }
 
-    override fun onStart() {
-        super.onStart()
-        Log.d("M_MainActivity", "onStart")
-    }
-
-    override fun onRestart() {
-        super.onRestart()
-        Log.d("M_MainActivity", "onRestart")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d("M_MainActivity", "onResume")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d("M_MainActivity", "onPause")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d("M_MainActivity", "onStop")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("M_MainActivity", "onDestroy")
-    }
-
-
-    override fun onSaveInstanceState(outState: Bundle)
-    {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(IS_EDIT_MODE, isEditMode)
     }
 
-    private fun initViews(savedInstanceState: Bundle?)
-    {
+    private fun initViews(savedInstanceState: Bundle?) {
         viewFields = mapOf(
             "nickName" to tv_nick_name,
             "rank" to tv_rank,
@@ -116,8 +91,7 @@ class ProfileActivity : AppCompatActivity()
         })
     }
 
-    private fun showCurrentMode(isEdit: Boolean)
-    {
+    private fun showCurrentMode(isEdit: Boolean) {
         val info = viewFields.filter { setOf("firstName","lastName","about","repository").contains(it.key) }
         for((_,v) in info)
         {
@@ -133,18 +107,15 @@ class ProfileActivity : AppCompatActivity()
 
         with(btn_edit)
         {
-            val filter: ColorFilter? = if(isEdit)
-            {
-                PorterDuffColorFilter(resources.getColor(R.color.color_accent, theme), PorterDuff.Mode.SRC_IN)
+            val filter: ColorFilter? = if(isEdit) {
+                PorterDuffColorFilter(resources.getColor(R.color.color_accent, requireNotNull(activity).theme), PorterDuff.Mode.SRC_IN)
             } else null
 
-            val icon = if(isEdit)
-            {
-                resources.getDrawable(R.drawable.ic_save_black_24dp, theme)
+            val icon = if(isEdit) {
+                resources.getDrawable(R.drawable.ic_save_black_24dp, requireNotNull(activity).theme)
             }
-            else
-            {
-                resources.getDrawable(R.drawable.ic_edit_black_24dp, theme)
+            else {
+                resources.getDrawable(R.drawable.ic_edit_black_24dp, requireNotNull(activity).theme)
             }
 
             background.colorFilter = filter
@@ -153,13 +124,12 @@ class ProfileActivity : AppCompatActivity()
 
     }
 
-    private fun initViewModel()
-    {
-        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-        viewModel.getProfileData().observe(this, Observer { updateUI(it) })
-        viewModel.getTheme().observe(this, Observer { updateTheme(it) })
-        viewModel.getRepositoryError().observe(this, Observer { updateRepoError(it) })
-        viewModel.getIsRepoError().observe(this, Observer { updateRepository(it) })
+    private fun initViewModel() {
+        viewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
+        viewModel.getProfileData().observe(viewLifecycleOwner, Observer { updateUI(it) })
+        viewModel.getTheme().observe(viewLifecycleOwner, Observer { updateTheme(it) })
+        viewModel.getRepositoryError().observe(viewLifecycleOwner, Observer { updateRepoError(it) })
+        viewModel.getIsRepoError().observe(viewLifecycleOwner, Observer { updateRepository(it) })
     }
 
     private fun updateRepository(isError: Boolean) {
@@ -172,12 +142,11 @@ class ProfileActivity : AppCompatActivity()
     }
 
     private fun updateTheme(mode: Int) {
-        delegate.setLocalNightMode(mode)
+        AppCompatDelegate.setDefaultNightMode(mode)
         Log.d("M_ProfileActivity", "updatedTheme")
     }
 
-    private fun updateUI(profile: Profile)
-    {
+    private fun updateUI(profile: Profile) {
         profile.toMap().also{
             for((k,v) in viewFields)
             {
@@ -188,8 +157,7 @@ class ProfileActivity : AppCompatActivity()
             updateDefaultAvatar(profile)
     }
 
-    private fun updateDefaultAvatar(profile: Profile)
-    {
+    private fun updateDefaultAvatar(profile: Profile) {
         Utils.toInitials(profile.firstName, profile.lastName)?.let {
             val avatar = getTextAvatar(it)
             iv_avatar.setImageBitmap(avatar)
@@ -197,13 +165,11 @@ class ProfileActivity : AppCompatActivity()
 
     }
 
-    private fun getTextAvatar(text: String): Bitmap
-    {
+    private fun getTextAvatar(text: String): Bitmap{
         val color = TypedValue()
-        theme.resolveAttribute(R.attr.colorAccent, color,true)
+        requireNotNull(activity).theme.resolveAttribute(R.attr.colorAccent, color,true)
 
-        var bitmap: Bitmap = Bitmap.createBitmap(ic_avatar.layoutParams.width,ic_avatar.layoutParams.height,
-            Bitmap.Config.ARGB_8888)
+        val bitmap: Bitmap = Bitmap.createBitmap(ic_avatar.layoutParams.width,ic_avatar.layoutParams.height, Bitmap.Config.ARGB_8888)
 
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint.textSize = convertSpToPx(16)
@@ -223,8 +189,7 @@ class ProfileActivity : AppCompatActivity()
         return bitmap
     }
 
-    private fun saveProfileInfo()
-    {
+    private fun saveProfileInfo() {
         Profile(
             firstName = et_first_name.text.toString(),
             lastName = et_last_name.text.toString(),

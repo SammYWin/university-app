@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/chatFragment">
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="ru.bgtu.diploma.ui.profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/groupFragment"
+        android:name="ru.bgtu.diploma.ui.group.GroupFragment"
+        android:label="@string/title_create_group"
+        tools:layout="@layout/fragment_group" />
+    <fragment
+        android:id="@+id/archiveFragment"
+        android:name="ru.bgtu.diploma.ui.archive.ArchiveFragment"
+        android:label="@string/title_archive"
+        tools:layout="@layout/fragment_archive" />
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="ru.bgtu.diploma.ui.chat.ChatFragment"
+        android:label="@string/title_chats_bgtu"
+        tools:layout="@layout/fragment_chat" />
+    <fragment
+        android:id="@+id/timetableFragment"
+        android:name="ru.bgtu.diploma.ui.timetable.TimetableFragment"
+        android:label="TimetableFragment" />
+</navigation>
