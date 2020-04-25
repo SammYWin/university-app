@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/profileFragment"
         android:name="ru.bgtu.diploma.ui.profile.ProfileFragment"
-        android:label="fragment_profile"
+        android:label="@string/title_profile_fragment"
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/groupFragment"
@@ -24,9 +24,16 @@
         android:id="@+id/chatFragment"
         android:name="ru.bgtu.diploma.ui.chat.ChatFragment"
         android:label="@string/title_chats_bgtu"
-        tools:layout="@layout/fragment_chat" />
+        tools:layout="@layout/fragment_chat" >
+        <action
+            android:id="@+id/action_chatFragment_to_archiveFragment"
+            app:destination="@id/archiveFragment" />
+        <action
+            android:id="@+id/action_chatFragment_to_groupFragment"
+            app:destination="@id/groupFragment" />
+    </fragment>
     <fragment
         android:id="@+id/timetableFragment"
         android:name="ru.bgtu.diploma.ui.timetable.TimetableFragment"
-        android:label="TimetableFragment" />
+        android:label="@string/tittle_timetable_fragment" />
 </navigation>

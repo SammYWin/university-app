@@ -4,12 +4,10 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.*
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,7 +32,6 @@ class ArchiveFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initToolbar()
         initViewModel()
         initViews()
     }
@@ -57,10 +54,6 @@ class ArchiveFragment : Fragment() {
         })
 
         return super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    private fun initToolbar() {
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
     }
 
     private fun initViewModel() {

@@ -11,7 +11,6 @@ import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
@@ -19,12 +18,10 @@ import kotlinx.android.synthetic.main.fragment_chat.*
 import kotlinx.android.synthetic.main.fragment_group.*
 import kotlinx.android.synthetic.main.fragment_group.chip_group
 import kotlinx.android.synthetic.main.fragment_group.fab
-import kotlinx.android.synthetic.main.fragment_group.toolbar
 import ru.bgtu.diploma.R
 import ru.bgtu.diploma.models.data.UserItem
 import ru.bgtu.diploma.ui.adapters.UserAdapter
 import ru.bgtu.diploma.viewmodels.GroupViewModel
-import java.util.function.ToDoubleBiFunction
 
 class GroupFragment : Fragment() {
 
@@ -40,7 +37,6 @@ class GroupFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initToolbar()
         initViews()
         initViewModel()
     }
@@ -66,10 +62,6 @@ class GroupFragment : Fragment() {
         return super.onCreateOptionsMenu(menu, inflater)
     }
 
-
-    private fun initToolbar() {
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
-    }
 
     private fun initViews() {
         usersAdapter = UserAdapter { viewModel.handleSelectedItem(it.id) }

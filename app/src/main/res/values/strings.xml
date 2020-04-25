@@ -14,4 +14,6 @@
     <string name="item_archive_title">Архив чатов</string>
     <string name="title_archive">Архив чатов</string>
     <string name="title_chats_bgtu">Сообщения</string>
+    <string name="tittle_timetable_fragment">Расписание</string>
+    <string name="title_profile_fragment">Профиль</string>
 </resources>
