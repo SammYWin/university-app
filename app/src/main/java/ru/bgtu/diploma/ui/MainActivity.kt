@@ -9,6 +9,7 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.bottomnavigation.LabelVisibilityMode.LABEL_VISIBILITY_UNLABELED
 import ru.bgtu.diploma.R
 
 
@@ -18,7 +19,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val bottomNavView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        val bottomNavView = findViewById<BottomNavigationView>(R.id.bottomNavigationView).apply {
+            labelVisibilityMode = LABEL_VISIBILITY_UNLABELED
+        }
+
         val navController = findNavController(R.id.nav_host_fragment)
 
         val appBarConfiguration = AppBarConfiguration.Builder(

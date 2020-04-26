@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_archive.*
 import ru.bgtu.diploma.R
+import ru.bgtu.diploma.databinding.FragmentArchiveBinding
 import ru.bgtu.diploma.extensions.config
 import ru.bgtu.diploma.ui.adapters.ChatAdapter
 import ru.bgtu.diploma.ui.adapters.ChatItemTouchHelperCallback
@@ -22,11 +23,12 @@ import ru.bgtu.diploma.viewmodels.ArchiveViewModel
 class ArchiveFragment : Fragment() {
     private lateinit var chatAdapter : ChatAdapter
     private lateinit var viewModel : ArchiveViewModel
+    private lateinit var binding: FragmentArchiveBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val v: View = inflater.inflate(R.layout.fragment_archive, container, false)
-        setHasOptionsMenu(true)
-        return v
+        binding = FragmentArchiveBinding.inflate(inflater)
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -63,7 +65,7 @@ class ArchiveFragment : Fragment() {
 
     private fun initViews() {
         chatAdapter = ChatAdapter {
-            Snackbar.make(rv_archive_list,"Click on ${it.title}and he is ${if (it.isOnline) "online" else "not online"}", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(binding.rvArchiveList,"Click on ${it.title}and he is ${if (it.isOnline) "online" else "not online"}", Snackbar.LENGTH_LONG).show()
         }
 
         val divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
@@ -75,7 +77,7 @@ class ArchiveFragment : Fragment() {
             requireNotNull(activity).theme.resolveAttribute(R.attr.colorSnackBarText, textColor, true)
 
             viewModel.restoreFromArchive(it.id)
-            val snack = Snackbar.make(rv_archive_list, "Восстановить чат с ${it.title}из архива?", Snackbar.LENGTH_LONG)
+            val snack = Snackbar.make(binding.rvArchiveList, "Восстановить чат с ${it.title}из архива?", Snackbar.LENGTH_LONG)
                     .setAction(getString(R.string.snack_bar_undo)) {_-> viewModel.addToArchive(it.id)}
                     .setActionTextColor(actionTextColor.data)
 
@@ -86,9 +88,9 @@ class ArchiveFragment : Fragment() {
             snack.show()
         }
         val touchHelper = ItemTouchHelper(touchCallback)
-        touchHelper.attachToRecyclerView(rv_archive_list)
+        touchHelper.attachToRecyclerView(binding.rvArchiveList)
 
-        with(rv_archive_list){
+        with(binding.rvArchiveList){
             layoutManager = LinearLayoutManager(context)
             adapter = chatAdapter
             addItemDecoration(divider)

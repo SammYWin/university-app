@@ -8,7 +8,7 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
     dataBinding {
-        enabled = false
+        enabled = true
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -19,7 +19,7 @@ android {
     }
     defaultConfig {
         applicationId "ru.bgtu.diploma"
-        minSdkVersion 23
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"

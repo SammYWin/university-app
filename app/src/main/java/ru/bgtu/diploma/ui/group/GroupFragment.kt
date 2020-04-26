@@ -11,6 +11,7 @@ import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
@@ -19,6 +20,7 @@ import kotlinx.android.synthetic.main.fragment_group.*
 import kotlinx.android.synthetic.main.fragment_group.chip_group
 import kotlinx.android.synthetic.main.fragment_group.fab
 import ru.bgtu.diploma.R
+import ru.bgtu.diploma.databinding.FragmentGroupBinding
 import ru.bgtu.diploma.models.data.UserItem
 import ru.bgtu.diploma.ui.adapters.UserAdapter
 import ru.bgtu.diploma.viewmodels.GroupViewModel
@@ -27,11 +29,12 @@ class GroupFragment : Fragment() {
 
     private lateinit var usersAdapter: UserAdapter
     private lateinit var viewModel: GroupViewModel
+    private lateinit var binding: FragmentGroupBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val v: View = inflater.inflate(R.layout.fragment_group, container, false)
-        setHasOptionsMenu(true)
-        return v
+        binding = FragmentGroupBinding.inflate(inflater)
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -66,15 +69,15 @@ class GroupFragment : Fragment() {
     private fun initViews() {
         usersAdapter = UserAdapter { viewModel.handleSelectedItem(it.id) }
         val divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
-        with(rv_user_list) {
+        with(binding.rvUserList) {
             adapter = usersAdapter
             layoutManager = LinearLayoutManager(context)
             addItemDecoration(divider)
         }
 
-        fab.setOnClickListener {
+        binding.fab.setOnClickListener {
             viewModel.handleCreateGroup()
-            TODO("navigate back to Chat Fragment")
+            findNavController().popBackStack()
         }
     }
 
@@ -88,8 +91,8 @@ class GroupFragment : Fragment() {
     }
 
     private fun toggleFab(isShow: Boolean) {
-        if(isShow) fab.show()
-        else fab.hide()
+        if(isShow) binding.fab.show()
+        else binding.fab.hide()
     }
 
     private fun addChipToGroup(user: UserItem) {
@@ -112,18 +115,18 @@ class GroupFragment : Fragment() {
             setOnCloseIconClickListener{viewModel.handleRemoveChip(tag.toString())}
         }
 
-        chip_group.addView(chip)
+        binding.chipGroup.addView(chip)
     }
 
     private fun updateChips(listUsers : List<UserItem>) {
-        chip_group.visibility = if(listUsers.isEmpty()) View.GONE else View.VISIBLE
+        binding.chipGroup.visibility = if(listUsers.isEmpty()) View.GONE else View.VISIBLE
 
         val users = listUsers.associate { user -> user.id to user }.toMutableMap()
         val views = chip_group.children.associate { view -> view.tag to view }
 
         for ((k, v) in views) {
             if (!users.containsKey(k))
-                chip_group.removeView(v)
+                binding.chipGroup.removeView(v)
             else users.remove(k)
         }
 

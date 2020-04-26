@@ -56,4 +56,9 @@
         <item name="android:minHeight">72dp</item>
     </style>
 
+    <style name="WindowAnimationTransition">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
+
 </resources>

@@ -17,6 +17,7 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.fragment_chat.*
 import ru.bgtu.diploma.R
+import ru.bgtu.diploma.databinding.FragmentChatBinding
 import ru.bgtu.diploma.extensions.config
 import ru.bgtu.diploma.models.data.ChatType
 import ru.bgtu.diploma.ui.adapters.ChatAdapter
@@ -29,11 +30,12 @@ class ChatFragment : Fragment() {
 
     private lateinit var chatAdapter: ChatAdapter
     private lateinit var viewModel: MainViewModel
+    private lateinit var binding: FragmentChatBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val v: View = inflater.inflate(R.layout.fragment_chat, container, false)
-        setHasOptionsMenu(true)
-        return v
+        binding = FragmentChatBinding.inflate(inflater)
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -70,7 +72,7 @@ class ChatFragment : Fragment() {
                 findNavController().navigate(ChatFragmentDirections.actionChatFragmentToArchiveFragment())
             }
             else
-                Snackbar.make(rv_chat_list, "Click on ${it.title}and he is ${if (it.isOnline) "online" else "not online"}", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(binding.rvChatList, "Click on ${it.title}and he is ${if (it.isOnline) "online" else "not online"}", Snackbar.LENGTH_LONG).show()
         }
 
         val touchCallback = ChatItemTouchHelperCallback(chatAdapter){
@@ -80,7 +82,7 @@ class ChatFragment : Fragment() {
             requireNotNull(activity).theme.resolveAttribute(R.attr.colorSnackBarText, textColor, true)
 
             viewModel.addToArchive(it.id)
-            val snack = Snackbar.make(rv_chat_list, "Вы точно хотите добавить ${it.title}в архив?", Snackbar.LENGTH_LONG)
+            val snack = Snackbar.make(binding.rvChatList, "Вы точно хотите добавить ${it.title}в архив?", Snackbar.LENGTH_LONG)
                 .setAction(getString(R.string.snack_bar_undo)) {_-> viewModel.restoreFromArchive(it.id)}
                 .setActionTextColor(actionTextColor.data)
 
@@ -92,18 +94,18 @@ class ChatFragment : Fragment() {
         }
 
         val touchHelper = ItemTouchHelper(touchCallback)
-        touchHelper.attachToRecyclerView(rv_chat_list)
+        touchHelper.attachToRecyclerView(binding.rvChatList)
 
         val divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
 
-        with(rv_chat_list){
+        with(binding.rvChatList){
             layoutManager = LinearLayoutManager(context)
             adapter = chatAdapter
             addItemDecoration(divider)
         }
 
 
-        fab.setOnClickListener{
+        binding.fab.setOnClickListener{
             findNavController().navigate(ChatFragmentDirections.actionChatFragmentToGroupFragment())
         }
     }

@@ -3,6 +3,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents">
         <!-- Customize your theme here. -->
+        <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
 
         <item name="colorPrimary">@android:color/white</item>
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
