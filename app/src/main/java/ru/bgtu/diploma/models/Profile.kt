@@ -11,12 +11,12 @@ data class Profile(
     val repository: String
 )
 {
-    val nickName: String = Utils.transliteration("$firstName $lastName","_")
+    val fullName: String = Utils.transliteration("$firstName $lastName")
 
-    val rank: String = "Junior Android Developer"
+    val rank: String = "16-ИВТ-1"
 
     fun toMap(): Map<String, Any> = mapOf(
-        "nickName" to nickName,
+        "nickName" to fullName,
         "rank" to rank,
         "rating" to rating,
         "respect" to respect,

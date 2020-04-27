@@ -19,9 +19,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val bottomNavView = findViewById<BottomNavigationView>(R.id.bottomNavigationView).apply {
-            labelVisibilityMode = LABEL_VISIBILITY_UNLABELED
-        }
+        val bottomNavView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
         val navController = findNavController(R.id.nav_host_fragment)
 

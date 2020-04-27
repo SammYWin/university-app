@@ -355,9 +355,10 @@ object DataGenerator {
                     "$i",
                     if (isMale) maleNames.random() else femaleNames.random(),
                     lastNames.random(true),
+                    null,
                     if (isMale) maleAvatars.random(true) else femaleAvatars.random(true),
-                    (0..Short.MAX_VALUE).random(),
-                    (0..Short.MAX_VALUE).random(),
+//                    (0..Short.MAX_VALUE).random(),
+//                    (0..Short.MAX_VALUE).random(),
                     lastVisit,
                     isOnline
                 )

@@ -3,6 +3,7 @@ package ru.bgtu.diploma.ui.custom
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
+import android.media.ThumbnailUtils
 import android.os.Parcel
 import android.os.Parcelable
 import android.util.AttributeSet
@@ -66,7 +67,7 @@ class AvatarImageView @JvmOverloads constructor(
 
             ta.recycle()
         }
-        scaleType = ScaleType.CENTER_CROP
+        //scaleType = ScaleType.CENTER_CROP
         //setOnLongClickListener(this)
         setup()
     }
@@ -96,7 +97,8 @@ class AvatarImageView @JvmOverloads constructor(
         Log.e("AvatarImageView", "onDraw: ")
         // NOT allocate, ONLY draw
 
-        if (drawable != null && isAvatarMode) drawAvatar(canvas)
+        if (drawable != null && isAvatarMode)
+            drawAvatar(canvas)
         else drawInitials(canvas)
 
         //resize rect
@@ -106,6 +108,7 @@ class AvatarImageView @JvmOverloads constructor(
             inset(half, half)
         }
         canvas.drawOval(borderRect.toRectF(), borderPaint)
+        scaleType = ScaleType.CENTER_CROP
     }
 
     override fun onSaveInstanceState(): Parcelable? {
@@ -202,8 +205,9 @@ class AvatarImageView @JvmOverloads constructor(
 
     private fun prepareShader(w: Int, h: Int) {
         if (w == 0 || drawable == null) return
-        val srcBm = drawable.toBitmap(w, h, Bitmap.Config.ARGB_8888)
-        avatarPaint.shader = BitmapShader(srcBm, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+        val srcBmp = drawable.toBitmap()
+        val bmp = ThumbnailUtils.extractThumbnail(srcBmp, w, h)
+        avatarPaint.shader = BitmapShader(bmp, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
     }
 
     private fun resolveDefaultSize(spec: Int): Int {

@@ -33,6 +33,7 @@ class GroupFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentGroupBinding.inflate(inflater)
+        setHasOptionsMenu(true)
 
         return binding.root
     }

@@ -59,8 +59,8 @@ class ProfileFragment : Fragment() {
         viewFields = mapOf(
             "nickName" to binding.tvNickName,
             "rank" to binding.tvRank,
-            "rating" to binding.tvRating,
-            "respect" to binding.tvRespect,
+//            "rating" to binding.tvRating,
+//            "respect" to binding.tvRespect,
             "firstName" to binding.etFirstName,
             "lastName" to binding.etLastName,
             "about" to binding.etAbout,

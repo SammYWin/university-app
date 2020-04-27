@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/profile_bg"
                 android:scaleType="centerCrop"
-                app:aspectRatio="1.78" />
+                app:aspectRatio="1.72" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -46,12 +46,12 @@
                     android:layout_marginRight="@dimen/spacing_huge_32"
                     android:layout_marginTop="36dp" />
 
-                <ru.bgtu.diploma.ui.custom.CircleImageView
+                <ru.bgtu.diploma.ui.custom.AvatarImageView
                     android:id="@+id/iv_avatar"
                     android:layout_width="@dimen/avatar_round_size"
                     android:layout_height="@dimen/avatar_round_size"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/test" />
+                    android:src="@drawable/test3" />
 
 
                 <ImageButton
@@ -81,76 +81,76 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_nick_name"
                     android:layout_centerHorizontal="true"
-                    tools:text="Junior Android Developer" />
+                    tools:text="16-ИВТ-1" />
             </RelativeLayout>
 
         </FrameLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="?attr/colorAccentedSurface">
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:background="?attr/colorAccentedSurface">-->
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:paddingBottom="@dimen/spacing_normal_16"
-                android:paddingTop="@dimen/spacing_normal_16">
+<!--            <LinearLayout-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:orientation="vertical"-->
+<!--                android:gravity="center"-->
+<!--                android:paddingBottom="@dimen/spacing_normal_16"-->
+<!--                android:paddingTop="@dimen/spacing_normal_16">-->
 
-                <TextView
-                    style="@style/Profile.Metrics.Value"
-                    android:id="@+id/tv_rating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
-                    android:text="0"
-                    android:drawableLeft="@drawable/ic_sp_24" />
+<!--                <TextView-->
+<!--                    style="@style/Profile.Metrics.Value"-->
+<!--                    android:id="@+id/tv_rating"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textColor="@android:color/white"-->
+<!--                    android:text="0"-->
+<!--                    android:drawableLeft="@drawable/ic_sp_24" />-->
 
-                <TextView
-                    style="@style/Profile.Metrics.Label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/profile_label_rating" />
-            </LinearLayout>
+<!--                <TextView-->
+<!--                    style="@style/Profile.Metrics.Label"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="@string/profile_label_rating" />-->
+<!--            </LinearLayout>-->
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/spacing_normal_16"
-                android:layout_marginTop="@dimen/spacing_normal_16"
-                android:background="@color/color_divider_light" />
+<!--            <View-->
+<!--                android:layout_width="1dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_marginBottom="@dimen/spacing_normal_16"-->
+<!--                android:layout_marginTop="@dimen/spacing_normal_16"-->
+<!--                android:background="@color/color_divider_light" />-->
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:paddingBottom="@dimen/spacing_normal_16"
-                android:paddingTop="@dimen/spacing_normal_16">
+<!--            <LinearLayout-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:orientation="vertical"-->
+<!--                android:gravity="center"-->
+<!--                android:paddingBottom="@dimen/spacing_normal_16"-->
+<!--                android:paddingTop="@dimen/spacing_normal_16">-->
 
-                <TextView
-                    style="@style/Profile.Metrics.Value"
-                    android:id="@+id/tv_respect"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
-                    android:text="0"
-                    android:drawableLeft="@drawable/ic_respect_24" />
+<!--                <TextView-->
+<!--                    style="@style/Profile.Metrics.Value"-->
+<!--                    android:id="@+id/tv_respect"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textColor="@android:color/white"-->
+<!--                    android:text="0"-->
+<!--                    android:drawableLeft="@drawable/ic_respect_24" />-->
 
-                <TextView
-                    style="@style/Profile.Metrics.Label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/profile_label_respect" />
+<!--                <TextView-->
+<!--                    style="@style/Profile.Metrics.Label"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="@string/profile_label_respect" />-->
 
-            </LinearLayout>
+<!--            </LinearLayout>-->
 
-        </LinearLayout>
+<!--        </LinearLayout>-->
 
             <RelativeLayout
                 style="@style/Profile.InfoItem"

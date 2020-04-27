@@ -34,6 +34,7 @@ class ChatFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentChatBinding.inflate(inflater)
+        setHasOptionsMenu(true)
 
         return binding.root
     }
