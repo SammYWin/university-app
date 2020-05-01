@@ -8,5 +8,5 @@ data class UserItem (
     val avatar: String?,
     var lastActivity:String,
     var isSelected : Boolean = false,
-    var isOnline: Boolean = false
+    var isOnline: Boolean? = false
 )

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "495027338854",
+    "firebase_url": "https://bstu-98b04.firebaseio.com",
+    "project_id": "bstu-98b04",
+    "storage_bucket": "bstu-98b04.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:495027338854:android:a9eca8dbd1ffa48312f7a7",
+        "android_client_info": {
+          "package_name": "ru.bgtu.diploma"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "495027338854-au7seg6rihogva2181713f78hnlqsre3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHxXJljYE2lKDHqpWKG51DCrq5bmHcA-s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "495027338854-au7seg6rihogva2181713f78hnlqsre3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

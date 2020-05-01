@@ -17,4 +17,8 @@
     <color name="color_divider_light">#1FFFFFFF</color>
     <color name="color_indicator">#2196F3</color>
     <color name="color_green">#4FD149</color>
+
+    <color name="color_tab_background">#0E2F54</color>
+    <color name="color_tab_text">#FFFFFF</color>
+    <color name="color_tab_indicator">#de3e3e</color>
 </resources>

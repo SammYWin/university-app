@@ -66,7 +66,7 @@ class ArchiveFragment : Fragment() {
 
     private fun initViews() {
         chatAdapter = ChatAdapter {
-            Snackbar.make(binding.rvArchiveList,"Click on ${it.title}and he is ${if (it.isOnline) "online" else "not online"}", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(binding.rvArchiveList,"Click on ${it.title}and he is ${if (it.isOnline == true) "online" else "not online"}", Snackbar.LENGTH_LONG).show()
         }
 
         val divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)

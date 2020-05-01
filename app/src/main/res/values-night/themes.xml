@@ -28,7 +28,34 @@
 
     <style name="SplashTheme" parent="Theme.MaterialComponents.NoActionBar">
         <item name="android:windowBackground">@drawable/ic_splash</item>
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorPrimaryDark">@color/color_primary_dark</item>
     </style>
+
+    <style name="AuthTheme" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="colorPrimary">@color/color_grey_toolbar</item>
+        <item name="colorPrimaryDark">@color/color_primary_dark</item>
+        <item name="colorAccent">@color/color_accent_night</item>
+
+        <item name="colorSecondary">@color/color_accent_night</item>
+        <item name="colorOnSecondary">@android:color/white</item>
+
+        <item name="colorBackgroundSurface">@color/color_grey_surface_dark</item>
+        <item name="colorAccentedSurface">@color/color_divider_light</item>
+        <item name="colorText">@color/color_grey</item>
+        <item name="colorIcon">@android:color/white</item>
+        <item name="colorToolbar">@color/color_grey_toolbar</item>
+        <item name="colorSwipeBackground">@color/color_accent_night</item>
+        <item name="colorItemSelected">@color/color_grey_toolbar</item>
+        <item name="colorChipClose">@color/color_grey</item>
+        <item name="colorChipBackground">@color/color_grey_surface_dark</item>
+        <item name="colorSnackBarText">@color/color_grey_super_dark</item>
+        <item name="android:statusBarColor">@android:color/black</item>
+        <item name="colorDivider">@color/color_divider_dark</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar"/>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light"/>
 
 
 </resources>

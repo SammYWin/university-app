@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Chat Dev-intensive</string>
+    <string name="app_name">БГТУ</string>
     <string name="profile_label_rating">Рейтинг</string>
     <string name="profile_label_respect">Уважение</string>
     <string name="profile_hint_repository">Репозиторий</string>
@@ -16,4 +16,16 @@
     <string name="title_chats_bgtu">Сообщения</string>
     <string name="tittle_timetable_fragment">Расписание</string>
     <string name="title_profile_fragment">Профиль</string>
+    <string name="title_auth">Аутентификация</string>
+    <string name="auth_login">Вход</string>
+    <string name="auth_register">Регистрация</string>
+    <string name="register_group">Группа:</string>
+    <string name="register_isProfessor">Я преподаватель</string>
+    <string name="register_isLeader">Я староста</string>
+    <string name="register_hint_firstName">Имя</string>
+    <string name="register_hint_lastName">Фамилия</string>
+    <string name="register_btn_text">Зарегистрироваться</string>
+    <string name="register_hint_email">E-mail</string>
+    <string name="register_hint_password">Пароль</string>
+    <string name="login_btn_text">Войти</string>
 </resources>

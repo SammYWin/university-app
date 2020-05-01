@@ -1,34 +1,40 @@
 package ru.bgtu.diploma.models.data
 
+import com.google.firebase.firestore.DocumentId
 import ru.bgtu.diploma.extensions.humanizeDiff
 import ru.bgtu.diploma.utils.Utils
 import java.util.*
 
 data class User
     (
+    @DocumentId
     val id:String,
     var firstName: String?,
     var lastName: String?,
     var nickName: String?,
     var avatar: String?,
-//    var rating: Int = 0,
-//    var respect: Int = 0,
+    var group: String?,
     val lastVisit: Date? = Date(),
-    var isOnline: Boolean = false
-
+    var isOnline: Boolean? = false,
+    var isProfessor: Boolean? = false,
+    var isGroupLeader: Boolean? = false,
+    var isActivated: Boolean? = true
     )
 {
-    constructor(id:String, firstName: String?, lastName: String?) : this
-        (
+    constructor(): this(
+        "", null, null, null, null, null, null, null, null, null, null
+    )
+
+    constructor(id: String, firstName: String?, lastName: String?) : this(
         id= id,
         firstName= firstName,
         lastName= lastName,
-        nickName = null,
-        avatar= null
-        )
+        nickName = "$firstName $lastName",
+        avatar= null,
+        group = "testGroup"
+    )
 
-    companion object Factory
-    {
+    companion object Factory {
         private var lastId : Int = -1
         fun makeUser(fullName : String?) : User
         {
@@ -46,7 +52,7 @@ data class User
     fun toUserItem(): UserItem {
         val lastActivity = when{
             lastVisit == null -> "Ещё ни разу не заходил"
-            isOnline -> "online"
+            isOnline == true -> "online"
             else -> "Последний раз был ${lastVisit.humanizeDiff()}"
         }
 

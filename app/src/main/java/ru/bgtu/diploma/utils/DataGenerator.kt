@@ -357,8 +357,7 @@ object DataGenerator {
                     lastNames.random(true),
                     null,
                     if (isMale) maleAvatars.random(true) else femaleAvatars.random(true),
-//                    (0..Short.MAX_VALUE).random(),
-//                    (0..Short.MAX_VALUE).random(),
+                    "testGroup",
                     lastVisit,
                     isOnline
                 )

@@ -1,7 +1,14 @@
 <resources>
     
     <style name="Profile">
-        
+    </style>
+
+    <style name="Auth">
+    </style>
+
+    <style name="Auth.EditText.Single" parent="Auth">
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:singleLine">true</item>
     </style>
     
     <style name="Profile.EditText" parent="Profile">

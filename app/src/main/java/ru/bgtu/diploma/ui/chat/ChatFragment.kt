@@ -73,7 +73,7 @@ class ChatFragment : Fragment() {
                 findNavController().navigate(ChatFragmentDirections.actionChatFragmentToArchiveFragment())
             }
             else
-                Snackbar.make(binding.rvChatList, "Click on ${it.title}and he is ${if (it.isOnline) "online" else "not online"}", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(binding.rvChatList, "Click on ${it.title}and he is ${if (it.isOnline == true) "online" else "not online"}", Snackbar.LENGTH_LONG).show()
         }
 
         val touchCallback = ChatItemTouchHelperCallback(chatAdapter){
