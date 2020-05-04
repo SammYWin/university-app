@@ -4,22 +4,11 @@
         <attr name="aspectRatio" format="float"/>
     </declare-styleable>
 
-    <declare-styleable name="CircleImageView">
-        <attr name="cv_borderColor" format="color"/>
-        <attr name="cv_borderWidth" format="dimension"/>
-    </declare-styleable>
-
     <declare-styleable name="AvatarImageView">
         <attr name="aiv_borderColor" format="color"/>
         <attr name="aiv_borderWidth" format="dimension"/>
         <attr name="aiv_initials" format="string"/>
     </declare-styleable>
-
-<!--    <declare-styleable name="AvatarImageViewMask">-->
-<!--        <attr name="aiv_borderColor" format="color"/>-->
-<!--        <attr name="aiv_borderWidth" format="dimension"/>-->
-<!--        <attr name="aiv_initials" format="string"/>-->
-<!--    </declare-styleable>-->
 
     <attr name="colorAccentedSurface" format="reference"/>
     <attr name="colorDivider" format="reference"/>
@@ -32,4 +21,5 @@
     <attr name="colorChipClose" format="reference"/>
     <attr name="colorChipBackground" format="reference"/>
     <attr name="colorSnackBarText" format="reference"/>
+    <attr name="colorTextInAuthFragment" format="reference"/>
 </resources>

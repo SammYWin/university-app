@@ -1,19 +1,20 @@
 <resources>
-    
-    <style name="Profile">
-    </style>
 
     <style name="Auth">
     </style>
 
     <style name="Auth.EditText.Single" parent="Auth">
-        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:textColor">?attr/colorTextInAuthFragment</item>
+        <item name="hintTextColor">?attr/colorTextInAuthFragment</item>
+        <item name="android:textCursorDrawable">@null</item>
         <item name="android:singleLine">true</item>
     </style>
-    
+
+    <style name="Profile">
+    </style>
+
     <style name="Profile.EditText" parent="Profile">
         <item name="android:textColor">?attr/colorPrimary</item>
-
         <item name="android:enabled">false</item>
         <item name="android:focusable">false</item>
         <item name="android:focusableInTouchMode">false</item>
@@ -38,7 +39,7 @@
         <item name="android:layout_marginTop">@dimen/spacing_normal_16</item>
     </style>
 
-    <style name="Profile.Header.Rank" parent="Profile.Header">
+    <style name="Profile.Header.Group" parent="Profile.Header">
         <item name="android:textSize">@dimen/font_normal_16</item>
     </style>
 

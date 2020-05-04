@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="ru.bgtu.diploma">
+          package="ru.bstu.diploma">
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-            android:name=".App"
+            android:name="ru.bstu.diploma.App"
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
@@ -14,7 +14,7 @@
             android:theme="@style/AppTheme">
 
         <activity
-            android:name=".ui.splash.SplashActivity"
+            android:name="ru.bstu.diploma.ui.splash.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -23,8 +23,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.MainActivity"/>
-        <activity android:name=".ui.auth.AuthActivity" android:theme="@style/AuthTheme"/>
+        <activity android:name="ru.bstu.diploma.ui.MainActivity"/>
+        <activity android:name="ru.bstu.diploma.ui.auth.AuthActivity" android:theme="@style/AuthTheme"/>
 
 
 

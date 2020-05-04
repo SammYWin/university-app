@@ -14,40 +14,46 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout2"
+            android:id="@+id/wr_login_email"
+            style="@style/Auth.EditText.Single"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
             android:layout_marginBottom="32dp"
             android:hint="@string/register_hint_email"
-            app:layout_constraintBottom_toTopOf="@+id/textInputLayout4"
+            app:layout_constraintBottom_toTopOf="@+id/wr_login_password"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_login_email"
                 style="@style/Auth.EditText.Single"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout4"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/wr_login_password"
+            style="@style/Auth.EditText.Single"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    style="@style/Auth.EditText.Single"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/register_hint_password" />
-            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_login_password"
+                style="@style/Auth.EditText.Single"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/register_hint_password"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/btn_login"
@@ -57,10 +63,10 @@
             android:backgroundTint="@color/color_accent"
             android:text="@string/login_btn_text"
             android:textColor="@android:color/white"
-            app:layout_constraintEnd_toEndOf="@+id/textInputLayout4"
+            app:layout_constraintEnd_toEndOf="@+id/wr_login_password"
             app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="@+id/textInputLayout4"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout4" />
+            app:layout_constraintStart_toStartOf="@+id/wr_login_password"
+            app:layout_constraintTop_toBottomOf="@+id/wr_login_password" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

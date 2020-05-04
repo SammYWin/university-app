@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "495027338854",
-    "firebase_url": "https://bstu-98b04.firebaseio.com",
-    "project_id": "bstu-98b04",
-    "storage_bucket": "bstu-98b04.appspot.com"
+    "project_number": "814270615709",
+    "firebase_url": "https://bstu-d5cc4.firebaseio.com",
+    "project_id": "bstu-d5cc4",
+    "storage_bucket": "bstu-d5cc4.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:495027338854:android:a9eca8dbd1ffa48312f7a7",
+        "mobilesdk_app_id": "1:814270615709:android:fc43e7b36c6a2928ca0474",
         "android_client_info": {
-          "package_name": "ru.bgtu.diploma"
+          "package_name": "ru.bstu.diploma"
         }
       },
       "oauth_client": [
         {
-          "client_id": "495027338854-au7seg6rihogva2181713f78hnlqsre3.apps.googleusercontent.com",
+          "client_id": "814270615709-rb79bofrk2gbl7tme1od62vmuhc9k51p.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAHxXJljYE2lKDHqpWKG51DCrq5bmHcA-s"
+          "current_key": "AIzaSyBHMANxXaFF7t6saD4mIDUJZKGAFjW6h14"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "495027338854-au7seg6rihogva2181713f78hnlqsre3.apps.googleusercontent.com",
+              "client_id": "814270615709-rb79bofrk2gbl7tme1od62vmuhc9k51p.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -7,22 +7,22 @@
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="ru.bgtu.diploma.ui.profile.ProfileFragment"
+        android:name="ru.bstu.diploma.ui.profile.ProfileFragment"
         android:label="@string/title_profile_fragment"
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/groupFragment"
-        android:name="ru.bgtu.diploma.ui.group.GroupFragment"
+        android:name="ru.bstu.diploma.ui.group.GroupFragment"
         android:label="@string/title_create_group"
         tools:layout="@layout/fragment_group" />
     <fragment
         android:id="@+id/archiveFragment"
-        android:name="ru.bgtu.diploma.ui.archive.ArchiveFragment"
+        android:name="ru.bstu.diploma.ui.archive.ArchiveFragment"
         android:label="@string/title_archive"
         tools:layout="@layout/fragment_archive" />
     <fragment
         android:id="@+id/chatFragment"
-        android:name="ru.bgtu.diploma.ui.chat.ChatFragment"
+        android:name="ru.bstu.diploma.ui.chat.ChatFragment"
         android:label="@string/title_chats_bgtu"
         tools:layout="@layout/fragment_chat" >
         <action
@@ -34,6 +34,6 @@
     </fragment>
     <fragment
         android:id="@+id/timetableFragment"
-        android:name="ru.bgtu.diploma.ui.timetable.TimetableFragment"
+        android:name="ru.bstu.diploma.ui.timetable.TimetableFragment"
         android:label="@string/tittle_timetable_fragment" />
 </navigation>
