@@ -11,6 +11,7 @@ object PreferencesRepository
     private const val FIRST_NAME = "FIRST_NAME"
     private const val LAST_NAME = "LAST_NAME"
     private const val NICK_NAME = "NICK_NAME"
+    private const val AVATAR = "AVATAR"
     private const val ABOUT = "ABOUT"
     private const val GROUP = "GROUP"
     private const val APP_THEME = "APP_THEME"
@@ -30,6 +31,7 @@ object PreferencesRepository
         prefs.getString(FIRST_NAME, "")!!,
         prefs.getString(LAST_NAME, "")!!,
         prefs.getString(NICK_NAME, "")!!,
+        prefs.getString(AVATAR, "")!!,
         prefs.getString(ABOUT, "")!!,
         prefs.getString(GROUP, "")!!
     )
@@ -41,15 +43,17 @@ object PreferencesRepository
             putValue(FIRST_NAME to firstName)
             putValue(LAST_NAME to lastName)
             putValue(NICK_NAME to nickName)
+            putValue(AVATAR to avatar)
             putValue(ABOUT to about)
             putValue(GROUP to group)
         }
     }
 
-    fun clearPreferences(){
+    fun clearProfilePreferences(){
         putValue(FIRST_NAME to "")
         putValue(LAST_NAME to "")
         putValue(NICK_NAME to "")
+        putValue(AVATAR to "")
         putValue(ABOUT to "")
         putValue(GROUP to "")
     }

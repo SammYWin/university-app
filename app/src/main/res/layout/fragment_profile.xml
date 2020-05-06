@@ -9,9 +9,26 @@
 
     </data>
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/spacing_normal_16"
+            app:layout_anchor="@id/frame_layout"
+            app:layout_anchorGravity="bottom|end"
+            app:srcCompat="@drawable/ic_photo_camera_black_24dp"/>
+
+
     <ScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,8 +36,8 @@
         tools:context="ru.bstu.diploma.ui.profile.ProfileFragment"
         android:orientation="vertical">
 
-
         <FrameLayout
+            android:id="@+id/frame_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -44,15 +61,13 @@
                     android:src="@drawable/ic_switch_day_night"
                     android:layout_toStartOf="@+id/iv_avatar"
                     android:layout_marginEnd="@dimen/spacing_huge_32"
-                    android:layout_marginTop="36dp" />
+                    android:layout_marginTop="36dp"/>
 
                 <ru.bstu.diploma.ui.custom.AvatarImageView
                     android:id="@+id/iv_avatar"
                     android:layout_width="@dimen/avatar_round_size"
                     android:layout_height="@dimen/avatar_round_size"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/test3" />
-
+                    android:layout_centerHorizontal="true"/>
 
                 <ImageButton
                     android:id="@+id/btn_edit"
@@ -155,7 +170,8 @@
             <RelativeLayout
                 style="@style/Profile.InfoItem"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_large_24">
 
                 <ImageView
                     android:id="@+id/ic_avatar"
@@ -288,4 +304,5 @@
 
     </LinearLayout>
 </ScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

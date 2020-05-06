@@ -4,6 +4,7 @@ data class Profile(
     val firstName: String,
     val lastName: String,
     val nickName: String = "$firstName $lastName",
+    val avatar: String = "",
     val about: String,
     var group: String
 )

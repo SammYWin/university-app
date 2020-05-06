@@ -1,14 +1,12 @@
 package ru.bstu.diploma.ui.profile
 
-import android.content.DialogInterface
+import android.app.Activity
 import android.content.Intent
 import android.graphics.*
 import android.os.Build
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
+import android.provider.MediaStore
 import android.util.Log
-import android.util.TypedValue
 import android.view.*
 import android.widget.EditText
 import android.widget.TextView
@@ -18,36 +16,51 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.fragment_profile.*
 import ru.bstu.diploma.R
 import ru.bstu.diploma.models.Profile
 import ru.bstu.diploma.utils.Utils
-import ru.bstu.diploma.utils.Utils.convertSpToPx
 import ru.bstu.diploma.viewmodels.ProfileViewModel
 import ru.bstu.diploma.databinding.FragmentProfileBinding
+import ru.bstu.diploma.glide.GlideApp
 import ru.bstu.diploma.models.data.User
 import ru.bstu.diploma.repositories.PreferencesRepository
 import ru.bstu.diploma.ui.auth.AuthActivity
-import ru.bstu.diploma.utils.FirestoreUtil
+import ru.bstu.diploma.utils.StorageUtil
+import java.io.ByteArrayOutputStream
 
 class ProfileFragment : Fragment() {
 
     companion object {
         const val IS_EDIT_MODE = "IS_EDIT_MODE"
+        const val RC_SELECT_IMAGE = 2
     }
 
     private lateinit var viewModel: ProfileViewModel
-    var isEditMode = false
-    var isAvatarSet = true
+    private var isEditMode = false
     lateinit var viewFields: Map<String, TextView>
     private lateinit var binding: FragmentProfileBinding
+    private lateinit var selectedImageBytes: ByteArray
+    private var avatarPath = ""
+    private var isAvatarSet = false
+    private var avatarChanged = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentProfileBinding.inflate(inflater)
+        binding = FragmentProfileBinding.inflate(inflater, container, false)
         setHasOptionsMenu(true)
+
+        binding.apply {
+            binding.fab.setOnClickListener {
+                val intent = Intent().apply {
+                    type = "image/*"
+                    action = Intent.ACTION_GET_CONTENT
+                    putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png"))
+                }
+                startActivityForResult(Intent.createChooser(intent, "Выберите изображение"), RC_SELECT_IMAGE)
+            }
+        }
+
         return binding.root
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -73,13 +86,47 @@ class ProfileFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if(requestCode == RC_SELECT_IMAGE && resultCode == Activity.RESULT_OK
+            && data != null && data.data != null){
+            val selectedImagePath = data.data
+            val selectedImageBmp = when {
+                Build.VERSION.SDK_INT >= 29 -> {
+                    val soure = ImageDecoder.createSource(requireActivity().contentResolver, selectedImagePath!!)
+                    ImageDecoder.decodeBitmap(soure)
+                }
+                else -> {
+                    MediaStore.Images.Media.getBitmap(activity?.contentResolver, selectedImagePath)
+                }
+            }
+            val outputStream = ByteArrayOutputStream()
+            selectedImageBmp.compress(Bitmap.CompressFormat.JPEG, 90, outputStream)
+            selectedImageBytes = outputStream.toByteArray()
+
+            GlideApp.with(this)
+                .load(selectedImageBytes)
+                .placeholder(R.drawable.avatar_default)
+                .into(binding.ivAvatar)
+
+            avatarChanged = true
+            if(!isAvatarSet) isAvatarSet = true
+
+            if(::selectedImageBytes.isInitialized){
+                StorageUtil.uploadProfileAvatar(selectedImageBytes){ imagePath ->
+                    avatarPath = imagePath
+                    saveProfileInfo()
+                }
+            }
+        }
+    }
+
     private fun handleLogout(){
         AlertDialog.Builder(requireContext())
             .setTitle("Выход")
             .setMessage("Вы уверены?")
             .setPositiveButton("Выйти") { dialog, which ->
                 FirebaseAuth.getInstance().signOut()
-                PreferencesRepository.clearPreferences()
+                PreferencesRepository.clearProfilePreferences()
                 startActivity(Intent(context, AuthActivity::class.java))
                 activity?.finish()
             }
@@ -171,63 +218,49 @@ class ProfileFragment : Fragment() {
                 v.text = it[k].toString()
             }
         }
-        if(!isAvatarSet)
+
+        avatarPath = profile.avatar
+        if(avatarPath == "")
             updateDefaultAvatar(profile)
+        else{
+            //selectedImageBytes = profile.avatar.toByteArray()
+            GlideApp.with(this)
+                .load(StorageUtil.pathToReference(avatarPath))
+                .placeholder(R.drawable.avatar_default)
+                .into(binding.ivAvatar)
+        }
     }
 
     private fun updateDefaultAvatar(profile: Profile) {
         Utils.toInitials(profile.firstName, profile.lastName)?.let {
-            val avatar = getTextAvatar(it)
-            binding.ivAvatar.setImageBitmap(avatar)
+            binding.ivAvatar.setInitials(it)
+            binding.ivAvatar.setImageDrawable(null)
         } ?: binding.ivAvatar.setImageResource(R.drawable.avatar_default)
 
     }
 
-    private fun getTextAvatar(text: String): Bitmap{
-        val color = TypedValue()
-        requireNotNull(activity).theme.resolveAttribute(R.attr.colorAccent, color,true)
-
-        val bitmap: Bitmap = Bitmap.createBitmap(ic_avatar.layoutParams.width,ic_avatar.layoutParams.height, Bitmap.Config.ARGB_8888)
-
-        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-        paint.textSize = convertSpToPx(16)
-        paint.color = Color.WHITE
-        paint.textAlign = Paint.Align.CENTER
-
-        val canvas = Canvas(bitmap)
-        canvas.drawColor(color.data)
-
-        val textBounds = Rect()
-        paint.getTextBounds(text,0,text.length,textBounds)
-
-        canvas.drawText(text,binding.icAvatar.layoutParams.width/2f,
-            binding.icAvatar.layoutParams.height/2f + textBounds.height()/2f, paint)
-
-
-        return bitmap
-    }
-
     private fun saveProfileInfo() {
-        binding.tvNickName.text = "${binding.etFirstName.text} ${binding.etLastName.text.toString()}"
+        binding.tvNickName.text = getString(R.string.profile_nickname, binding.etFirstName.text.trim(), binding.etLastName.text.trim())
+
         val profile = Profile(
-            firstName = binding.etFirstName.text.toString(),
-            lastName = binding.etLastName.text.toString(),
+            firstName = binding.etFirstName.text.trim().toString(),
+            lastName = binding.etLastName.text.trim().toString(),
             nickName = binding.tvNickName.text.toString(),
-            about = binding.etAbout.text.toString(),
+            avatar = avatarPath,
+            about = binding.etAbout.text.trim().toString(),
             group = binding.tvGroup.text.toString()
         )
         val user = User()
         with(user){
-            firstName = binding.etFirstName.text.toString()
-            lastName = binding.etLastName.text.toString()
+            firstName = binding.etFirstName.text.trim().toString()
+            lastName = binding.etLastName.text.trim().toString()
             nickName = binding.tvNickName.text.toString()
-            about = binding.etAbout.text.toString()
+            avatar = avatarPath
+            about = binding.etAbout.text.trim().toString()
             group = binding.tvGroup.text.toString()
         }
 
         viewModel.saveProfileData(profile, user)
     }
-
-
 
 }

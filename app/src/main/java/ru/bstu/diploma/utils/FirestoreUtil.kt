@@ -27,7 +27,7 @@ object FirestoreUtil {
         }
     }
 
-    fun updateCurrentUser(user: User){
+    fun updateCurrentUser(user: User, onComplete: () -> Unit){
         val userFieldMap = mutableMapOf<String, Any>()
         if(user.firstName != null) userFieldMap["firstName"] = user.firstName!!
         if(user.lastName != null) userFieldMap["lastName"] = user.lastName!!
@@ -41,7 +41,9 @@ object FirestoreUtil {
         if(user.isGroupLeader != null) userFieldMap["isGroupLeader"] = user.isGroupLeader!!
         if(user.isActivated != null) userFieldMap["isActivated"] = user.isActivated!!
 
-        currentUserDocRef.update(userFieldMap)
+        currentUserDocRef.update(userFieldMap).addOnSuccessListener {
+            onComplete()
+        }
     }
 
     fun getCurrentUser(onComplete: (User) -> Unit){

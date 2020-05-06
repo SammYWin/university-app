@@ -17,7 +17,6 @@ class ProfileViewModel : ViewModel()
     private val appTheme = MutableLiveData<Int>()
 
     init {
-        Log.d("M_ProfileViewModel", "init view model")
         profileData.value = repository.getProfile()
         appTheme.value = repository.getAppTheme()
         FirestoreUtil.getCurrentUser { user ->
@@ -25,17 +24,13 @@ class ProfileViewModel : ViewModel()
                 user.firstName!!,
                 user.lastName!!,
                 user.nickName!!,
+                user.avatar!!,
                 user.about!!,
                 user.group!!
             )
             profileData.value = profile
             repository.saveProfile(profile)
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        Log.d("M_ProfileViewModel", "view model cleared")
     }
 
     fun getProfileData() : LiveData<Profile> = profileData
@@ -45,7 +40,7 @@ class ProfileViewModel : ViewModel()
     fun saveProfileData(profile : Profile, user: User)
     {
         repository.saveProfile(profile)
-        FirestoreUtil.updateCurrentUser(user)
+        FirestoreUtil.updateCurrentUser(user){}
         profileData.value = profile
     }
 

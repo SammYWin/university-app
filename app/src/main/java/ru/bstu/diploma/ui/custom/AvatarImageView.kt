@@ -123,8 +123,8 @@ class AvatarImageView @JvmOverloads constructor(
     }
 
     override fun onRestoreInstanceState(state: Parcelable) {
-        Log.e("AvatarImageView", "onRestoreInstanceState $id")
-        super.onRestoreInstanceState(state)
+        val savedState = state as SavedState
+        super.onRestoreInstanceState(savedState.superState)
         if (state is SavedState) {
             state.also {
                 isAvatarMode = it.ssIsAvatarMode

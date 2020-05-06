@@ -332,4 +332,5 @@
     <string name="error_first_name_empty">Введите имя</string>
     <string name="error_last_name_empty">Введите фамилию</string>
     <string name="spinner_hint">Выберите группу</string>
+    <string name="profile_nickname">%1$s %2$s</string>
 </resources>
