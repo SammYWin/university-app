@@ -1,15 +1,20 @@
 package ru.bstu.diploma.viewmodels
 
 import androidx.lifecycle.*
+import com.google.firebase.firestore.ListenerRegistration
 import ru.bstu.diploma.extensions.mutableLiveData
+import ru.bstu.diploma.models.data.User
 import ru.bstu.diploma.models.data.UserItem
 import ru.bstu.diploma.repositories.GroupRepository
+import ru.bstu.diploma.utils.FirestoreUtil
 
 class GroupViewModel : ViewModel(){
     private val query = mutableLiveData("")
     private val groupRepository = GroupRepository
     private val userItems = mutableLiveData(loadUsers())
     private val selectedItems = Transformations.map(userItems){users -> users.filter { it.isSelected }}
+
+    private lateinit var userListenerRegistration: ListenerRegistration
 
     fun getUsersData() : LiveData<List<UserItem>>{
         val result = MediatorLiveData<List<UserItem>>()
@@ -55,6 +60,14 @@ class GroupViewModel : ViewModel(){
         groupRepository.createChat(selectedItems.value)
     }
 
-    private fun loadUsers(): List<UserItem> = groupRepository.loadUsers().map{it.toUserItem()}
+    private fun loadUsers(): List<UserItem> {
+        var _userItems = listOf<UserItem>()
+        userListenerRegistration = FirestoreUtil.addUsersListener{
+            _userItems =  it.map { it.toUserItem() }
+            userItems.value = _userItems
+        }
+
+        return _userItems
+    }
 
 }

@@ -1,5 +1,6 @@
 package ru.bstu.diploma.viewmodels
 
+import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.LiveData
@@ -15,8 +16,10 @@ class ProfileViewModel : ViewModel()
     private val repository : PreferencesRepository = PreferencesRepository
     private val profileData = MutableLiveData<Profile>()
     private val appTheme = MutableLiveData<Int>()
+    var currentAvatar: Drawable? = null
 
     init {
+        Log.d("M_ProfileViewModel", "viewModel Init")
         profileData.value = repository.getProfile()
         appTheme.value = repository.getAppTheme()
         FirestoreUtil.getCurrentUser { user ->
@@ -28,7 +31,9 @@ class ProfileViewModel : ViewModel()
                 user.about!!,
                 user.group!!
             )
-            profileData.value = profile
+            if(!profileData.value!!.equals(profile)) {
+                profileData.value = profile
+            }
             repository.saveProfile(profile)
         }
     }
@@ -39,9 +44,11 @@ class ProfileViewModel : ViewModel()
 
     fun saveProfileData(profile : Profile, user: User)
     {
-        repository.saveProfile(profile)
-        FirestoreUtil.updateCurrentUser(user){}
-        profileData.value = profile
+        if(!repository.getProfile().equals(profile)){
+            repository.saveProfile(profile)
+            profileData.value = profile
+        }
+        FirestoreUtil.updateCurrentUser(user)
     }
 
     fun switchTheme()

@@ -83,7 +83,7 @@ class GroupFragment : Fragment() {
         viewModel.getUsersData().observe(viewLifecycleOwner, Observer { usersAdapter.updateData(it) })
         viewModel.getSelectedData().observe(viewLifecycleOwner, Observer {
             updateChips(it)
-            toggleFab(it.size > 1)
+            toggleFab(it.size >= 1)
         })
     }
 

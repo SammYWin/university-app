@@ -9,15 +9,17 @@ import com.bumptech.glide.Glide
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_user_list.*
 import ru.bstu.diploma.R
+import ru.bstu.diploma.glide.GlideApp
 import ru.bstu.diploma.models.data.UserItem
+import ru.bstu.diploma.utils.StorageUtil
 
 class UserAdapter(val listener: (UserItem)->Unit) : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
     var items: List<UserItem> = listOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val convertView = inflater.inflate(R.layout.item_user_list, parent, false)
-        return UserViewHolder(convertView)
+        val itemView = inflater.inflate(R.layout.item_user_list, parent, false)
+        return UserViewHolder(itemView)
     }
 
     override fun getItemCount(): Int = items.size
@@ -41,17 +43,17 @@ class UserAdapter(val listener: (UserItem)->Unit) : RecyclerView.Adapter<UserAda
         diffResult.dispatchUpdatesTo(this)
     }
 
-    inner class UserViewHolder(convertView : View) : RecyclerView.ViewHolder(convertView), LayoutContainer{
+    inner class UserViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView), LayoutContainer{
         override val containerView: View?
         get() = itemView
 
         fun bind(user: UserItem, listener: (UserItem) -> Unit){
-            if(user.avatar == null){
+            if(user.avatar == ""){
                 Glide.with(itemView).clear(iv_avatar_user)
                 iv_avatar_user.setInitials(user.initials ?: "??")
             } else{
-                Glide.with(itemView)
-                    .load(user.avatar)
+                GlideApp.with(itemView)
+                    .load(StorageUtil.pathToReference(user.avatar!!))
                     .into(iv_avatar_user)
             }
 

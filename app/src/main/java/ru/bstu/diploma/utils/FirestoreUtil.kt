@@ -1,22 +1,24 @@
 package ru.bstu.diploma.utils
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import ru.bstu.diploma.models.data.User
+import ru.bstu.diploma.models.data.UserItem
 import java.lang.NullPointerException
 
 object FirestoreUtil {
     private val firestoreInstance by lazy { FirebaseFirestore.getInstance() }
 
     private val currentUserDocRef: DocumentReference
-        get() = firestoreInstance.document("user/${FirebaseAuth.getInstance().uid 
+        get() = firestoreInstance.document("user/${FirebaseAuth.getInstance().uid
                                             ?: throw NullPointerException("UID is null")}")
 
     fun initCurrentUserIfFirstTime(user: User, onComplete: () -> Unit){
         currentUserDocRef.get().addOnSuccessListener { documentSnapshot ->
             if(!documentSnapshot.exists()){
-                //user.nickName = FirebaseAuth.getInstance().currentUser?.displayName
                 val newUser = user
                 currentUserDocRef.set(newUser).addOnSuccessListener {
                     onComplete()
@@ -27,7 +29,7 @@ object FirestoreUtil {
         }
     }
 
-    fun updateCurrentUser(user: User, onComplete: () -> Unit){
+    fun updateCurrentUser(user: User){
         val userFieldMap = mutableMapOf<String, Any>()
         if(user.firstName != null) userFieldMap["firstName"] = user.firstName!!
         if(user.lastName != null) userFieldMap["lastName"] = user.lastName!!
@@ -41,9 +43,7 @@ object FirestoreUtil {
         if(user.isGroupLeader != null) userFieldMap["isGroupLeader"] = user.isGroupLeader!!
         if(user.isActivated != null) userFieldMap["isActivated"] = user.isActivated!!
 
-        currentUserDocRef.update(userFieldMap).addOnSuccessListener {
-            onComplete()
-        }
+        currentUserDocRef.update(userFieldMap)
     }
 
     fun getCurrentUser(onComplete: (User) -> Unit){
@@ -52,4 +52,23 @@ object FirestoreUtil {
                 onComplete(user) }
         }
     }
+
+    fun addUsersListener(onListen: (List<User>) -> Unit): ListenerRegistration{
+        return firestoreInstance.collection("user")
+            .addSnapshotListener{querySnapshot, firebaseFirestoreException ->
+                if(firebaseFirestoreException != null){
+                    Log.e("FIRESTORE", "Users listener error", firebaseFirestoreException)
+                    return@addSnapshotListener
+                }
+
+                val users = mutableListOf<User>()
+                querySnapshot?.documents?.forEach {
+                    if(it.id != FirebaseAuth.getInstance().currentUser?.uid)
+                        users.add(it.toObject(User::class.java)!!)
+                }
+                onListen(users)
+            }
+    }
+
+    fun removeListener(registration: ListenerRegistration) = registration.remove()
 }

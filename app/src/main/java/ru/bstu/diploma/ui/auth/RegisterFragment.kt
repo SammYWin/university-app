@@ -103,6 +103,7 @@ class RegisterFragment: Fragment(), AdapterView.OnItemSelectedListener {
             this.lastName = lastName
             nickName = "$firstName $lastName"
             about = ""
+            avatar = ""
         }
 
         val dialog: AlertDialog = SpotsDialog.Builder()

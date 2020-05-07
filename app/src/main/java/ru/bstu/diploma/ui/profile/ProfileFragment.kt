@@ -10,11 +10,14 @@ import android.util.Log
 import android.view.*
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.firebase.auth.FirebaseAuth
 import ru.bstu.diploma.R
 import ru.bstu.diploma.models.Profile
@@ -69,6 +72,41 @@ class ProfileFragment : Fragment() {
         initViewModel()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if(requestCode == RC_SELECT_IMAGE && resultCode == Activity.RESULT_OK
+            && data != null && data.data != null){
+            val selectedImagePath = data.data
+            val selectedImageBmp = when {
+                Build.VERSION.SDK_INT >= 29 -> {
+                    val source = ImageDecoder.createSource(requireActivity().contentResolver, selectedImagePath!!)
+                    ImageDecoder.decodeBitmap(source)
+                }
+                else -> {
+                    MediaStore.Images.Media.getBitmap(activity?.contentResolver, selectedImagePath)
+                }
+            }
+            val outputStream = ByteArrayOutputStream()
+            selectedImageBmp.compress(Bitmap.CompressFormat.JPEG, 90, outputStream)
+            selectedImageBytes = outputStream.toByteArray()
+
+            GlideApp.with(this)
+                .load(selectedImageBytes)
+                .placeholder(selectedImageBmp.toDrawable(resources))
+                .into(binding.ivAvatar)
+            viewModel.currentAvatar = selectedImageBmp.toDrawable(resources)
+
+            avatarChanged = true
+            if(!isAvatarSet) isAvatarSet = true
+
+            if(::selectedImageBytes.isInitialized){
+                StorageUtil.uploadProfileAvatar(selectedImageBytes){ imagePath ->
+                    avatarPath = imagePath
+                    saveProfileInfo()
+                }
+            }
+        }
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(IS_EDIT_MODE, isEditMode)
@@ -84,40 +122,6 @@ class ProfileFragment : Fragment() {
             handleLogout()
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if(requestCode == RC_SELECT_IMAGE && resultCode == Activity.RESULT_OK
-            && data != null && data.data != null){
-            val selectedImagePath = data.data
-            val selectedImageBmp = when {
-                Build.VERSION.SDK_INT >= 29 -> {
-                    val soure = ImageDecoder.createSource(requireActivity().contentResolver, selectedImagePath!!)
-                    ImageDecoder.decodeBitmap(soure)
-                }
-                else -> {
-                    MediaStore.Images.Media.getBitmap(activity?.contentResolver, selectedImagePath)
-                }
-            }
-            val outputStream = ByteArrayOutputStream()
-            selectedImageBmp.compress(Bitmap.CompressFormat.JPEG, 90, outputStream)
-            selectedImageBytes = outputStream.toByteArray()
-
-            GlideApp.with(this)
-                .load(selectedImageBytes)
-                .placeholder(R.drawable.avatar_default)
-                .into(binding.ivAvatar)
-
-            avatarChanged = true
-            if(!isAvatarSet) isAvatarSet = true
-
-            if(::selectedImageBytes.isInitialized){
-                StorageUtil.uploadProfileAvatar(selectedImageBytes){ imagePath ->
-                    avatarPath = imagePath
-                    saveProfileInfo()
-                }
-            }
-        }
     }
 
     private fun handleLogout(){
@@ -208,7 +212,6 @@ class ProfileFragment : Fragment() {
 
     private fun updateTheme(mode: Int) {
         AppCompatDelegate.setDefaultNightMode(mode)
-        Log.d("M_ProfileActivity", "updatedTheme")
     }
 
     private fun updateUI(profile: Profile) {
@@ -218,15 +221,14 @@ class ProfileFragment : Fragment() {
                 v.text = it[k].toString()
             }
         }
-
+        Log.d("M_ProfileFragment", "updateUI called")
         avatarPath = profile.avatar
         if(avatarPath == "")
             updateDefaultAvatar(profile)
-        else{
-            //selectedImageBytes = profile.avatar.toByteArray()
+        else  {
             GlideApp.with(this)
                 .load(StorageUtil.pathToReference(avatarPath))
-                .placeholder(R.drawable.avatar_default)
+                .placeholder(viewModel.currentAvatar ?: resources.getDrawable(R.drawable.avatar_default, requireActivity().theme) )
                 .into(binding.ivAvatar)
         }
     }
