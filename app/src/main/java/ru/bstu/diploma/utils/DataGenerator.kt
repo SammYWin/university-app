@@ -443,8 +443,7 @@ object DataGenerator {
             list.add(
                 TextMessage(
                     "$i",
-                    user,
-                    chat,
+                    user.firstName ?: "??",
                     true,
                     user.lastVisit ?: Date(),
                     (0..10).random() > 0,

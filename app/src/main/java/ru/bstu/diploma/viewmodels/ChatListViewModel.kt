@@ -8,7 +8,7 @@ import ru.bstu.diploma.extensions.mutableLiveData
 import ru.bstu.diploma.models.data.ChatItem
 import ru.bstu.diploma.repositories.ChatRepository
 
-class MainViewModel : ViewModel() {
+class ChatListViewModel : ViewModel() {
     private val query = mutableLiveData("")
     private val chatRepository = ChatRepository
     private val chats = Transformations.map(chatRepository.loadChats()){ chats->

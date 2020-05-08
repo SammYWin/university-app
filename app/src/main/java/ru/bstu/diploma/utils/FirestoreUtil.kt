@@ -5,6 +5,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import ru.bstu.diploma.models.BaseMessage
+import ru.bstu.diploma.models.ImageMessage
+import ru.bstu.diploma.models.TextMessage
+import ru.bstu.diploma.models.data.Chat
 import ru.bstu.diploma.models.data.User
 import ru.bstu.diploma.models.data.UserItem
 import java.lang.NullPointerException
@@ -15,6 +19,8 @@ object FirestoreUtil {
     private val currentUserDocRef: DocumentReference
         get() = firestoreInstance.document("user/${FirebaseAuth.getInstance().uid
                                             ?: throw NullPointerException("UID is null")}")
+
+    private val chatsCollectionRef = firestoreInstance.collection("chats")
 
     fun initCurrentUserIfFirstTime(user: User, onComplete: () -> Unit){
         currentUserDocRef.get().addOnSuccessListener { documentSnapshot ->
@@ -53,6 +59,20 @@ object FirestoreUtil {
         }
     }
 
+    fun getUsersByIds(ids: List<String>, onComplete: (List<User>) -> Unit) {
+        val users = mutableListOf<User>()
+        for(id in ids)(
+            firestoreInstance.collection("user").document(id).get()
+                .addOnSuccessListener {
+                    it.toObject(User::class.java)?.let { user ->
+                        users.add(user)
+                        if(users.size == ids.size)
+                            onComplete(users)
+                    }
+                })
+    }
+
+
     fun addUsersListener(onListen: (List<User>) -> Unit): ListenerRegistration{
         return firestoreInstance.collection("user")
             .addSnapshotListener{querySnapshot, firebaseFirestoreException ->
@@ -69,6 +89,35 @@ object FirestoreUtil {
                 onListen(users)
             }
     }
-
     fun removeListener(registration: ListenerRegistration) = registration.remove()
+
+    fun createChat(items: List<UserItem>?, onComplete: () -> Unit){
+        val ids = items!!.map { it.id }
+        getUsersByIds(ids){
+            val users = it
+            val title = if(it.size > 1) {
+                users.map { it.firstName }.joinToString(", ")
+            }else users.first().nickName!!
+
+            val baseMsgs = mutableListOf<BaseMessage>()
+
+            val _newChat = Chat("", title, users, baseMsgs)
+            val newChat = hashMapOf(
+                "title" to _newChat.title,
+                "isArchived" to _newChat.isArchived
+            )
+
+            val newChatRef = chatsCollectionRef.document()
+                newChatRef.set(newChat)
+            for(member in users){
+                newChatRef.collection("members").document().set(member)
+            }
+            for(msg in baseMsgs){
+                newChatRef.collection("messages").document().set(msg)
+            }
+
+        }
+
+    }
+
 }

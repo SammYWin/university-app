@@ -1,4 +1,4 @@
-package ru.bstu.diploma.ui.group
+package ru.bstu.diploma.ui.users
 
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -14,21 +14,21 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
-import kotlinx.android.synthetic.main.fragment_group.chip_group
+import kotlinx.android.synthetic.main.fragment_users.chip_group
 import ru.bstu.diploma.R
-import ru.bstu.diploma.databinding.FragmentGroupBinding
+import ru.bstu.diploma.databinding.FragmentUsersBinding
 import ru.bstu.diploma.models.data.UserItem
 import ru.bstu.diploma.ui.adapters.UserAdapter
-import ru.bstu.diploma.viewmodels.GroupViewModel
+import ru.bstu.diploma.viewmodels.UsersViewModel
 
-class GroupFragment : Fragment() {
+class UsersFragment : Fragment() {
 
     private lateinit var usersAdapter: UserAdapter
-    private lateinit var viewModel: GroupViewModel
-    private lateinit var binding: FragmentGroupBinding
+    private lateinit var viewModel: UsersViewModel
+    private lateinit var binding: FragmentUsersBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentGroupBinding.inflate(inflater)
+        binding = FragmentUsersBinding.inflate(inflater)
         setHasOptionsMenu(true)
 
         return binding.root
@@ -73,13 +73,13 @@ class GroupFragment : Fragment() {
         }
 
         binding.fab.setOnClickListener {
-            viewModel.handleCreateGroup()
+            viewModel.handleCreateChat()
             findNavController().popBackStack()
         }
     }
 
     private fun initViewModel() {
-        viewModel = ViewModelProvider(this).get(GroupViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(UsersViewModel::class.java)
         viewModel.getUsersData().observe(viewLifecycleOwner, Observer { usersAdapter.updateData(it) })
         viewModel.getSelectedData().observe(viewLifecycleOwner, Observer {
             updateChips(it)
@@ -98,10 +98,8 @@ class GroupFragment : Fragment() {
         requireNotNull(activity).theme.resolveAttribute(R.attr.colorChipClose, closeIconColor, true)
         requireNotNull(activity).theme.resolveAttribute(R.attr.colorChipBackground, bgColor, true)
 
-
         val chip = Chip(context).apply {
             text = user.fullName
-            chipIcon = resources.getDrawable(R.drawable.avatar_default, requireNotNull(activity).theme)
             isCloseIconVisible = true
             tag = user.id
             isClickable = true
@@ -109,7 +107,7 @@ class GroupFragment : Fragment() {
             chipBackgroundColor = ColorStateList.valueOf(bgColor.data)
 
             setTextColor(Color.WHITE)
-            setOnCloseIconClickListener{viewModel.handleRemoveChip(tag.toString())}
+            setOnCloseIconClickListener { viewModel.handleRemoveChip(tag.toString()) }
         }
 
         binding.chipGroup.addView(chip)

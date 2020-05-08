@@ -8,7 +8,7 @@ import ru.bstu.diploma.models.data.UserItem
 import ru.bstu.diploma.repositories.GroupRepository
 import ru.bstu.diploma.utils.FirestoreUtil
 
-class GroupViewModel : ViewModel(){
+class UsersViewModel : ViewModel(){
     private val query = mutableLiveData("")
     private val groupRepository = GroupRepository
     private val userItems = mutableLiveData(loadUsers())
@@ -56,8 +56,9 @@ class GroupViewModel : ViewModel(){
         query.value = text
     }
 
-    fun handleCreateGroup() {
-        groupRepository.createChat(selectedItems.value)
+    fun handleCreateChat() {
+//        groupRepository.createChat(selectedItems.value)
+        FirestoreUtil.createChat(selectedItems.value){}
     }
 
     private fun loadUsers(): List<UserItem> {
@@ -68,6 +69,11 @@ class GroupViewModel : ViewModel(){
         }
 
         return _userItems
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        FirestoreUtil.removeListener(userListenerRegistration)
     }
 
 }

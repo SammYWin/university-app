@@ -306,7 +306,7 @@
     <string name="snack_bar_undo">ОТМЕНА</string>
     <string name="chat_no_messages">Сообщение ещё нет</string>
     <string name="send_photo">отправил фото</string>
-    <string name="title_create_group">Создание группы</string>
+    <string name="title_create_chat">Создание чата</string>
     <string name="item_archive_title">Архив чатов</string>
     <string name="title_archive">Архив чатов</string>
     <string name="title_chats_bgtu">Сообщения</string>

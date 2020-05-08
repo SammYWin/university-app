@@ -1,6 +1,6 @@
 package ru.bstu.diploma.models.data
 
-import androidx.annotation.VisibleForTesting
+import com.google.firebase.firestore.DocumentId
 import ru.bstu.diploma.App
 import ru.bstu.diploma.R
 import ru.bstu.diploma.extensions.shortFormat
@@ -10,27 +10,25 @@ import ru.bstu.diploma.utils.Utils
 import java.util.*
 
 data class Chat(
+    @DocumentId
     val id: String,
     val title: String,
     val members: List<User> = listOf(),
     var messages: MutableList<BaseMessage> = mutableListOf(),
     var isArchived: Boolean = false
 ) {
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    fun unreadableMessageCount(): Int = messages.filter{ message -> !message.isReaded }.count()
+    private fun unreadableMessageCount(): Int = messages.filter{ message -> !message.isReaded }.count()
 
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    fun lastMessageDate(): Date? = if(messages.isEmpty()) null else messages.last().date
+    private fun lastMessageDate(): Date? = if(messages.isEmpty()) null else messages.last().date
 
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    fun lastMessageShort(): Pair<String, String?>{
+    private fun lastMessageShort(): Pair<String, String?>{
         val lastMessage = messages.lastOrNull()
         var first =  App.applicationContext().resources.getString(R.string.chat_no_messages)
-        val second = lastMessage?.from?.firstName
+        val second = lastMessage?.senderName
 
         if (lastMessage != null) {
             first = if(lastMessage is TextMessage) lastMessage.text!!
-                    else "${lastMessage.from.firstName} - ${App.applicationContext().resources.getString(R.string.send_photo)}"
+                    else "${lastMessage.senderName} - ${App.applicationContext().resources.getString(R.string.send_photo)}"
         }
 
         return first to second

@@ -14,22 +14,22 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import ru.bstu.diploma.R
-import ru.bstu.diploma.databinding.FragmentChatBinding
+import ru.bstu.diploma.databinding.FragmentChatListBinding
 import ru.bstu.diploma.extensions.config
 import ru.bstu.diploma.models.data.ChatType
 import ru.bstu.diploma.ui.adapters.ChatAdapter
 import ru.bstu.diploma.ui.adapters.ChatItemTouchHelperCallback
-import ru.bstu.diploma.viewmodels.MainViewModel
+import ru.bstu.diploma.viewmodels.ChatListViewModel
 
 
-class ChatFragment : Fragment() {
+class ChatListFragment : Fragment() {
 
     private lateinit var chatAdapter: ChatAdapter
-    private lateinit var viewModel: MainViewModel
-    private lateinit var binding: FragmentChatBinding
+    private lateinit var viewModel: ChatListViewModel
+    private lateinit var binding: FragmentChatListBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentChatBinding.inflate(inflater)
+        binding = FragmentChatListBinding.inflate(inflater)
         setHasOptionsMenu(true)
 
         return binding.root
@@ -66,7 +66,7 @@ class ChatFragment : Fragment() {
     private fun initViews() {
         chatAdapter = ChatAdapter {
             if(it.chatType == ChatType.ARCHIVE) {
-                findNavController().navigate(ChatFragmentDirections.actionChatFragmentToArchiveFragment())
+                findNavController().navigate(ChatListFragmentDirections.actionChatFragmentToArchiveFragment())
             }
             else
                 Snackbar.make(binding.rvChatList, "Click on ${it.title}and he is ${if (it.isOnline == true) "online" else "not online"}", Snackbar.LENGTH_LONG).show()
@@ -103,12 +103,12 @@ class ChatFragment : Fragment() {
 
 
         binding.fab.setOnClickListener{
-            findNavController().navigate(ChatFragmentDirections.actionChatFragmentToGroupFragment())
+            findNavController().navigate(ChatListFragmentDirections.actionChatFragmentToGroupFragment())
         }
     }
 
     private fun initViewModel() {
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(ChatListViewModel::class.java)
         viewModel.getChatData().observe(viewLifecycleOwner, Observer { chatAdapter.updateData(it) })
     }
 

@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
 
         val appBarConfiguration = AppBarConfiguration.Builder(
-            R.id.chatFragment,
+            R.id.chatListFragment,
             R.id.timetableFragment,
             R.id.profileFragment
         ).build()

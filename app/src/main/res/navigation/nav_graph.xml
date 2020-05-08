@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/chatFragment">
+    app:startDestination="@id/chatListFragment">
 
     <fragment
         android:id="@+id/profileFragment"
@@ -11,26 +11,26 @@
         android:label="@string/title_profile_fragment"
         tools:layout="@layout/fragment_profile" />
     <fragment
-        android:id="@+id/groupFragment"
-        android:name="ru.bstu.diploma.ui.group.GroupFragment"
-        android:label="@string/title_create_group"
-        tools:layout="@layout/fragment_group" />
+        android:id="@+id/usersFragment"
+        android:name="ru.bstu.diploma.ui.users.UsersFragment"
+        android:label="@string/title_create_chat"
+        tools:layout="@layout/fragment_users" />
     <fragment
         android:id="@+id/archiveFragment"
         android:name="ru.bstu.diploma.ui.archive.ArchiveFragment"
         android:label="@string/title_archive"
         tools:layout="@layout/fragment_archive" />
     <fragment
-        android:id="@+id/chatFragment"
-        android:name="ru.bstu.diploma.ui.chat.ChatFragment"
+        android:id="@+id/chatListFragment"
+        android:name="ru.bstu.diploma.ui.chat.ChatListFragment"
         android:label="@string/title_chats_bgtu"
-        tools:layout="@layout/fragment_chat" >
+        tools:layout="@layout/fragment_chat_list" >
         <action
             android:id="@+id/action_chatFragment_to_archiveFragment"
             app:destination="@id/archiveFragment" />
         <action
             android:id="@+id/action_chatFragment_to_groupFragment"
-            app:destination="@id/groupFragment" />
+            app:destination="@id/usersFragment" />
     </fragment>
     <fragment
         android:id="@+id/timetableFragment"
