@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.bstu.diploma.R
 import ru.bstu.diploma.models.data.ChatItem
 
-class ChatItemTouchHelperCallback(val adapter: ChatAdapter, val swipeListener: (ChatItem) -> Unit) : ItemTouchHelper.Callback() {
+class ChatItemTouchHelperCallback(val listAdapter: ChatListAdapter, val swipeListener: (ChatItem) -> Unit) : ItemTouchHelper.Callback() {
 
     private val bgRect = RectF()
     private val iconBounds = Rect()
@@ -34,7 +34,7 @@ class ChatItemTouchHelperCallback(val adapter: ChatAdapter, val swipeListener: (
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        swipeListener.invoke(adapter.items[viewHolder.adapterPosition])
+        swipeListener.invoke(listAdapter.items[viewHolder.adapterPosition])
     }
 
     override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {

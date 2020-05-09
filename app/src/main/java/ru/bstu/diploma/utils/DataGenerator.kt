@@ -379,7 +379,7 @@ object DataGenerator {
             list.add(singleChat)
         }
         for (i in 0 until count) {
-            val members = stabUsers.randomSublist(5, 2)
+            val members = stabUsers.randomSublist(5, 3)
             Log.e("DataGenerator", "$members")
             val groupChat = Chat(
                 "${list.size}",
@@ -443,6 +443,7 @@ object DataGenerator {
             list.add(
                 TextMessage(
                     "$i",
+                    "text",
                     user.firstName ?: "??",
                     true,
                     user.lastVisit ?: Date(),

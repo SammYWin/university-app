@@ -15,12 +15,12 @@ import com.google.android.material.snackbar.Snackbar
 import ru.bstu.diploma.R
 import ru.bstu.diploma.databinding.FragmentArchiveBinding
 import ru.bstu.diploma.extensions.config
-import ru.bstu.diploma.ui.adapters.ChatAdapter
+import ru.bstu.diploma.ui.adapters.ChatListAdapter
 import ru.bstu.diploma.ui.adapters.ChatItemTouchHelperCallback
 import ru.bstu.diploma.viewmodels.ArchiveViewModel
 
 class ArchiveFragment : Fragment() {
-    private lateinit var chatAdapter : ChatAdapter
+    private lateinit var chatListAdapter : ChatListAdapter
     private lateinit var viewModel : ArchiveViewModel
     private lateinit var binding: FragmentArchiveBinding
 
@@ -60,17 +60,17 @@ class ArchiveFragment : Fragment() {
 
     private fun initViewModel() {
         viewModel = ViewModelProvider(this).get(ArchiveViewModel::class.java)
-        viewModel.getChatData().observe(viewLifecycleOwner, Observer{chatAdapter.updateData(it)})
+        viewModel.getChatData().observe(viewLifecycleOwner, Observer{chatListAdapter.updateData(it)})
     }
 
     private fun initViews() {
-        chatAdapter = ChatAdapter {
+        chatListAdapter = ChatListAdapter {
             Snackbar.make(binding.rvArchiveList,"Click on ${it.title}and he is ${if (it.isOnline == true) "online" else "not online"}", Snackbar.LENGTH_LONG).show()
         }
 
         val divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
 
-        val touchCallback = ChatItemTouchHelperCallback(chatAdapter){
+        val touchCallback = ChatItemTouchHelperCallback(chatListAdapter){
             val actionTextColor = TypedValue()
             val textColor = TypedValue()
             requireNotNull(activity).theme.resolveAttribute(R.attr.colorAccent, actionTextColor, true)
@@ -92,7 +92,7 @@ class ArchiveFragment : Fragment() {
 
         with(binding.rvArchiveList){
             layoutManager = LinearLayoutManager(context)
-            adapter = chatAdapter
+            adapter = chatListAdapter
             addItemDecoration(divider)
         }
     }

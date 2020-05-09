@@ -22,7 +22,7 @@
         tools:layout="@layout/fragment_archive" />
     <fragment
         android:id="@+id/chatListFragment"
-        android:name="ru.bstu.diploma.ui.chat.ChatListFragment"
+        android:name="ru.bstu.diploma.ui.chatList.ChatListFragment"
         android:label="@string/title_chats_bgtu"
         tools:layout="@layout/fragment_chat_list" >
         <action

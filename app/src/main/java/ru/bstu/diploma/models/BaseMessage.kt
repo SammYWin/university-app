@@ -8,6 +8,7 @@ import java.util.*
 abstract class BaseMessage(
     @DocumentId
     val id: String,
+    val type: String,
     val senderName: String,
     val isIncoming: Boolean = true,
     val date: Date = Date(),
@@ -24,18 +25,20 @@ abstract class BaseMessage(
             lastId++
             return when(type)
             {
-                "image" -> ImageMessage(
+                "text" -> TextMessage(
                     "$lastId",
-                    senderName,
-                    date = date,
-                    image = payload as String,
-                    isIncoming = isIncoming
-                )
-                else -> TextMessage(
-                    "$lastId",
+                    type,
                     senderName,
                     date = date,
                     text = payload as String,
+                    isIncoming = isIncoming
+                )
+                else -> ImageMessage(
+                    "$lastId",
+                    type,
+                    senderName,
+                    date = date,
+                    image = payload as String,
                     isIncoming = isIncoming
                 )
             }

@@ -34,7 +34,7 @@ data class Chat(
         return first to second
     }
 
-    private fun isSingle(): Boolean = members.size == 1
+    private fun isSingle(): Boolean = members.size == 2
 
 
     fun toChatItem(): ChatItem {

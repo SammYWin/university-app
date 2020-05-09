@@ -3,7 +3,6 @@ package ru.bstu.diploma.viewmodels
 import androidx.lifecycle.*
 import com.google.firebase.firestore.ListenerRegistration
 import ru.bstu.diploma.extensions.mutableLiveData
-import ru.bstu.diploma.models.data.User
 import ru.bstu.diploma.models.data.UserItem
 import ru.bstu.diploma.repositories.GroupRepository
 import ru.bstu.diploma.utils.FirestoreUtil
@@ -58,7 +57,7 @@ class UsersViewModel : ViewModel(){
 
     fun handleCreateChat() {
 //        groupRepository.createChat(selectedItems.value)
-        FirestoreUtil.createChat(selectedItems.value){}
+        FirestoreUtil.getOrCreateChat(selectedItems.value!!){}
     }
 
     private fun loadUsers(): List<UserItem> {

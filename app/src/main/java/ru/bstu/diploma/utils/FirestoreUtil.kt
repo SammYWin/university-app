@@ -91,33 +91,83 @@ object FirestoreUtil {
     }
     fun removeListener(registration: ListenerRegistration) = registration.remove()
 
-    fun createChat(items: List<UserItem>?, onComplete: () -> Unit){
-        val ids = items!!.map { it.id }
-        getUsersByIds(ids){
-            val users = it
-            val title = if(it.size > 1) {
-                users.map { it.firstName }.joinToString(", ")
-            }else users.first().nickName!!
+    fun getOrCreateChat(items: List<UserItem>, onComplete: (chatId: String) -> Unit){
+        val ids = items.map { it.id }.toMutableList()
+        ids.add(FirebaseAuth.getInstance().currentUser!!.uid)
 
-            val baseMsgs = mutableListOf<BaseMessage>()
+        chatsCollectionRef.whereEqualTo("memberIds", ids).get()
+            .addOnSuccessListener {
+                if(it.documents.isNotEmpty()){
+                    onComplete(it.documents.first().id)
+                    return@addOnSuccessListener
+                }
+                else{
+                    getUsersByIds(ids){ members ->
+                        val title = if(members.size > 2)
+                            members.map { it.firstName }.joinToString(", ")
+                        else
+                            members.find { user -> user.id != FirebaseAuth.getInstance().currentUser!!.uid }!!.nickName!!
 
-            val _newChat = Chat("", title, users, baseMsgs)
-            val newChat = hashMapOf(
-                "title" to _newChat.title,
-                "isArchived" to _newChat.isArchived
-            )
+                        val baseMsgs = mutableListOf<BaseMessage>()
+                        val newChat = Chat("", title, members, baseMsgs)
 
-            val newChatRef = chatsCollectionRef.document()
-                newChatRef.set(newChat)
-            for(member in users){
-                newChatRef.collection("members").document().set(member)
-            }
-            for(msg in baseMsgs){
-                newChatRef.collection("messages").document().set(msg)
+                        val newChatRef = chatsCollectionRef.document()
+                        newChatRef.set(mapOf("memberIds" to ids))
+
+                        currentUserDocRef.collection("engagedChats").document()
+                            .set(mapOf(
+                                "chatId" to newChatRef.id,
+                                "title" to newChat.title,
+                                "isArchived" to newChat.isArchived
+                            ))
+
+                        //setting engagedChats for other users in the chat
+                        for(member in members){
+                            if(member.id != FirebaseAuth.getInstance().currentUser!!.uid) {
+                                val _title = if(members.size > 2)
+                                    members.map { it.firstName }.joinToString(", ")
+                                else
+                                    members.find { user -> user.id != member.id }!!.nickName!!
+
+                                firestoreInstance.collection("user").document(member.id)
+                                    .collection("engagedChats")
+                                    .document()
+                                    .set(
+                                        mapOf(
+                                            "chatId" to newChatRef.id,
+                                            "title" to _title,
+                                            "isArchived" to newChat.isArchived
+                                        )
+                                    )
+                            }
+                        }
+
+                        onComplete(newChatRef.id)
+                    }
             }
 
         }
 
+    }
+
+    fun addChatMessagesListener(chatId: String, onListen: (List<BaseMessage>) -> Unit): ListenerRegistration{
+        return chatsCollectionRef.document(chatId).collection("messages").orderBy("date")
+            .addSnapshotListener{ querrySnapshot, firebaseFirestoreException ->
+                if (firebaseFirestoreException != null){
+                    Log.d("M_FirestoreUtil", "ChatMessages Listener exception", firebaseFirestoreException)
+                    return@addSnapshotListener
+                }
+
+                val messages = mutableListOf<BaseMessage>()
+                querrySnapshot?.documents?.forEach {
+                    if (it["type"] == "text")
+                        it.toObject(TextMessage::class.java)?.let { textMessage -> messages.add(textMessage) }
+                    else
+                        it.toObject(ImageMessage::class.java)?.let { imageMessage -> messages.add(imageMessage) }
+                }
+
+                onListen(messages)
+            }
     }
 
 }

@@ -1,4 +1,4 @@
-package ru.bstu.diploma.ui.chat
+package ru.bstu.diploma.ui.chatList
 
 import android.os.Bundle
 import android.util.TypedValue
@@ -17,14 +17,14 @@ import ru.bstu.diploma.R
 import ru.bstu.diploma.databinding.FragmentChatListBinding
 import ru.bstu.diploma.extensions.config
 import ru.bstu.diploma.models.data.ChatType
-import ru.bstu.diploma.ui.adapters.ChatAdapter
+import ru.bstu.diploma.ui.adapters.ChatListAdapter
 import ru.bstu.diploma.ui.adapters.ChatItemTouchHelperCallback
 import ru.bstu.diploma.viewmodels.ChatListViewModel
 
 
 class ChatListFragment : Fragment() {
 
-    private lateinit var chatAdapter: ChatAdapter
+    private lateinit var chatListAdapter: ChatListAdapter
     private lateinit var viewModel: ChatListViewModel
     private lateinit var binding: FragmentChatListBinding
 
@@ -64,7 +64,7 @@ class ChatListFragment : Fragment() {
     }
 
     private fun initViews() {
-        chatAdapter = ChatAdapter {
+        chatListAdapter = ChatListAdapter {
             if(it.chatType == ChatType.ARCHIVE) {
                 findNavController().navigate(ChatListFragmentDirections.actionChatFragmentToArchiveFragment())
             }
@@ -72,7 +72,7 @@ class ChatListFragment : Fragment() {
                 Snackbar.make(binding.rvChatList, "Click on ${it.title}and he is ${if (it.isOnline == true) "online" else "not online"}", Snackbar.LENGTH_LONG).show()
         }
 
-        val touchCallback = ChatItemTouchHelperCallback(chatAdapter){
+        val touchCallback = ChatItemTouchHelperCallback(chatListAdapter){
             val actionTextColor = TypedValue()
             val textColor = TypedValue()
             requireNotNull(activity).theme.resolveAttribute(R.attr.colorAccent, actionTextColor, true)
@@ -97,7 +97,7 @@ class ChatListFragment : Fragment() {
 
         with(binding.rvChatList){
             layoutManager = LinearLayoutManager(context)
-            adapter = chatAdapter
+            adapter = chatListAdapter
             addItemDecoration(divider)
         }
 
@@ -109,7 +109,7 @@ class ChatListFragment : Fragment() {
 
     private fun initViewModel() {
         viewModel = ViewModelProvider(this).get(ChatListViewModel::class.java)
-        viewModel.getChatData().observe(viewLifecycleOwner, Observer { chatAdapter.updateData(it) })
+        viewModel.getChatData().observe(viewLifecycleOwner, Observer { chatListAdapter.updateData(it) })
     }
 
 

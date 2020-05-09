@@ -16,7 +16,7 @@ import ru.bstu.diploma.R
 import ru.bstu.diploma.models.data.ChatItem
 import ru.bstu.diploma.models.data.ChatType
 
-class ChatAdapter(val listener : (ChatItem)->Unit) : RecyclerView.Adapter<ChatAdapter.ChatItemViewHolder>() {
+class ChatListAdapter(val listener : (ChatItem)->Unit) : RecyclerView.Adapter<ChatListAdapter.ChatItemViewHolder>() {
 
     companion object{
         private const val ARCHIVE_TYPE = 0
