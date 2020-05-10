@@ -4,12 +4,10 @@ import androidx.lifecycle.*
 import com.google.firebase.firestore.ListenerRegistration
 import ru.bstu.diploma.extensions.mutableLiveData
 import ru.bstu.diploma.models.data.UserItem
-import ru.bstu.diploma.repositories.GroupRepository
 import ru.bstu.diploma.utils.FirestoreUtil
 
 class UsersViewModel : ViewModel(){
     private val query = mutableLiveData("")
-    private val groupRepository = GroupRepository
     private val userItems = mutableLiveData(loadUsers())
     private val selectedItems = Transformations.map(userItems){users -> users.filter { it.isSelected }}
 

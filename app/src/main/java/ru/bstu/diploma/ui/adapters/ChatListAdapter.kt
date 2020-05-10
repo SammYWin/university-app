@@ -13,8 +13,11 @@ import kotlinx.android.synthetic.main.item_chat_archive.*
 import kotlinx.android.synthetic.main.item_chat_group.*
 import kotlinx.android.synthetic.main.item_chat_single.*
 import ru.bstu.diploma.R
+import ru.bstu.diploma.extensions.truncate
+import ru.bstu.diploma.glide.GlideApp
 import ru.bstu.diploma.models.data.ChatItem
 import ru.bstu.diploma.models.data.ChatType
+import ru.bstu.diploma.utils.StorageUtil
 
 class ChatListAdapter(val listener : (ChatItem)->Unit) : RecyclerView.Adapter<ChatListAdapter.ChatItemViewHolder>() {
 
@@ -49,9 +52,6 @@ class ChatListAdapter(val listener : (ChatItem)->Unit) : RecyclerView.Adapter<Ch
     }
 
     fun updateData(data: List<ChatItem>){
-        Log.d("M_ChatAdapter", "update data adapter - new data ${data.size} hash : ${data.hashCode()} " +
-                "old data ${items.size} hash : ${items.hashCode()}")
-
         val diffCallBack = object : DiffUtil.Callback(){
 
             override fun areItemsTheSame(oldPos: Int, newPos: Int): Boolean = items[oldPos].id == data[newPos].id
@@ -94,12 +94,13 @@ class ChatListAdapter(val listener : (ChatItem)->Unit) : RecyclerView.Adapter<Ch
 
 
         override fun bind(item: ChatItem, listener : (ChatItem)->Unit) {
-            if (item.avatar == null) {
+            if (item.avatar == null || item.avatar == "") {
                 Glide.with(itemView).clear(iv_avatar_single)
                 iv_avatar_single.setInitials(item.initials)
             } else {
-                Glide.with(itemView)
-                    .load(item.avatar)
+                GlideApp.with(itemView)
+                    .load(StorageUtil.pathToReference(item.avatar))
+                    .placeholder(R.drawable.avatar_default)
                     .into(iv_avatar_single)
             }
 
@@ -155,7 +156,7 @@ class ChatListAdapter(val listener : (ChatItem)->Unit) : RecyclerView.Adapter<Ch
                 text = item.messageCount.toString()
             }
 
-            tv_title_group.text = item.title
+            tv_title_group.text = if(item.title.length > 36) item.title.truncate() else item.title
             tv_message_group.text = item.shortDescription
 
             with(tv_message_author) {

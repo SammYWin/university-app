@@ -89,61 +89,113 @@ object FirestoreUtil {
                 onListen(users)
             }
     }
+
+    fun addChatsListener(onListen: (List<Chat>?) -> Unit): ListenerRegistration{
+        return currentUserDocRef.collection("engagedChats")
+            .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                if(firebaseFirestoreException != null){
+                    Log.e("FIRESTORE", "Chats listener error", firebaseFirestoreException)
+                    return@addSnapshotListener
+                }
+
+                val chats: MutableList<Chat> = mutableListOf()
+                querySnapshot?.documents?.forEach{
+                    val id = it["chatId"] as String
+                    val title = it["title"] as String
+                    val avatar = it["avatar"] as String?
+                    val isArchived = it["isArchived"] as Boolean
+
+                    val _chat = Chat(
+                        id,
+                        title,
+                        avatar = avatar,
+                        isArchived = isArchived
+                    )
+
+                    chatsCollectionRef.document(id).get().addOnSuccessListener{chat ->
+                        val memberIds = chat["memberIds"] as List<String>
+                        getUsersByIds(memberIds){
+                            _chat.members = it.toMutableList()
+                            chats.add(_chat)
+                            if(chats.size == querySnapshot.documents.size)
+                                onListen(chats.toList())
+                        }
+                    }
+                }
+            }
+    }
+
     fun removeListener(registration: ListenerRegistration) = registration.remove()
 
     fun getOrCreateChat(items: List<UserItem>, onComplete: (chatId: String) -> Unit){
         val ids = items.map { it.id }.toMutableList()
         ids.add(FirebaseAuth.getInstance().currentUser!!.uid)
 
-        chatsCollectionRef.whereEqualTo("memberIds", ids).get()
-            .addOnSuccessListener {
-                if(it.documents.isNotEmpty()){
-                    onComplete(it.documents.first().id)
-                    return@addOnSuccessListener
-                }
-                else{
-                    getUsersByIds(ids){ members ->
-                        val title = if(members.size > 2)
-                            members.map { it.firstName }.joinToString(", ")
-                        else
-                            members.find { user -> user.id != FirebaseAuth.getInstance().currentUser!!.uid }!!.nickName!!
-
-                        val baseMsgs = mutableListOf<BaseMessage>()
-                        val newChat = Chat("", title, members, baseMsgs)
-
-                        val newChatRef = chatsCollectionRef.document()
-                        newChatRef.set(mapOf("memberIds" to ids))
-
-                        currentUserDocRef.collection("engagedChats").document()
-                            .set(mapOf(
-                                "chatId" to newChatRef.id,
-                                "title" to newChat.title,
-                                "isArchived" to newChat.isArchived
-                            ))
-
-                        //setting engagedChats for other users in the chat
-                        for(member in members){
-                            if(member.id != FirebaseAuth.getInstance().currentUser!!.uid) {
-                                val _title = if(members.size > 2)
-                                    members.map { it.firstName }.joinToString(", ")
-                                else
-                                    members.find { user -> user.id != member.id }!!.nickName!!
-
-                                firestoreInstance.collection("user").document(member.id)
-                                    .collection("engagedChats")
-                                    .document()
-                                    .set(
-                                        mapOf(
-                                            "chatId" to newChatRef.id,
-                                            "title" to _title,
-                                            "isArchived" to newChat.isArchived
-                                        )
-                                    )
-                            }
-                        }
-
-                        onComplete(newChatRef.id)
+        chatsCollectionRef.get().addOnSuccessListener {
+                for(doc in it.documents){
+                    val memberIds = doc["memberIds"] as List<String>
+                    if(memberIds.toSet() == ids.toSet()){
+                        onComplete(doc.id)
+                        return@addOnSuccessListener
                     }
+                }
+
+                getUsersByIds(ids){ members ->
+                    val title = if(members.size > 2)
+                        members.map { it.firstName }.joinToString(", ")
+                    else
+                        members.find { user -> user.id != FirebaseAuth.getInstance().currentUser!!.uid }!!.nickName!!
+
+                    val avatar = if(members.size > 2) null
+                    else members.find { user -> user.id != FirebaseAuth.getInstance().currentUser!!.uid }!!.avatar
+
+                    val baseMsgs = mutableListOf<BaseMessage>()
+                    val newChat = Chat(
+                        "",
+                        title,
+                        avatar,
+                        members.toMutableList(),
+                        baseMsgs
+                    )
+
+                    val newChatRef = chatsCollectionRef.document()
+                    newChatRef.set(mapOf("memberIds" to ids))
+
+                    currentUserDocRef.collection("engagedChats").document()
+                        .set(mapOf(
+                            "chatId" to newChatRef.id,
+                            "title" to newChat.title,
+                            "avatar" to avatar,
+                            "isArchived" to newChat.isArchived
+                        ))
+
+                    //setting engagedChats for other users in the chat
+                    for(member in members){
+                        if(member.id != FirebaseAuth.getInstance().currentUser!!.uid) {
+                            val _title = if(members.size > 2)
+                                members.map { it.firstName }.joinToString(", ")
+                            else
+                                members.find { user -> user.id != member.id }!!.nickName!!
+
+                            val _avatar = if(members.size > 2) null
+                            else members.find { user -> user.id != member.id }!!.avatar
+
+                            firestoreInstance.collection("user").document(member.id)
+                                .collection("engagedChats")
+                                .document()
+                                .set(
+                                    mapOf(
+                                        "chatId" to newChatRef.id,
+                                        "title" to _title,
+                                        "avatar" to _avatar,
+                                        "isArchived" to newChat.isArchived
+                                    )
+                                )
+                        }
+                    }
+
+                    onComplete(newChatRef.id)
+
             }
 
         }

@@ -73,21 +73,21 @@ class ChatListFragment : Fragment() {
         }
 
         val touchCallback = ChatItemTouchHelperCallback(chatListAdapter){
-            val actionTextColor = TypedValue()
-            val textColor = TypedValue()
-            requireNotNull(activity).theme.resolveAttribute(R.attr.colorAccent, actionTextColor, true)
-            requireNotNull(activity).theme.resolveAttribute(R.attr.colorSnackBarText, textColor, true)
-
-            viewModel.addToArchive(it.id)
-            val snack = Snackbar.make(binding.rvChatList, "Вы точно хотите добавить ${it.title}в архив?", Snackbar.LENGTH_LONG)
-                .setAction(getString(R.string.snack_bar_undo)) {_-> viewModel.restoreFromArchive(it.id)}
-                .setActionTextColor(actionTextColor.data)
-
-            val textView = snack.view.findViewById(R.id.snackbar_text) as TextView
-            textView.setTextColor(textColor.data)
-            snack.config(snack.context)
-
-            snack.show()
+//            val actionTextColor = TypedValue()
+//            val textColor = TypedValue()
+//            requireNotNull(activity).theme.resolveAttribute(R.attr.colorAccent, actionTextColor, true)
+//            requireNotNull(activity).theme.resolveAttribute(R.attr.colorSnackBarText, textColor, true)
+//
+//            viewModel.addToArchive(it.id)
+//            val snack = Snackbar.make(binding.rvChatList, "Вы точно хотите добавить ${it.title}в архив?", Snackbar.LENGTH_LONG)
+//                .setAction(getString(R.string.snack_bar_undo)) {_-> viewModel.restoreFromArchive(it.id)}
+//                .setActionTextColor(actionTextColor.data)
+//
+//            val textView = snack.view.findViewById(R.id.snackbar_text) as TextView
+//            textView.setTextColor(textColor.data)
+//            snack.config(snack.context)
+//
+//            snack.show()
         }
 
         val touchHelper = ItemTouchHelper(touchCallback)
@@ -109,7 +109,11 @@ class ChatListFragment : Fragment() {
 
     private fun initViewModel() {
         viewModel = ViewModelProvider(this).get(ChatListViewModel::class.java)
-        viewModel.getChatData().observe(viewLifecycleOwner, Observer { chatListAdapter.updateData(it) })
+        viewModel.getChatData().observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                chatListAdapter.updateData(it)
+            }
+        })
     }
 
 

@@ -1,5 +1,6 @@
 package ru.bstu.diploma.models.data
 
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentId
 import ru.bstu.diploma.App
 import ru.bstu.diploma.R
@@ -12,8 +13,9 @@ import java.util.*
 data class Chat(
     @DocumentId
     val id: String,
-    val title: String,
-    val members: List<User> = listOf(),
+    var title: String,
+    var avatar: String?,
+    var members: MutableList<User> = mutableListOf(), //mutable or not mutable?
     var messages: MutableList<BaseMessage> = mutableListOf(),
     var isArchived: Boolean = false
 ) {
@@ -39,16 +41,16 @@ data class Chat(
 
     fun toChatItem(): ChatItem {
         return if (isSingle()) {
-            val user = members.first()
+            val otherUser = members.find { user -> user.id != FirebaseAuth.getInstance().currentUser!!.uid }!!
             ChatItem(
                 id,
-                user.avatar,
-                Utils.toInitials(user.firstName, user.lastName) ?: "??",
-                "${user.firstName ?: ""} ${user.lastName ?: ""}",
+                avatar,
+                Utils.toInitials(otherUser.firstName, otherUser.lastName) ?: "??",
+                "${otherUser.firstName ?: ""} ${otherUser.lastName ?: ""}",
                 lastMessageShort().first,
                 unreadableMessageCount(),
                 lastMessageDate()?.shortFormat(),
-                user.isOnline
+                otherUser.isOnline
             )
         } else {
             ChatItem(

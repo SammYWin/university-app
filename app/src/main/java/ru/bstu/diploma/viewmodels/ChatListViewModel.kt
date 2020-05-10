@@ -1,17 +1,17 @@
 package ru.bstu.diploma.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import com.google.firebase.firestore.ListenerRegistration
 import ru.bstu.diploma.extensions.mutableLiveData
+import ru.bstu.diploma.models.data.Chat
 import ru.bstu.diploma.models.data.ChatItem
-import ru.bstu.diploma.repositories.ChatRepository
+import ru.bstu.diploma.utils.FirestoreUtil
 
 class ChatListViewModel : ViewModel() {
+    private lateinit var chatsListenerRegistration: ListenerRegistration
     private val query = mutableLiveData("")
-    private val chatRepository = ChatRepository
-    private val chats = Transformations.map(chatRepository.loadChats()){ chats->
+    private val _chats = mutableLiveData(loadChats())
+    private val chats = Transformations.map(_chats){ chats ->
             val archivedChats = chats
                 .filter { it.isArchived }
                 .map { it.toArchiveChatItem(chats) }
@@ -28,15 +28,17 @@ class ChatListViewModel : ViewModel() {
             }
     }
 
-    fun getChatData() : LiveData<List<ChatItem>>{
-        val result = MediatorLiveData<List<ChatItem>>()
+    fun getChatData() : LiveData<List<ChatItem>?>{
+        val result = MediatorLiveData<List<ChatItem>?>()
 
         val FilterF = {
             val queryStr = query.value!!
-            val resChats =  chats.value!!
+            val resChats =  chats.value
 
-            result.value = if(queryStr.isEmpty()) resChats
-                            else resChats.filter { it.title.contains(queryStr, true) }
+            if (resChats != null) {
+                result.value = if(queryStr.isEmpty()) resChats
+                else resChats.filter { it.title.contains(queryStr, true) }
+            }
 
         }
 
@@ -46,19 +48,36 @@ class ChatListViewModel : ViewModel() {
         return result
     }
 
-    fun addToArchive(id: String) {
-        val chat = chatRepository.find(id)
-        chat ?: return
-        chatRepository.update(chat.copy(isArchived = true))
+    private fun loadChats(): List<Chat>{
+        var loadedChats:  List<Chat> = listOf()
+        chatsListenerRegistration = FirestoreUtil.addChatsListener {
+            if (it != null) {
+                loadedChats = it
+            }
+            _chats.value = it
+        }
+
+        return loadedChats
     }
 
-    fun restoreFromArchive(id: String) {
-        val chat = chatRepository.find(id)
-        chat ?: return
-        chatRepository.update(chat.copy(isArchived = false))
-    }
+//    fun addToArchive(id: String) {
+//        val chat = chatRepository.find(id)
+//        chat ?: return
+//        chatRepository.update(chat.copy(isArchived = true))
+//    }
+//
+//    fun restoreFromArchive(id: String) {
+//        val chat = chatRepository.find(id)
+//        chat ?: return
+//        chatRepository.update(chat.copy(isArchived = false))
+//    }
 
     fun handleSearchQuery(text: String?) {
         query.value = text
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+       FirestoreUtil.removeListener(chatsListenerRegistration)
     }
 }

@@ -1,6 +1,6 @@
 package ru.bstu.diploma.extensions
 
-fun String.truncate(value: Int = 16) : String?
+fun String.truncate(value: Int = 36) : String?
 {
     var result = this
     var _value = value
