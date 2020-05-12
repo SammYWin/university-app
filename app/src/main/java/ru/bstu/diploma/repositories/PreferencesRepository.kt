@@ -36,6 +36,7 @@ object PreferencesRepository
         prefs.getString(GROUP, "")!!
     )
 
+    fun getProfileFirstName(): String = prefs.getString(FIRST_NAME, "")!!
 
     fun saveProfile(profile: Profile) {
         with(profile)

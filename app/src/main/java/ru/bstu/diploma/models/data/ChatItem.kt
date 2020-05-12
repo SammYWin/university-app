@@ -2,6 +2,7 @@ package ru.bstu.diploma.models.data
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
+import ru.bstu.diploma.models.BaseMessage
 
 @Parcelize
 data class ChatItem (
@@ -9,6 +10,7 @@ data class ChatItem (
     val avatar: String?,
     val initials: String,
     val title: String,
+    val lastMessageSenderId: String?,
     val shortDescription: String?,
     val messageCount: Int = 0,
     val lastMessageDate: String?,

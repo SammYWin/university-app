@@ -26,11 +26,11 @@ data class Chat(
     private fun lastMessageShort(): Pair<String, String?>{
         val lastMessage = messages.lastOrNull()
         var first =  App.applicationContext().resources.getString(R.string.chat_no_messages)
-        val second = lastMessage?.senderId
+        val second = lastMessage?.senderFirstName
 
         if (lastMessage != null) {
             first = if(lastMessage is TextMessage) lastMessage.text!!
-                    else "${lastMessage.senderId} - ${App.applicationContext().resources.getString(R.string.send_photo)}"
+                    else "${lastMessage.senderFirstName} - ${App.applicationContext().resources.getString(R.string.send_photo)}"
         }
 
         return first to second
@@ -47,6 +47,7 @@ data class Chat(
                 otherUser.avatar,
                 Utils.toInitials(otherUser.firstName, otherUser.lastName) ?: "??",
                 "${otherUser.firstName ?: ""} ${otherUser.lastName ?: ""}",
+                messages.lastOrNull()?.senderId ?: "",
                 lastMessageShort().first,
                 unreadableMessageCount(),
                 lastMessageDate()?.shortFormat(),
@@ -58,6 +59,7 @@ data class Chat(
                 null,
                 "",
                 members.map { it.firstName }.joinToString(", "),
+                messages.lastOrNull()?.senderId ?: "",
                 lastMessageShort().first,
                 unreadableMessageCount(),
                 lastMessageDate()?.shortFormat(),
@@ -77,6 +79,7 @@ data class Chat(
             null,
             "",
             App.applicationContext().resources.getString(R.string.item_archive_title),
+            messages.lastOrNull()?.senderId ?: "",
             archivedChats.last().lastMessageShort().first,
             archivedChats.sumBy { it.unreadableMessageCount() },
             archivedChats.last().lastMessageDate()?.shortFormat(),

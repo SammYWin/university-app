@@ -7,19 +7,19 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ListenerRegistration
 import ru.bstu.diploma.extensions.mutableLiveData
 import ru.bstu.diploma.models.BaseMessage
-import ru.bstu.diploma.models.TextMessage
 import ru.bstu.diploma.models.data.ChatItem
+import ru.bstu.diploma.repositories.PreferencesRepository
 import ru.bstu.diploma.utils.FirestoreUtil
 
 class ChatRoomViewModel(chatItem: ChatItem): ViewModel() {
     private val chat = chatItem
     private val messages = mutableLiveData(loadMessages())
-    private val isMessageSend = MutableLiveData<Boolean>()
+    private val isMessageSent = MutableLiveData<Boolean>()
     private lateinit var messagesListenerRegistration: ListenerRegistration
 
     fun getMessagesData(): LiveData<List<BaseMessage>> = messages
 
-    fun getIsMessageSend(): LiveData<Boolean> = isMessageSend
+    fun getIsMessageSent(): LiveData<Boolean> = isMessageSent
 
     private fun loadMessages(): List<BaseMessage> {
         var _messages = listOf<BaseMessage>()
@@ -34,13 +34,14 @@ class ChatRoomViewModel(chatItem: ChatItem): ViewModel() {
     fun handleSendMessage(text: String){
         val newMessage = BaseMessage.makeMessage(
             FirebaseAuth.getInstance().currentUser!!.uid,
+            senderFirstName = PreferencesRepository.getProfileFirstName(),
             payload = text
         )
         FirestoreUtil.sendMessage(newMessage, chat.id){
-            isMessageSend.value = true
+            isMessageSent.value = true
         }
     }
 
-    fun reloadIsMessageSend(){ isMessageSend.value = false }
+    fun reloadIsMessageSent(){ isMessageSent.value = false }
 
 }

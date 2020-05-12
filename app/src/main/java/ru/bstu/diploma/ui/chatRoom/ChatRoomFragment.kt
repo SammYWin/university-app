@@ -1,25 +1,24 @@
 package ru.bstu.diploma.ui.chatRoom
 
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
+import android.view.*
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.get
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.firestore.ListenerRegistration
-import kotlinx.android.synthetic.main.fragment_chat_room.*
 import ru.bstu.diploma.R
 import ru.bstu.diploma.databinding.FragmentChatRoomBinding
+import ru.bstu.diploma.extensions.isKeyboardOpen
 import ru.bstu.diploma.models.data.ChatItem
-import ru.bstu.diploma.ui.adapters.ChatItemTouchHelperCallback
 import ru.bstu.diploma.ui.adapters.ChatRoomAdapter
-import ru.bstu.diploma.utils.FirestoreUtil
 import ru.bstu.diploma.viewmodels.ChatRoomViewModel
 import ru.bstu.diploma.viewmodels.ChatRoomViewModelFactory
 
@@ -28,7 +27,6 @@ class ChatRoomFragment: Fragment() {
     private lateinit var viewModel: ChatRoomViewModel
     private lateinit var chatRoomAdapter: ChatRoomAdapter
     private lateinit var chatItem: ChatItem
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentChatRoomBinding.inflate(inflater)
@@ -51,17 +49,29 @@ class ChatRoomFragment: Fragment() {
     private fun initViewModel() {
         val viewModelFactory = ChatRoomViewModelFactory(chatItem)
         viewModel = ViewModelProvider(this, viewModelFactory).get(ChatRoomViewModel::class.java)
-        viewModel.getMessagesData().observe(viewLifecycleOwner, Observer { chatRoomAdapter.updateData(it) })
-        viewModel.getIsMessageSend().observe(viewLifecycleOwner, Observer { updateRecyclerPosition(it) })
+        viewModel.getMessagesData().observe(viewLifecycleOwner, Observer {
+            chatRoomAdapter.updateData(it)
+            binding.rvMessages.scrollToPosition(binding.rvMessages.adapter!!.itemCount - 1) //TODO scroll to first unread message
+        })
+        viewModel.getIsMessageSent().observe(viewLifecycleOwner, Observer { updateRecyclerPosition(it) })
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun initViews() {
         chatRoomAdapter = ChatRoomAdapter()
 
+        binding.etMessage.setOnTouchListener { v, event ->
+            val currentVisiblePosition = (binding.rvMessages.getLayoutManager() as LinearLayoutManager).findLastVisibleItemPosition()
+            if (currentVisiblePosition == binding.rvMessages.adapter!!.itemCount - 1)
+                binding.rvMessages.postDelayed({
+                    binding.rvMessages.scrollToPosition(currentVisiblePosition)
+                }, 100)
+            false
+        }
+
         with(binding.rvMessages) {
             adapter = chatRoomAdapter
-            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
-            scrollToPosition(binding.rvMessages.adapter!!.itemCount - 1)
+            layoutManager = LinearLayoutManager(context)
         }
 
         binding.ivSend.setOnClickListener{
@@ -72,10 +82,10 @@ class ChatRoomFragment: Fragment() {
         }
     }
 
-    fun updateRecyclerPosition(isSend: Boolean){
-        if(isSend == true){
+    fun updateRecyclerPosition(isSent: Boolean){
+        if(isSent == true){
             binding.rvMessages.scrollToPosition(binding.rvMessages.adapter!!.itemCount - 1)
-            viewModel.reloadIsMessageSend()
+            viewModel.reloadIsMessageSent()
         }
     }
 

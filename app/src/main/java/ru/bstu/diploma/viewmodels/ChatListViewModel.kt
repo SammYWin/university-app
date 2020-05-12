@@ -15,11 +15,11 @@ class ChatListViewModel : ViewModel() {
             val archivedChats = chats
                 .filter { it.isArchived }
                 .map { it.toArchiveChatItem(chats) }
-                .sortedBy { it.lastMessageDate }
+                .sortedByDescending { it.lastMessageDate }
             if(archivedChats.isEmpty()){
                 return@map chats
                     .map { it.toChatItem() }
-                    .sortedBy { it.lastMessageDate }
+                    .sortedByDescending { it.lastMessageDate }
             } else{
                 val chatsWithArchiveItem = mutableListOf<ChatItem>()
                 chatsWithArchiveItem.add(0, archivedChats.last())

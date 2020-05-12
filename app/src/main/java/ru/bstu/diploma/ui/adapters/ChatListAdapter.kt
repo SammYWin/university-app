@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_chat_archive.*
 import kotlinx.android.synthetic.main.item_chat_group.*
 import kotlinx.android.synthetic.main.item_chat_single.*
+import ru.bstu.diploma.App
 import ru.bstu.diploma.R
 import ru.bstu.diploma.extensions.truncate
 import ru.bstu.diploma.glide.GlideApp
@@ -117,7 +119,11 @@ class ChatListAdapter(val listener : (ChatItem)->Unit) : RecyclerView.Adapter<Ch
             }
 
             tv_title_single.text = item.title
-            tv_message_single.text = item.shortDescription
+            tv_message_single.text = if(item.shortDescription == App.applicationContext().resources.getString(R.string.chat_no_messages))
+                item.shortDescription
+            else if(item.lastMessageSenderId == FirebaseAuth.getInstance().currentUser!!.uid)
+                App.applicationContext().resources.getString(R.string.chat_item_your_message_tag) + item.shortDescription
+            else item.shortDescription
 
             itemView.setOnClickListener{
                 listener.invoke(item)

@@ -99,6 +99,7 @@ object FirestoreUtil {
                 }
 
                 val chats: MutableList<Chat> = mutableListOf()
+
                 querySnapshot?.documents?.forEach{
                     val id = it["chatId"] as String
                     val title = it["title"] as String
@@ -114,12 +115,27 @@ object FirestoreUtil {
 
                     chatsCollectionRef.document(id).get().addOnSuccessListener{chat ->
                         val memberIds = chat["memberIds"] as List<String>
-                        getUsersByIds(memberIds){
-                            _chat.members = it.toMutableList()
-                            chats.add(_chat)
-                            if(chats.size == querySnapshot.documents.size)
-                                onListen(chats.toList())
-                        }
+
+                        chatsCollectionRef.document(id).collection("messages").orderBy("date")
+                            .addSnapshotListener { querySnapshotMessages, firebaseFirestoreException ->
+                                if(firebaseFirestoreException != null){
+                                    Log.e("FIRESTORE", "Chats listener error", firebaseFirestoreException)
+                                    return@addSnapshotListener
+                                }
+
+                                querySnapshotMessages?.documents?.forEach{
+                                    it.toObject(TextMessage::class.java)?.let { message ->
+                                        _chat.messages.add(message)
+                                    }
+                                }
+
+                                getUsersByIds(memberIds){
+                                    _chat.members = it.toMutableList()
+                                    chats.add(_chat)
+                                    if(chats.size == querySnapshot.documents.size)
+                                        onListen(chats.toList())
+                                }
+                            }
                     }
                 }
             }
