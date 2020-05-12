@@ -21,4 +21,9 @@
     <color name="color_tab_text">#FFFFFF</color>
     <color name="color_tab_indicator">#2196F3</color>
     <color name="color_cursor">#FFFFFF</color>
+    <color name="color_chat_text_edit">#272727</color>
+    <color name="color_chat_background">#1D1D1D</color>
+    <color name="color_chat_send">#FFFFFF</color>
+    <color name="color_chat_my_message">#1FFFFFFF</color>
+    <color name="color_chat_other_message">#272727</color>
 </resources>

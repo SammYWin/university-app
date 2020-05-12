@@ -1,6 +1,9 @@
 package ru.bstu.diploma.models.data
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class ChatItem (
     val id: String,
     val avatar: String?,
@@ -12,4 +15,4 @@ data class ChatItem (
     val isOnline: Boolean? = false,
     val chatType : ChatType = ChatType.SINGLE,
     var author :String? = null
-)
+): Parcelable

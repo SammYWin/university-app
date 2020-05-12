@@ -222,4 +222,13 @@ object FirestoreUtil {
             }
     }
 
+    fun sendMessage(message: BaseMessage, chatId: String, onComplete: () -> Unit){
+        chatsCollectionRef.document(chatId)
+            .collection("messages")
+            .add(message)
+            .addOnSuccessListener {
+                onComplete()
+            }
+    }
+
 }

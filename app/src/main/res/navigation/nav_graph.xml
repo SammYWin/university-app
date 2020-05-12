@@ -30,10 +30,25 @@
             app:destination="@id/archiveFragment" />
         <action
             android:id="@+id/action_chatFragment_to_groupFragment"
-            app:destination="@id/usersFragment" />
+            app:destination="@id/usersFragment"
+            app:enterAnim="@anim/bottom_up"
+            app:exitAnim="@anim/idle" />
+        <action
+            android:id="@+id/action_chatListFragment_to_chatRoomFragment"
+            app:destination="@id/chatRoomFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
     </fragment>
     <fragment
         android:id="@+id/timetableFragment"
         android:name="ru.bstu.diploma.ui.timetable.TimetableFragment"
         android:label="@string/tittle_timetable_fragment" />
+    <fragment
+        android:id="@+id/chatRoomFragment"
+        android:name="ru.bstu.diploma.ui.chatRoom.ChatRoomFragment"
+        android:label="ChatRoomFragment" >
+        <argument
+            android:name="chatItem"
+            app:argType="ru.bstu.diploma.models.data.ChatItem" />
+    </fragment>
 </navigation>

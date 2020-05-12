@@ -23,4 +23,9 @@
     <color name="color_tab_indicator">#de3e3e</color>
     <color name="color_cursor">#0E2F54</color>
     <color name="color_spinner_error">#de3e3e</color>
+    <color name="color_chat_text_edit">#ffffff</color>
+    <color name="color_chat_background">#EEEEEE</color>
+    <color name="color_chat_send">#0E2F54</color>
+    <color name="color_chat_my_message">#AEE1F5</color>
+    <color name="color_chat_other_message">#FFF</color>
 </resources>

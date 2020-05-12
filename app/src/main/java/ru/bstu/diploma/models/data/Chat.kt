@@ -26,11 +26,11 @@ data class Chat(
     private fun lastMessageShort(): Pair<String, String?>{
         val lastMessage = messages.lastOrNull()
         var first =  App.applicationContext().resources.getString(R.string.chat_no_messages)
-        val second = lastMessage?.senderName
+        val second = lastMessage?.senderId
 
         if (lastMessage != null) {
             first = if(lastMessage is TextMessage) lastMessage.text!!
-                    else "${lastMessage.senderName} - ${App.applicationContext().resources.getString(R.string.send_photo)}"
+                    else "${lastMessage.senderId} - ${App.applicationContext().resources.getString(R.string.send_photo)}"
         }
 
         return first to second
@@ -44,7 +44,7 @@ data class Chat(
             val otherUser = members.find { user -> user.id != FirebaseAuth.getInstance().currentUser!!.uid }!!
             ChatItem(
                 id,
-                avatar,
+                otherUser.avatar,
                 Utils.toInitials(otherUser.firstName, otherUser.lastName) ?: "??",
                 "${otherUser.firstName ?: ""} ${otherUser.lastName ?: ""}",
                 lastMessageShort().first,
@@ -57,7 +57,7 @@ data class Chat(
                 id,
                 null,
                 "",
-                title,
+                members.map { it.firstName }.joinToString(", "),
                 lastMessageShort().first,
                 unreadableMessageCount(),
                 lastMessageDate()?.shortFormat(),

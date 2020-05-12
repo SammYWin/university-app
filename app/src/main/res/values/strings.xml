@@ -324,7 +324,7 @@
     <string name="register_hint_email">E-mail</string>
     <string name="register_hint_password">Пароль</string>
     <string name="login_btn_text">Войти</string>
-    <string name="error_register_or_login">Что-то пошло не так. Проверьте введенные данные.</string>
+    <string name="error_register_or_login">Ошибка.\nПроверьте введенные данные и подключение к интернету.</string>
     <string name="error_email_empty">Введите e-mail</string>
     <string name="error_password_empty">Введите пароль</string>
     <string name="alert_login_process">Выполняется авторизация…</string>
@@ -333,4 +333,6 @@
     <string name="error_last_name_empty">Введите фамилию</string>
     <string name="spinner_hint">Выберите группу</string>
     <string name="profile_nickname">%1$s %2$s</string>
+    <string name="hint_chat_edit_text">Сообщение</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
 </resources>
