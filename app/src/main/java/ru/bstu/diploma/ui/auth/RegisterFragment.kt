@@ -2,7 +2,6 @@ package ru.bstu.diploma.ui.auth
 
 import android.app.AlertDialog
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -12,7 +11,6 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
@@ -83,7 +81,7 @@ class RegisterFragment: Fragment(), AdapterView.OnItemSelectedListener {
             return
         }else binding.wrRegisterLastName.error = null
 
-        if(user.group == null || binding.spinner.selectedItem == getString(R.string.spinner_hint)){
+        if(user.group == null || binding.spinner.selectedItem == getString(R.string.spinner_groups_hint)){
             (binding.spinner.selectedView as TextView).error = ""
             return
         }

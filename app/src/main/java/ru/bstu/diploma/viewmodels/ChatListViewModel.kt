@@ -10,6 +10,7 @@ import ru.bstu.diploma.utils.FirestoreUtil
 class ChatListViewModel : ViewModel() {
     private lateinit var chatsListenerRegistration: ListenerRegistration
     private val query = mutableLiveData("")
+    private val chatsLoaded = MutableLiveData<Boolean>()
     private val _chats = mutableLiveData(loadChats())
     private val chats = Transformations.map(_chats){ chats ->
             val archivedChats = chats
@@ -27,6 +28,9 @@ class ChatListViewModel : ViewModel() {
                 return@map chatsWithArchiveItem
             }
     }
+
+    fun getChatsLoaded(): LiveData<Boolean> = chatsLoaded
+    fun resetChatsLoaded() = chatsLoaded.setValue(false)
 
     fun getChatData() : LiveData<List<ChatItem>?>{
         val result = MediatorLiveData<List<ChatItem>?>()
@@ -53,6 +57,7 @@ class ChatListViewModel : ViewModel() {
         chatsListenerRegistration = FirestoreUtil.addChatsListener {
             if (it != null) {
                 loadedChats = it
+                chatsLoaded.value = true
             }
             _chats.value = it
         }

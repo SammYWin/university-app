@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.*
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -30,6 +31,9 @@ class ChatListFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentChatListBinding.inflate(inflater)
+
+        (activity as AppCompatActivity).supportActionBar!!.title = getString(R.string.title_updating)
+
         setHasOptionsMenu(true)
 
         return binding.root
@@ -113,6 +117,12 @@ class ChatListFragment : Fragment() {
         viewModel.getChatData().observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 chatListAdapter.updateData(it)
+            }
+        })
+        viewModel.getChatsLoaded().observe(viewLifecycleOwner, Observer {
+            if(it == true){
+                (activity as AppCompatActivity).supportActionBar!!.title = getString(R.string.title_chats_bgtu)
+                viewModel.resetChatsLoaded()
             }
         })
     }

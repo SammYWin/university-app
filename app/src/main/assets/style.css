@@ -1,0 +1,10 @@
+.contless {width: 100%;border-collapse: collapse;}
+	.daeweek{padding:30px 0 10px;font-size: 20px;border-bottom: solid 1px e0dfdf;}
+	.itmles {padding: 25px 10px;vertical-align: middle;border-bottom: solid 1px e0dfdf;}
+		.schtype{font-style: italic;color: de3e3e;}
+	td.itmles.schteacher {min-width: 110px;}
+	.schtime{background-color: eef2f7;text-align: center;min-width:110px;border-left: solid 1px e0dfdf;}
+	.schclass{border-right: solid 1px e0dfdf;min-width: 80px;}
+.nameusr{font-weight: bold;}
+.itmfilter{padding-bottom: 20px;}
+.btnprint {cursor: pointer;width: 30px;height: 30px;background:url(/upload/img/print.png);background-size: 100%;position: absolute;right: 15px;top: 40px;}
