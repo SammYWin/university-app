@@ -20,6 +20,7 @@ import ru.bstu.diploma.extensions.config
 import ru.bstu.diploma.models.data.ChatType
 import ru.bstu.diploma.ui.adapters.ChatListAdapter
 import ru.bstu.diploma.ui.adapters.ChatItemTouchHelperCallback
+import ru.bstu.diploma.utils.FirestoreUtil
 import ru.bstu.diploma.viewmodels.ChatListViewModel
 
 
@@ -74,7 +75,7 @@ class ChatListFragment : Fragment() {
             }
             else
                 findNavController().navigate(ChatListFragmentDirections.actionChatListFragmentToChatRoomFragment(it))
-                //Snackbar.make(binding.rvChatList, "Click on ${it.title}and he is ${if (it.isOnline == true) "online" else "not online"}", Snackbar.LENGTH_LONG).show()
+                FirestoreUtil.updateUnreadCount(it.id)
         }
 
         val touchCallback = ChatItemTouchHelperCallback(chatListAdapter){

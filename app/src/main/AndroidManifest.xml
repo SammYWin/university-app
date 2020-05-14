@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="ru.bstu.diploma.ui.MainActivity"/>
+        <activity android:name="ru.bstu.diploma.ui.main.MainActivity"/>
         <activity android:name="ru.bstu.diploma.ui.auth.AuthActivity" android:theme="@style/AuthTheme"/>
 
 

@@ -14,7 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import dmax.dialog.SpotsDialog
 import ru.bstu.diploma.R
 import ru.bstu.diploma.databinding.FragmentLoginBinding
-import ru.bstu.diploma.ui.MainActivity
+import ru.bstu.diploma.ui.main.MainActivity
 
 
 class LoginFragment: Fragment() {

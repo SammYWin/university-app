@@ -1436,7 +1436,7 @@
     <string name="hint_chat_edit_text">Сообщение</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
     <string name="chat_item_your_message_tag">Вы: \</string>
-    <string name="title_updating">Обновление...</string>
+    <string name="title_updating">Обновление…</string>
     <string name="btn_text_choose_timetable">Выбрать расписание</string>
     <string name="btn_text_dialog_show">Показать</string>
 

@@ -12,7 +12,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import ru.bstu.diploma.R
 import ru.bstu.diploma.databinding.ActivityAuthBinding
-import ru.bstu.diploma.ui.MainActivity
+import ru.bstu.diploma.ui.main.MainActivity
 import ru.bstu.diploma.ui.adapters.AuthFragmentPagerAdapter
 
 class AuthActivity : AppCompatActivity() {

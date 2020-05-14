@@ -3,6 +3,7 @@ package ru.bstu.diploma.utils
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import ru.bstu.diploma.models.BaseMessage
@@ -105,12 +106,14 @@ object FirestoreUtil {
                     val title = it["title"] as String
                     val avatar = it["avatar"] as String?
                     val isArchived = it["isArchived"] as Boolean
+                    val unreadCount = it["unreadCount"] as Long?
 
                     val _chat = Chat(
                         id,
                         title,
                         avatar = avatar,
-                        isArchived = isArchived
+                        isArchived = isArchived,
+                        unreadCount = unreadCount?.toInt() ?: 0
                     )
 
                     chatsCollectionRef.document(id).get().addOnSuccessListener{chat ->
@@ -123,8 +126,8 @@ object FirestoreUtil {
                                     return@addSnapshotListener
                                 }
 
-                                querySnapshotMessages?.documents?.forEach{
-                                    it.toObject(TextMessage::class.java)?.let { message ->
+                                querySnapshotMessages?.documents?.forEach{doc->
+                                    doc.toObject(TextMessage::class.java)?.let { message ->
                                         _chat.messages.add(message)
                                     }
                                 }
@@ -245,6 +248,33 @@ object FirestoreUtil {
             .addOnSuccessListener {
                 onComplete()
             }
+
+        chatsCollectionRef.document(chatId).get().addOnSuccessListener {
+            val memberIds = it["memberIds"] as MutableList<String>
+
+            memberIds.forEach{ id ->
+                if(id != FirebaseAuth.getInstance().currentUser!!.uid) {
+                    firestoreInstance.collection("user")
+                        .document(id).collection("engagedChats").whereEqualTo("chatId", chatId)
+                        .get().addOnSuccessListener {q->
+                            firestoreInstance.collection("user")
+                                .document(id).collection("engagedChats").document(q.documents[0].id)
+                                .update("unreadCount", FieldValue.increment(1))
+                        }
+                }
+            }
+        }
+
     }
 
+    fun updateUnreadCount(chatId: String) {
+        firestoreInstance.collection("user")
+            .document(FirebaseAuth.getInstance().currentUser!!.uid).collection("engagedChats")
+            .whereEqualTo("chatId", chatId).get().addOnSuccessListener {
+                firestoreInstance.collection("user")
+                    .document(FirebaseAuth.getInstance().currentUser!!.uid)
+                    .collection("engagedChats").document(it.documents[0].id)
+                    .update("unreadCount", 0)
+            }
+    }
 }

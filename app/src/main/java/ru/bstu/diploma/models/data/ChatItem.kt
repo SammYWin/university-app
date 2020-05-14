@@ -12,7 +12,7 @@ data class ChatItem (
     val title: String,
     val lastMessageSenderId: String?,
     val shortDescription: String?,
-    val messageCount: Int = 0,
+    val unreadCount: Int = 0,
     val lastMessageDate: String?,
     val isOnline: Boolean? = false,
     val chatType : ChatType = ChatType.SINGLE,

@@ -51,7 +51,7 @@ class ChatRoomFragment: Fragment() {
         viewModel = ViewModelProvider(this, viewModelFactory).get(ChatRoomViewModel::class.java)
         viewModel.getMessagesData().observe(viewLifecycleOwner, Observer {
             chatRoomAdapter.updateData(it)
-            binding.rvMessages.scrollToPosition(binding.rvMessages.adapter!!.itemCount - 1) //TODO scroll to first unread message
+            binding.rvMessages.scrollToPosition((binding.rvMessages.adapter!!.itemCount-1) - chatItem.unreadCount)
         })
         viewModel.getIsMessageSent().observe(viewLifecycleOwner, Observer { updateRecyclerPosition(it) })
     }

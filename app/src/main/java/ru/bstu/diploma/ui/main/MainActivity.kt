@@ -1,4 +1,4 @@
-package ru.bstu.diploma.ui
+package ru.bstu.diploma.ui.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

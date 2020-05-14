@@ -17,7 +17,8 @@ data class Chat(
     var avatar: String?,
     var members: MutableList<User> = mutableListOf(), //mutable or not mutable?
     var messages: MutableList<BaseMessage> = mutableListOf(),
-    var isArchived: Boolean = false
+    var isArchived: Boolean = false,
+    var unreadCount: Int = 0
 ) {
     private fun unreadableMessageCount(): Int = messages.filter{ message -> !message.isReaded }.count()
 
@@ -49,7 +50,7 @@ data class Chat(
                 "${otherUser.firstName ?: ""} ${otherUser.lastName ?: ""}",
                 messages.lastOrNull()?.senderId ?: "",
                 lastMessageShort().first,
-                unreadableMessageCount(),
+                unreadCount,
                 lastMessageDate()?.shortFormat(),
                 otherUser.isOnline
             )
@@ -61,7 +62,7 @@ data class Chat(
                 members.map { it.firstName }.joinToString(", "),
                 messages.lastOrNull()?.senderId ?: "",
                 lastMessageShort().first,
-                unreadableMessageCount(),
+                unreadCount,
                 lastMessageDate()?.shortFormat(),
                 false,
                 ChatType.GROUP,
@@ -81,7 +82,7 @@ data class Chat(
             App.applicationContext().resources.getString(R.string.item_archive_title),
             messages.lastOrNull()?.senderId ?: "",
             archivedChats.last().lastMessageShort().first,
-            archivedChats.sumBy { it.unreadableMessageCount() },
+            archivedChats.sumBy { it.unreadCount },
             archivedChats.last().lastMessageDate()?.shortFormat(),
             chatType = ChatType.ARCHIVE,
             author = archivedChats.last().lastMessageShort().second

@@ -114,8 +114,8 @@ class ChatListAdapter(val listener : (ChatItem)->Unit) : RecyclerView.Adapter<Ch
             }
 
             with(tv_counter_single) {
-                visibility = if (item.messageCount > 0) View.VISIBLE else View.GONE
-                text = item.messageCount.toString()
+                visibility = if (item.unreadCount > 0) View.VISIBLE else View.GONE
+                text = item.unreadCount.toString()
             }
 
             tv_title_single.text = item.title
@@ -158,15 +158,15 @@ class ChatListAdapter(val listener : (ChatItem)->Unit) : RecyclerView.Adapter<Ch
             }
 
             with(tv_counter_group) {
-                visibility = if (item.messageCount > 0) View.VISIBLE else View.GONE
-                text = item.messageCount.toString()
+                visibility = if (item.unreadCount > 0) View.VISIBLE else View.GONE
+                text = item.unreadCount.toString()
             }
 
             tv_title_group.text = if(item.title.length > 36) item.title.truncate() else item.title
             tv_message_group.text = item.shortDescription
 
             with(tv_message_author) {
-                visibility = if (item.messageCount > 0 || item.lastMessageDate != null) View.VISIBLE else View.GONE
+                visibility = if (item.unreadCount > 0 || item.lastMessageDate != null) View.VISIBLE else View.GONE
                 text = "@" + item.author
             }
 
@@ -180,13 +180,13 @@ class ChatListAdapter(val listener : (ChatItem)->Unit) : RecyclerView.Adapter<Ch
 
         override fun bind(item: ChatItem, listener: (ChatItem) -> Unit) {
             with(tv_date_archive){
-                visibility = if (item.messageCount > 0) View.VISIBLE else View.GONE
+                visibility = if (item.unreadCount > 0) View.VISIBLE else View.GONE
                 text = item.lastMessageDate
             }
 
             with(tv_counter_archive){
-                visibility = if(item.messageCount > 0) View.VISIBLE else View.GONE
-                text = item.messageCount.toString()
+                visibility = if(item.unreadCount > 0) View.VISIBLE else View.GONE
+                text = item.unreadCount.toString()
             }
 
             tv_title_archive.text = item.title

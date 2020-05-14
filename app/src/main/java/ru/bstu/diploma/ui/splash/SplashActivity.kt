@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import ru.bstu.diploma.ui.MainActivity
+import ru.bstu.diploma.ui.main.MainActivity
 import ru.bstu.diploma.ui.auth.AuthActivity
 
 class SplashActivity : AppCompatActivity() {

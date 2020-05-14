@@ -18,7 +18,7 @@ import dmax.dialog.SpotsDialog
 import ru.bstu.diploma.R
 import ru.bstu.diploma.databinding.FragmentRegisterBinding
 import ru.bstu.diploma.models.data.User
-import ru.bstu.diploma.ui.MainActivity
+import ru.bstu.diploma.ui.main.MainActivity
 import ru.bstu.diploma.utils.FirestoreUtil
 
 class RegisterFragment: Fragment(), AdapterView.OnItemSelectedListener {
