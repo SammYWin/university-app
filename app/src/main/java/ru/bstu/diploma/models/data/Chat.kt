@@ -27,11 +27,11 @@ data class Chat(
     private fun lastMessageShort(): Pair<String, String?>{
         val lastMessage = messages.lastOrNull()
         var first =  App.applicationContext().resources.getString(R.string.chat_no_messages)
-        val second = lastMessage?.senderFirstName
+        val second = lastMessage?.senderName
 
         if (lastMessage != null) {
             first = if(lastMessage is TextMessage) lastMessage.text!!
-                    else "${lastMessage.senderFirstName} - ${App.applicationContext().resources.getString(R.string.send_photo)}"
+                    else "${lastMessage.senderName} - ${App.applicationContext().resources.getString(R.string.send_photo)}"
         }
 
         return first to second

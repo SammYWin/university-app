@@ -9,34 +9,72 @@
     android:layout_marginEnd="@dimen/spacing_small_8"
     android:layout_marginStart="@dimen/spacing_small_8">
 
-
     <RelativeLayout
-        android:id="@+id/message_root"
+        android:id="@+id/root"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:background="@drawable/rect_message_mine">
+        android:layout_gravity="end">
 
-        <TextView
-            android:id="@+id/tv_message_text"
-            android:layout_width="wrap_content"
-            android:maxWidth="250dp"
-            android:minWidth="100dp"
-            android:layout_height="wrap_content"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:paddingTop="4dp"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-            tools:text="@string/lorem_ipsum" />
-        <TextView
-            android:id="@+id/tv_message_time"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_message_text"
-            android:layout_alignEnd="@id/tv_message_text"
-            android:layout_marginEnd="8dp"
-            android:paddingBottom="5dp"
-            android:textSize="12sp"
-            tools:text="12/05/2020 15:00"/>
+            android:orientation="horizontal">
+
+            <ru.bstu.diploma.ui.custom.AvatarImageView
+                android:id="@+id/iv_sender_avatar"
+                android:layout_width="@dimen/avatar_item_size"
+                android:layout_height="@dimen/avatar_item_size"
+                android:layout_marginEnd="@dimen/spacing_tiny_4" />
+
+
+            <RelativeLayout
+                android:id="@+id/message_root"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rect_message_mine">
+
+                <TextView
+                    android:id="@+id/tv_sender_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingTop="4dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="14sp"
+                    tools:text="Иван Танадайчук"/>
+
+                <TextView
+                    android:id="@+id/tv_message_text"
+                    android:layout_width="wrap_content"
+                    android:maxWidth="250dp"
+                    android:minWidth="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_sender_name"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingTop="4dp"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                    tools:text="@string/lorem_ipsum" />
+
+                <TextView
+                    android:id="@+id/tv_message_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_message_text"
+                    android:layout_alignEnd="@id/tv_message_text"
+                    android:layout_marginEnd="8dp"
+                    android:paddingBottom="5dp"
+                    android:textSize="12sp"
+                    tools:text="12/05/2020 15:00"/>
+            </RelativeLayout>
+
+        </LinearLayout>
+
     </RelativeLayout>
+
+
+
+
 </FrameLayout>

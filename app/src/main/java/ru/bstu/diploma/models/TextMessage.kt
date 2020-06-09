@@ -7,15 +7,15 @@ class TextMessage(
     id: String,
     type: String,
     senderId: String,
-    senderFirstName: String,
+    senderName: String,
     isIncoming: Boolean = false,
     date: Date = Date(),
     isReaded: Boolean = true,
     var text: String?
-) : BaseMessage(id, type, senderId, senderFirstName, isIncoming, date, isReaded) {
+) : BaseMessage(id, type, senderId, senderName, isIncoming, date, isReaded) {
     constructor(): this("", "", "", "", false, Date(), true, "")
 
-    override fun formatMessage(): String = "id:$id $senderFirstName" +
+    override fun formatMessage(): String = "id:$id $senderName" +
             " ${if(isIncoming) "получил" else "отправил"} сообщение \"$text\" ${date.humanizeDiff()}"
 
 }

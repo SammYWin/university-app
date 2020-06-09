@@ -10,7 +10,7 @@ abstract class BaseMessage(
     val id: String,
     val type: String,
     val senderId: String,
-    val senderFirstName: String,
+    val senderName: String,
     val isIncoming: Boolean = true,
     val date: Date = Date(),
     var isReaded: Boolean = true
@@ -23,7 +23,7 @@ abstract class BaseMessage(
     companion object AbstractFactory
     {
         var lastId = -1
-        fun makeMessage(senderId: String, senderFirstName: String, date: Date = Date(), type: String = "text", payload: Any?, isIncoming: Boolean = false) : BaseMessage
+        fun makeMessage(senderId: String, senderName: String, date: Date = Date(), type: String = "text", payload: Any?, isIncoming: Boolean = false) : BaseMessage
         {
             lastId++
             return when(type)
@@ -32,7 +32,7 @@ abstract class BaseMessage(
                     "$lastId",
                     type,
                     senderId,
-                    senderFirstName,
+                    senderName,
                     date = date,
                     text = payload as String,
                     isIncoming = isIncoming
@@ -41,7 +41,7 @@ abstract class BaseMessage(
                     "$lastId",
                     type,
                     senderId,
-                    senderFirstName,
+                    senderName,
                     date = date,
                     image = payload as String,
                     isIncoming = isIncoming

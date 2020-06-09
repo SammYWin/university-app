@@ -1,6 +1,7 @@
 package ru.bstu.diploma.ui.main
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -28,7 +29,6 @@ class MainActivity : AppCompatActivity() {
 
         bottomNavView.setupWithNavController(navController)
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration)
-
 
     }
 

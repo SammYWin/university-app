@@ -34,7 +34,7 @@ class ChatRoomViewModel(chatItem: ChatItem): ViewModel() {
     fun handleSendMessage(text: String){
         val newMessage = BaseMessage.makeMessage(
             FirebaseAuth.getInstance().currentUser!!.uid,
-            senderFirstName = PreferencesRepository.getProfileFirstName(),
+            senderName = PreferencesRepository.getProfileName(),
             payload = text
         )
         FirestoreUtil.sendMessage(newMessage, chat.id){

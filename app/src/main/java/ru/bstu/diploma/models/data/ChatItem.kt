@@ -2,7 +2,6 @@ package ru.bstu.diploma.models.data
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
-import ru.bstu.diploma.models.BaseMessage
 
 @Parcelize
 data class ChatItem (

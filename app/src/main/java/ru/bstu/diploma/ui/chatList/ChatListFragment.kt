@@ -71,7 +71,7 @@ class ChatListFragment : Fragment() {
     private fun initViews() {
         chatListAdapter = ChatListAdapter {
             if(it.chatType == ChatType.ARCHIVE) {
-                findNavController().navigate(ChatListFragmentDirections.actionChatFragmentToArchiveFragment())
+                //findNavController().navigate(ChatListFragmentDirections.actionChatFragmentToArchiveFragment())
             }
             else
                 findNavController().navigate(ChatListFragmentDirections.actionChatListFragmentToChatRoomFragment(it))

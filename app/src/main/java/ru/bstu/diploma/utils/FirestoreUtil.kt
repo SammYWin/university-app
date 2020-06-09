@@ -60,6 +60,13 @@ object FirestoreUtil {
         }
     }
 
+    fun getUserById(id: String, onComplete: (user: User) -> Unit){
+        firestoreInstance.collection("user").document(id).get()
+            .addOnSuccessListener {
+                it.toObject(User::class.java)?.let { user -> onComplete(user) }
+            }
+    }
+
     fun getUsersByIds(ids: List<String>, onComplete: (List<User>) -> Unit) {
         val users = mutableListOf<User>()
         for(id in ids)(
@@ -216,9 +223,7 @@ object FirestoreUtil {
                     onComplete(newChatRef.id)
 
             }
-
         }
-
     }
 
     fun addChatMessagesListener(chatId: String, onListen: (List<BaseMessage>) -> Unit): ListenerRegistration{

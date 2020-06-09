@@ -1,10 +1,12 @@
 package ru.bstu.diploma.ui.adapters
 
+import android.text.Layout
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.RelativeLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -12,10 +14,15 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_text_message.*
 import ru.bstu.diploma.R
 import ru.bstu.diploma.extensions.shortFormat
+import ru.bstu.diploma.glide.GlideApp
 import ru.bstu.diploma.models.BaseMessage
 import ru.bstu.diploma.models.TextMessage
+import ru.bstu.diploma.models.data.ChatType
+import ru.bstu.diploma.utils.FirestoreUtil
+import ru.bstu.diploma.utils.StorageUtil
+import ru.bstu.diploma.utils.Utils
 
-class ChatRoomAdapter: RecyclerView.Adapter<ChatRoomAdapter.MessageItemViewHolder>() {
+class ChatRoomAdapter(val chatType: ChatType): RecyclerView.Adapter<ChatRoomAdapter.MessageItemViewHolder>() {
 
     var items: List<BaseMessage> = listOf()
 
@@ -28,7 +35,7 @@ class ChatRoomAdapter: RecyclerView.Adapter<ChatRoomAdapter.MessageItemViewHolde
     }
 
     override fun onBindViewHolder(holder: MessageItemViewHolder, position: Int) {
-        holder.bind(items[position])
+        holder.bind(items[position], chatType)
         setMessageRootGravity(holder, items[position])
     }
 
@@ -53,34 +60,71 @@ class ChatRoomAdapter: RecyclerView.Adapter<ChatRoomAdapter.MessageItemViewHolde
         override val containerView: View?
             get() = itemView
 
-        fun bind(item: BaseMessage){
+        fun bind(item: BaseMessage, chatType: ChatType){
             if(item is TextMessage){
                 tv_message_text.text = item.text
                 tv_message_time.text = item.date.shortFormat()
+            }
 
+            if(chatType == ChatType.GROUP && item.senderId != FirebaseAuth.getInstance().currentUser!!.uid){
+                tv_sender_name.visibility = View.VISIBLE
+                tv_sender_name.text = item.senderName
+
+//                if(item is TextMessage){
+//                    if(item.text!!.length <= item.senderName.length){
+//                        tv_message_time.layoutParams = RelativeLayout.LayoutParams(
+//                            ViewGroup.LayoutParams.WRAP_CONTENT,
+//                            ViewGroup.LayoutParams.WRAP_CONTENT,
+//                            End
+//                        )
+//                    }
+//                }
+
+                iv_sender_avatar.visibility = View.VISIBLE
+                FirestoreUtil.getUserById(item.senderId){
+                    if(it.avatar == null || it.avatar == "" ){
+                        GlideApp.with(itemView).clear(iv_sender_avatar)
+                        iv_sender_avatar.setInitials(Utils.toInitials(it.firstName, it.lastName)!!)
+                    }else {
+                        GlideApp.with(itemView)
+                            .load(StorageUtil.pathToReference(it.avatar!!))
+                            .placeholder(R.drawable.avatar_default)
+                            .into(iv_sender_avatar)
+                    }
+                }
+            }else{
+                tv_sender_name.visibility = View.GONE
+                iv_sender_avatar.visibility = View.GONE
             }
         }
     }
 
     private fun setMessageRootGravity(holder: MessageItemViewHolder, message: BaseMessage) {
         if(message.senderId == FirebaseAuth.getInstance().currentUser!!.uid){
-            holder.message_root.apply {
-                background = resources.getDrawable(R.drawable.rect_message_mine, context.theme)
+            holder.root.apply {
                 layoutParams = FrameLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     Gravity.END
                 )
             }
+
+            holder.message_root.apply {
+                background = resources.getDrawable(R.drawable.rect_message_mine, context.theme)
+            }
+
         }
         else{
-            holder.message_root.apply {
-                background = resources.getDrawable(R.drawable.rect_message_other, context.theme)
+            holder.root.apply {
                 layoutParams = FrameLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     Gravity.START
                 )
+            }
+
+            holder.message_root.apply {
+                background = resources.getDrawable(R.drawable.rect_message_other, context.theme)
             }
         }
     }

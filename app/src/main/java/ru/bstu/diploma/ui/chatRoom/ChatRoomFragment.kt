@@ -58,7 +58,7 @@ class ChatRoomFragment: Fragment() {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initViews() {
-        chatRoomAdapter = ChatRoomAdapter()
+        chatRoomAdapter = ChatRoomAdapter(chatItem.chatType)
 
         binding.etMessage.setOnTouchListener { v, event ->
             val currentVisiblePosition = (binding.rvMessages.getLayoutManager() as LinearLayoutManager).findLastVisibleItemPosition()
