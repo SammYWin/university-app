@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import ru.bstu.diploma.R
 import ru.bstu.diploma.databinding.FragmentChatListBinding
@@ -33,6 +34,7 @@ class ChatListFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentChatListBinding.inflate(inflater)
 
+        (activity as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottomNavigationView).visibility = View.VISIBLE
         (activity as AppCompatActivity).supportActionBar!!.title = getString(R.string.title_updating)
 
         setHasOptionsMenu(true)
@@ -109,7 +111,7 @@ class ChatListFragment : Fragment() {
 
 
         binding.fab.setOnClickListener{
-            findNavController().navigate(ChatListFragmentDirections.actionChatFragmentToGroupFragment())
+            findNavController().navigate(ChatListFragmentDirections.actionChatListFragmentToUsersFragment(null))
         }
     }
 

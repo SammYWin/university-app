@@ -58,6 +58,10 @@ class UsersViewModel : ViewModel(){
         FirestoreUtil.getOrCreateChat(selectedItems.value!!){}
     }
 
+    fun handleAddUsersToChat(chatId: String) {
+        FirestoreUtil.addUsersToChat(chatId, selectedItems.value!!)
+    }
+
     private fun loadUsers(): List<UserItem> {
         var _userItems = listOf<UserItem>()
         userListenerRegistration = FirestoreUtil.addUsersListener{

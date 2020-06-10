@@ -70,15 +70,13 @@ class ChatRoomAdapter(val chatType: ChatType): RecyclerView.Adapter<ChatRoomAdap
                 tv_sender_name.visibility = View.VISIBLE
                 tv_sender_name.text = item.senderName
 
-//                if(item is TextMessage){
-//                    if(item.text!!.length <= item.senderName.length){
-//                        tv_message_time.layoutParams = RelativeLayout.LayoutParams(
-//                            ViewGroup.LayoutParams.WRAP_CONTENT,
-//                            ViewGroup.LayoutParams.WRAP_CONTENT,
-//                            End
-//                        )
-//                    }
-//                }
+                if(item is TextMessage){
+                    val params = tv_message_time.layoutParams as RelativeLayout.LayoutParams
+                    if(item.text!!.length <= item.senderName.length){
+                        params.addRule(RelativeLayout.ALIGN_END, R.id.tv_sender_name)
+                    } else params.addRule(RelativeLayout.ALIGN_END, R.id.tv_message_text)
+                    tv_message_time.layoutParams = params
+                }
 
                 iv_sender_avatar.visibility = View.VISIBLE
                 FirestoreUtil.getUserById(item.senderId){

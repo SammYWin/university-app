@@ -12,12 +12,14 @@ import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import ru.bstu.diploma.R
 import ru.bstu.diploma.databinding.FragmentChatRoomBinding
 import ru.bstu.diploma.extensions.isKeyboardOpen
 import ru.bstu.diploma.models.data.ChatItem
+import ru.bstu.diploma.models.data.ChatType
 import ru.bstu.diploma.ui.adapters.ChatRoomAdapter
 import ru.bstu.diploma.viewmodels.ChatRoomViewModel
 import ru.bstu.diploma.viewmodels.ChatRoomViewModelFactory
@@ -27,6 +29,7 @@ class ChatRoomFragment: Fragment() {
     private lateinit var viewModel: ChatRoomViewModel
     private lateinit var chatRoomAdapter: ChatRoomAdapter
     private lateinit var chatItem: ChatItem
+    private var isAddingNewUsers: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentChatRoomBinding.inflate(inflater)
@@ -36,6 +39,8 @@ class ChatRoomFragment: Fragment() {
         (activity as AppCompatActivity).supportActionBar!!.title = chatItem.title
         (activity as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottomNavigationView).visibility = View.GONE
 
+        setHasOptionsMenu(true)
+
         return binding.root
     }
 
@@ -44,6 +49,27 @@ class ChatRoomFragment: Fragment() {
 
         initViewModel()
         initViews()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        if(chatItem.chatType == ChatType.SINGLE)
+            inflater.inflate(R.menu.menu_single_chat, menu)
+        else inflater.inflate(R.menu.menu_group_chat, menu)
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.add_users -> {
+                findNavController().navigate(ChatRoomFragmentDirections.actionChatRoomFragmentToUsersFragment(chatItem.id))
+                isAddingNewUsers = true
+            }
+
+            else -> return super.onOptionsItemSelected(item)
+        }
+
+        return true
     }
 
     private fun initViewModel() {
@@ -87,10 +113,5 @@ class ChatRoomFragment: Fragment() {
             binding.rvMessages.scrollToPosition(binding.rvMessages.adapter!!.itemCount - 1)
             viewModel.reloadIsMessageSent()
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        (activity as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottomNavigationView).visibility = View.VISIBLE
     }
 }

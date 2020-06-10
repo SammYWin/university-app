@@ -282,4 +282,8 @@ object FirestoreUtil {
                     .update("unreadCount", 0)
             }
     }
+
+    fun addUsersToChat(chatId: String, value: List<UserItem>) {
+        //TODO implement
+    }
 }

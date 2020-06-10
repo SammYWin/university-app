@@ -28,10 +28,17 @@ class UsersFragment : Fragment() {
     private lateinit var usersAdapter: UserAdapter
     private lateinit var viewModel: UsersViewModel
     private lateinit var binding: FragmentUsersBinding
+    private var chatIdForNewUsers: String? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentUsersBinding.inflate(inflater)
         (activity as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottomNavigationView).visibility = View.GONE
+
+        chatIdForNewUsers = UsersFragmentArgs.fromBundle(requireArguments()).chatIdForNewUsers
+
+        if(chatIdForNewUsers != null){
+            (activity as AppCompatActivity).supportActionBar!!.title = getString(R.string.title_add_users_to_chat)
+        }
 
         setHasOptionsMenu(true)
 
@@ -43,11 +50,6 @@ class UsersFragment : Fragment() {
 
         initViews()
         initViewModel()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        (activity as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottomNavigationView).visibility = View.VISIBLE
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -82,7 +84,9 @@ class UsersFragment : Fragment() {
         }
 
         binding.fab.setOnClickListener {
-            viewModel.handleCreateChat()
+            if(chatIdForNewUsers == null)
+                viewModel.handleCreateChat()
+            else viewModel.handleAddUsersToChat(chatIdForNewUsers!!)
             findNavController().popBackStack()
         }
     }
@@ -136,4 +140,5 @@ class UsersFragment : Fragment() {
 
         users.forEach { (_, v) -> addChipToGroup(v) }
     }
+
 }
