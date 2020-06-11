@@ -16,8 +16,8 @@
         android:label="@string/title_create_chat"
         tools:layout="@layout/fragment_users" >
         <argument
-            android:name="chatIdForNewUsers"
-            app:argType="string"
+            android:name="chatItemForNewMembers"
+            app:argType="ru.bstu.diploma.models.data.ChatItem"
             app:nullable="true" />
     </fragment>
     <fragment

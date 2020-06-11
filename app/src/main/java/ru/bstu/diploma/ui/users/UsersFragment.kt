@@ -19,6 +19,7 @@ import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.fragment_users.chip_group
 import ru.bstu.diploma.R
 import ru.bstu.diploma.databinding.FragmentUsersBinding
+import ru.bstu.diploma.models.data.ChatItem
 import ru.bstu.diploma.models.data.UserItem
 import ru.bstu.diploma.ui.adapters.UserAdapter
 import ru.bstu.diploma.viewmodels.UsersViewModel
@@ -28,15 +29,15 @@ class UsersFragment : Fragment() {
     private lateinit var usersAdapter: UserAdapter
     private lateinit var viewModel: UsersViewModel
     private lateinit var binding: FragmentUsersBinding
-    private var chatIdForNewUsers: String? = null
+    private var chatItemForNewMembers: ChatItem? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentUsersBinding.inflate(inflater)
         (activity as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottomNavigationView).visibility = View.GONE
 
-        chatIdForNewUsers = UsersFragmentArgs.fromBundle(requireArguments()).chatIdForNewUsers
+        chatItemForNewMembers = UsersFragmentArgs.fromBundle(requireArguments()).chatItemForNewMembers
 
-        if(chatIdForNewUsers != null){
+        if(chatItemForNewMembers != null){
             (activity as AppCompatActivity).supportActionBar!!.title = getString(R.string.title_add_users_to_chat)
         }
 
@@ -84,9 +85,10 @@ class UsersFragment : Fragment() {
         }
 
         binding.fab.setOnClickListener {
-            if(chatIdForNewUsers == null)
+            if(chatItemForNewMembers == null)
                 viewModel.handleCreateChat()
-            else viewModel.handleAddUsersToChat(chatIdForNewUsers!!)
+            else viewModel.handleAddMembersToChat(chatItemForNewMembers!!)
+
             findNavController().popBackStack()
         }
     }

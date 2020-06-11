@@ -1439,7 +1439,7 @@
     <string name="title_updating">Обновление…</string>
     <string name="btn_text_choose_timetable">Выбрать расписание</string>
     <string name="btn_text_dialog_show">Показать</string>
-    <string name="menu_add_users">Добавить участников</string>
+    <string name="menu_chat_add_members">Добавить участников</string>
     <string name="menu_exit_chat">Выйти из чата</string>
     <string name="menu_show_profile">Показать профиль</string>
     <string name="title_add_users_to_chat">Добавить участников</string>

@@ -10,6 +10,7 @@ import ru.bstu.diploma.models.BaseMessage
 import ru.bstu.diploma.models.ImageMessage
 import ru.bstu.diploma.models.TextMessage
 import ru.bstu.diploma.models.data.Chat
+import ru.bstu.diploma.models.data.ChatItem
 import ru.bstu.diploma.models.data.User
 import ru.bstu.diploma.models.data.UserItem
 import java.lang.NullPointerException
@@ -283,7 +284,35 @@ object FirestoreUtil {
             }
     }
 
-    fun addUsersToChat(chatId: String, value: List<UserItem>) {
-        //TODO implement
+    fun addMembersToChat(chatItem: ChatItem, newMembers: List<UserItem>) {
+        val ids = newMembers.map { it.id }.toMutableList()
+
+        chatsCollectionRef.document(chatItem.id).get().addOnSuccessListener {chat ->
+            val memberIds = chat["memberIds"] as List<String>
+            for(member in memberIds){
+                if(ids.contains(member))
+                    ids.remove(member)
+            }
+
+            val newTitle = chatItem.title + ", " + newMembers.filter { member -> ids.contains(member.id) }
+                .map { Utils.parseFullName(it.fullName).first }.joinToString(", ")
+
+            for(id in ids) {
+                firestoreInstance.collection("user").document(id)
+                    .collection("engagedChats")
+                    .document()
+                    .set(
+                        mapOf(
+                            "chatId" to chatItem.id,
+                            "title" to newTitle,
+                            "avatar" to chatItem.avatar,
+                            "isArchived" to false
+                        )
+                    )
+            }
+
+            ids.forEach { id-> chatsCollectionRef.document(chatItem.id).update("memberIds", FieldValue.arrayUnion(id)) }
+
+        }
     }
 }

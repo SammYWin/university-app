@@ -81,7 +81,7 @@ class ChatRoomAdapter(val chatType: ChatType): RecyclerView.Adapter<ChatRoomAdap
                 iv_sender_avatar.visibility = View.VISIBLE
                 FirestoreUtil.getUserById(item.senderId){
                     if(it.avatar == null || it.avatar == "" ){
-                        GlideApp.with(itemView).clear(iv_sender_avatar)
+                        //GlideApp.with(itemView).clear(iv_sender_avatar)
                         iv_sender_avatar.setInitials(Utils.toInitials(it.firstName, it.lastName)!!)
                     }else {
                         GlideApp.with(itemView)

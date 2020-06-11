@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/add_users"
-        android:title="@string/menu_add_users" />
+        android:id="@+id/add_members"
+        android:title="@string/menu_chat_add_members" />
     <item
         android:id="@+id/exit_chat"
         android:title="@string/menu_exit_chat" />

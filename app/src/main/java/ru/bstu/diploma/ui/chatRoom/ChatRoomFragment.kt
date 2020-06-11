@@ -1,14 +1,10 @@
 package ru.bstu.diploma.ui.chatRoom
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
-import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -17,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import ru.bstu.diploma.R
 import ru.bstu.diploma.databinding.FragmentChatRoomBinding
-import ru.bstu.diploma.extensions.isKeyboardOpen
 import ru.bstu.diploma.models.data.ChatItem
 import ru.bstu.diploma.models.data.ChatType
 import ru.bstu.diploma.ui.adapters.ChatRoomAdapter
@@ -29,7 +24,6 @@ class ChatRoomFragment: Fragment() {
     private lateinit var viewModel: ChatRoomViewModel
     private lateinit var chatRoomAdapter: ChatRoomAdapter
     private lateinit var chatItem: ChatItem
-    private var isAddingNewUsers: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentChatRoomBinding.inflate(inflater)
@@ -61,9 +55,8 @@ class ChatRoomFragment: Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.add_users -> {
-                findNavController().navigate(ChatRoomFragmentDirections.actionChatRoomFragmentToUsersFragment(chatItem.id))
-                isAddingNewUsers = true
+            R.id.add_members -> {
+                findNavController().navigate(ChatRoomFragmentDirections.actionChatRoomFragmentToUsersFragment(chatItem))
             }
 
             else -> return super.onOptionsItemSelected(item)
