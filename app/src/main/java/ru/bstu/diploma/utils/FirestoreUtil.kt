@@ -193,7 +193,8 @@ object FirestoreUtil {
                             "chatId" to newChatRef.id,
                             "title" to newChat.title,
                             "avatar" to avatar,
-                            "isArchived" to newChat.isArchived
+                            "isArchived" to newChat.isArchived,
+                            "unreadCount" to 0
                         ))
 
                     //setting engagedChats for other users in the chat
@@ -215,7 +216,8 @@ object FirestoreUtil {
                                         "chatId" to newChatRef.id,
                                         "title" to _title,
                                         "avatar" to _avatar,
-                                        "isArchived" to newChat.isArchived
+                                        "isArchived" to newChat.isArchived,
+                                        "unreadCount" to 0
                                     )
                                 )
                         }
@@ -306,7 +308,8 @@ object FirestoreUtil {
                             "chatId" to chatItem.id,
                             "title" to newTitle,
                             "avatar" to chatItem.avatar,
-                            "isArchived" to false
+                            "isArchived" to false,
+                            "unreadCount" to 0
                         )
                     )
             }
@@ -314,5 +317,15 @@ object FirestoreUtil {
             ids.forEach { id-> chatsCollectionRef.document(chatItem.id).update("memberIds", FieldValue.arrayUnion(id)) }
 
         }
+    }
+
+    fun exitGroupChat(chatId: String) {
+        chatsCollectionRef.document(chatId).update("memberIds", FieldValue.arrayRemove(
+            FirebaseAuth.getInstance().currentUser!!.uid))
+
+        firestoreInstance.collection("user").document(FirebaseAuth.getInstance().currentUser!!.uid)
+            .collection("engagedChats").whereEqualTo("chatId", chatId).addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                querySnapshot!!.forEach { chat -> chat.reference.delete() }
+            }
     }
 }

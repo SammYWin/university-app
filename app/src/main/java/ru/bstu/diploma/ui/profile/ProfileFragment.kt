@@ -19,6 +19,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.firebase.auth.FirebaseAuth
+import dmax.dialog.SpotsDialog
 import ru.bstu.diploma.R
 import ru.bstu.diploma.models.Profile
 import ru.bstu.diploma.utils.Utils
@@ -99,7 +100,13 @@ class ProfileFragment : Fragment() {
             if(!isAvatarSet) isAvatarSet = true
 
             if(::selectedImageBytes.isInitialized){
+                val dialog: android.app.AlertDialog = SpotsDialog.Builder()
+                    .setContext(context)
+                    .setMessage(getString(R.string.dialog_avatar_saving))
+                    .build().apply { show() }
+
                 StorageUtil.uploadProfileAvatar(selectedImageBytes){ imagePath ->
+                    dialog.dismiss()
                     avatarPath = imagePath
                     saveProfileInfo()
                 }

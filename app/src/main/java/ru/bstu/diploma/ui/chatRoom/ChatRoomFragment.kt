@@ -1,9 +1,11 @@
 package ru.bstu.diploma.ui.chatRoom
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -11,11 +13,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 import ru.bstu.diploma.R
 import ru.bstu.diploma.databinding.FragmentChatRoomBinding
 import ru.bstu.diploma.models.data.ChatItem
 import ru.bstu.diploma.models.data.ChatType
+import ru.bstu.diploma.repositories.PreferencesRepository
 import ru.bstu.diploma.ui.adapters.ChatRoomAdapter
+import ru.bstu.diploma.ui.auth.AuthActivity
 import ru.bstu.diploma.viewmodels.ChatRoomViewModel
 import ru.bstu.diploma.viewmodels.ChatRoomViewModelFactory
 
@@ -58,10 +63,22 @@ class ChatRoomFragment: Fragment() {
             R.id.add_members -> {
                 findNavController().navigate(ChatRoomFragmentDirections.actionChatRoomFragmentToUsersFragment(chatItem))
             }
-
+            R.id.exit_chat ->{
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Покинуть чат")
+                    .setMessage("Вы уверены?")
+                    .setPositiveButton("Выйти") { dialog, which ->
+                        viewModel.handleExitGroupChat(chatItem.id)
+                        dialog.cancel()
+                        findNavController().popBackStack()
+                    }
+                    .setNegativeButton("Отмена") { dialog, which ->
+                        dialog.cancel()
+                    }
+                    .create().show()
+            }
             else -> return super.onOptionsItemSelected(item)
         }
-
         return true
     }
 

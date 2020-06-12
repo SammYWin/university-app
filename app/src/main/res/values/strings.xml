@@ -1443,6 +1443,7 @@
     <string name="menu_exit_chat">Выйти из чата</string>
     <string name="menu_show_profile">Показать профиль</string>
     <string name="title_add_users_to_chat">Добавить участников</string>
+    <string name="dialog_avatar_saving">Сохранение аватара</string>
 
 
 </resources>
