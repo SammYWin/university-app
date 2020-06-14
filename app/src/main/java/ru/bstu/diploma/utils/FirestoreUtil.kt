@@ -1,11 +1,13 @@
 package ru.bstu.diploma.utils
 
 import android.util.Log
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import ru.bstu.diploma.App
 import ru.bstu.diploma.models.BaseMessage
 import ru.bstu.diploma.models.ImageMessage
 import ru.bstu.diploma.models.TextMessage
@@ -154,9 +156,10 @@ object FirestoreUtil {
 
     fun removeListener(registration: ListenerRegistration) = registration.remove()
 
-    fun getOrCreateChat(items: List<UserItem>, onComplete: (chatId: String) -> Unit){
-        val ids = items.map { it.id }.toMutableList()
-        ids.add(FirebaseAuth.getInstance().currentUser!!.uid)
+    fun getOrCreateChat(_ids: List<String>, onComplete: (chatId: String) -> Unit){
+        val ids = _ids.toMutableList()
+        if(!ids.contains(FirebaseAuth.getInstance().currentUser!!.uid))
+            ids.add(FirebaseAuth.getInstance().currentUser!!.uid)
 
         chatsCollectionRef.get().addOnSuccessListener {
                 for(doc in it.documents){
@@ -313,20 +316,18 @@ object FirestoreUtil {
                         )
                     )
             }
-
             ids.forEach { id-> chatsCollectionRef.document(chatItem.id).update("memberIds", FieldValue.arrayUnion(id)) }
-
         }
     }
 
     fun exitGroupChat(chatId: String) {
+        firestoreInstance.collection("user").document(FirebaseAuth.getInstance().currentUser!!.uid)
+            .collection("engagedChats").whereEqualTo("chatId", chatId).get().addOnSuccessListener {
+                it.documents[0].reference.delete()
+            }
+
         chatsCollectionRef.document(chatId).update("memberIds", FieldValue.arrayRemove(
             FirebaseAuth.getInstance().currentUser!!.uid))
-
-        firestoreInstance.collection("user").document(FirebaseAuth.getInstance().currentUser!!.uid)
-            .collection("engagedChats").whereEqualTo("chatId", chatId).addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                querySnapshot!!.forEach { chat -> chat.reference.delete() }
-            }
     }
 
     fun loadUserDataFromChat(chatId: String, onComplete: (user: User) -> Unit) {
@@ -337,5 +338,49 @@ object FirestoreUtil {
                     getUserById(it){user -> onComplete(user)}
             }
         }
+    }
+
+    fun getChatById(chatId: String, onComplete: (chat: Chat) -> Unit) {
+        firestoreInstance.collection("user").document(FirebaseAuth.getInstance().currentUser!!.uid)
+            .collection("engagedChats").whereEqualTo("chatId", chatId).addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                querySnapshot!!.forEach{
+                    val id = it["chatId"] as String
+                    val title = it["title"] as String
+                    val avatar = it["avatar"] as String?
+                    val isArchived = it["isArchived"] as Boolean
+                    val unreadCount = it["unreadCount"] as Long?
+
+                    val _chat = Chat(
+                        id,
+                        title,
+                        avatar = avatar,
+                        isArchived = isArchived,
+                        unreadCount = unreadCount?.toInt() ?: 0
+                    )
+
+                    chatsCollectionRef.document(id).get().addOnSuccessListener{chat ->
+                        val memberIds = chat["memberIds"] as List<String>
+
+                        chatsCollectionRef.document(id).collection("messages").orderBy("date")
+                            .addSnapshotListener { querySnapshotMessages, firebaseFirestoreException ->
+                                if(firebaseFirestoreException != null){
+                                    Log.e("FIRESTORE", "Get chat by id error", firebaseFirestoreException)
+                                    return@addSnapshotListener
+                                }
+
+                                querySnapshotMessages?.documents?.forEach{doc->
+                                    doc.toObject(TextMessage::class.java)?.let { message ->
+                                        _chat.messages.add(message)
+                                    }
+                                }
+
+                                getUsersByIds(memberIds){
+                                    _chat.members = it.toMutableList()
+                                    onComplete(_chat)
+                                }
+                            }
+                    }
+                }
+            }
     }
 }

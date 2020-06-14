@@ -7,14 +7,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import ru.bstu.diploma.R
 import ru.bstu.diploma.databinding.FragmentProfileInfoBinding
 import ru.bstu.diploma.extensions.humanizeDiff
 import ru.bstu.diploma.glide.GlideApp
+import ru.bstu.diploma.models.data.Chat
 import ru.bstu.diploma.models.data.User
 import ru.bstu.diploma.utils.StorageUtil
 import ru.bstu.diploma.utils.Utils
-import ru.bstu.diploma.viewmodels.ChatRoomViewModelFactory
 import ru.bstu.diploma.viewmodels.ProfileInfoViewModel
 import ru.bstu.diploma.viewmodels.ProfileInfoViewModelFactory
 
@@ -41,7 +42,11 @@ class ProfileInfoFragment: Fragment() {
         val viewModelFactory = ProfileInfoViewModelFactory(chatId, userId)
         viewModel = ViewModelProvider(this, viewModelFactory).get(ProfileInfoViewModel::class.java)
         viewModel.getUserInfo().observe(viewLifecycleOwner, Observer { user -> updateUserInfo(user) })
+        viewModel.getChat().observe(viewLifecycleOwner, Observer { chat -> navigateToChat(chat) })
+    }
 
+    private fun navigateToChat(chat: Chat) {
+        findNavController().navigate(ProfileInfoFragmentDirections.actionProfileInfoFragmentToChatRoomFragment(chat.toChatItem()))
     }
 
     private fun updateUserInfo(user: User) {
@@ -69,7 +74,10 @@ class ProfileInfoFragment: Fragment() {
     private fun initViews() {
         binding.ivAvatar.setImageResource(R.drawable.avatar_default)
         binding.fab.setOnClickListener {
-
+            if(chatId != null)
+                findNavController().popBackStack()
+            else
+                viewModel.handleGetOrCreateChat()
         }
     }
 }

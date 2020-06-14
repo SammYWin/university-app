@@ -100,6 +100,10 @@ class ChatRoomAdapter(val chatType: ChatType, val avatarClicked: (userId: String
             }else{
                 tv_sender_name.visibility = View.GONE
                 iv_sender_avatar.visibility = View.GONE
+
+                val params = tv_message_time.layoutParams as RelativeLayout.LayoutParams
+                params.addRule(RelativeLayout.ALIGN_END, R.id.tv_message_text)
+                tv_message_time.layoutParams = params
             }
         }
     }

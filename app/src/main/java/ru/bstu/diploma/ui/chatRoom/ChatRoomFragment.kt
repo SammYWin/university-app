@@ -17,6 +17,7 @@ import ru.bstu.diploma.databinding.FragmentChatRoomBinding
 import ru.bstu.diploma.models.data.ChatItem
 import ru.bstu.diploma.models.data.ChatType
 import ru.bstu.diploma.ui.adapters.ChatRoomAdapter
+import ru.bstu.diploma.utils.FirestoreUtil
 import ru.bstu.diploma.viewmodels.ChatRoomViewModel
 import ru.bstu.diploma.viewmodels.ChatRoomViewModelFactory
 
@@ -122,5 +123,11 @@ class ChatRoomFragment: Fragment() {
             binding.rvMessages.scrollToPosition(binding.rvMessages.adapter!!.itemCount - 1)
             viewModel.resetIsMessageSent()
         }
+    }
+
+    override fun onDestroy() {
+        FirestoreUtil.updateUnreadCount(chatItem.id)
+        (activity as AppCompatActivity).supportActionBar!!.title = getString(R.string.title_chats_bgtu)
+        super.onDestroy()
     }
 }

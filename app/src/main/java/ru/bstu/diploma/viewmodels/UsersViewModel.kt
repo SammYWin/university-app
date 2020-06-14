@@ -55,8 +55,7 @@ class UsersViewModel : ViewModel(){
     }
 
     fun handleCreateChat() {
-//        groupRepository.createChat(selectedItems.value)
-        FirestoreUtil.getOrCreateChat(selectedItems.value!!){}
+        FirestoreUtil.getOrCreateChat(selectedItems.value!!.map { it.id }){}
     }
 
     fun handleAddMembersToChat(chatItem: ChatItem) {

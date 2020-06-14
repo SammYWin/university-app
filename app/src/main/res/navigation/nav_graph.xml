@@ -65,5 +65,10 @@
             android:name="userId"
             app:argType="string"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_profileInfoFragment_to_chatRoomFragment"
+            app:destination="@id/chatRoomFragment"
+            app:popUpTo="@id/chatRoomFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

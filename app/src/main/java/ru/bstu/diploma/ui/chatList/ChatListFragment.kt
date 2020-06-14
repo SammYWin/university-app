@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.*
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -98,8 +99,8 @@ class ChatListFragment : Fragment() {
 //            snack.show()
         }
 
-        val touchHelper = ItemTouchHelper(touchCallback)
-        touchHelper.attachToRecyclerView(binding.rvChatList)
+//        val touchHelper = ItemTouchHelper(touchCallback)
+//        touchHelper.attachToRecyclerView(binding.rvChatList)
 
         val divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
 
@@ -124,8 +125,8 @@ class ChatListFragment : Fragment() {
         })
         viewModel.getChatsLoaded().observe(viewLifecycleOwner, Observer {
             if(it == true){
-                (activity as AppCompatActivity).supportActionBar!!.title = getString(R.string.title_chats_bgtu)
                 viewModel.resetChatsLoaded()
+                (activity as AppCompatActivity).supportActionBar!!.title = getString(R.string.title_chats_bgtu)
             }
         })
     }

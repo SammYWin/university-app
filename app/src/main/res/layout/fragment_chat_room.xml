@@ -56,9 +56,10 @@
                 android:id="@+id/iv_send"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/et_message"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="@dimen/spacing_normal_16"
-                android:layout_marginTop="9dp"
+                android:layout_marginTop="-40dp"
                 android:elevation="2dp"
                 android:src="@drawable/ic_send_black_24dp" />
         </RelativeLayout>
