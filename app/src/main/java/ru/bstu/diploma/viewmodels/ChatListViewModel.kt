@@ -6,6 +6,9 @@ import ru.bstu.diploma.extensions.mutableLiveData
 import ru.bstu.diploma.models.data.Chat
 import ru.bstu.diploma.models.data.ChatItem
 import ru.bstu.diploma.utils.FirestoreUtil
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 class ChatListViewModel : ViewModel() {
     private lateinit var chatsListenerRegistration: ListenerRegistration
@@ -16,11 +19,9 @@ class ChatListViewModel : ViewModel() {
             val archivedChats = chats
                 .filter { it.isArchived }
                 .map { it.toArchiveChatItem(chats) }
-                .sortedByDescending { it.lastMessageDate }
             if(archivedChats.isEmpty()){
                 return@map chats
                     .map { it.toChatItem() }
-                    .sortedByDescending { it.lastMessageDate }
             } else{
                 val chatsWithArchiveItem = mutableListOf<ChatItem>()
                 chatsWithArchiveItem.add(0, archivedChats.last())
@@ -55,11 +56,13 @@ class ChatListViewModel : ViewModel() {
     private fun loadChats(): List<Chat>{
         var loadedChats:  List<Chat> = listOf()
         chatsListenerRegistration = FirestoreUtil.addChatsListener {
+            var newList = listOf<Chat>()
             if (it != null) {
-                loadedChats = it
+                newList = it.sortedByDescending { it.messages.lastOrNull()?.date }
+                loadedChats = newList
                 chatsLoaded.value = true
             }
-            _chats.value = it
+            _chats.value = newList
         }
 
         return loadedChats

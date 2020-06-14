@@ -43,6 +43,10 @@
         <item name="android:textSize">@dimen/font_normal_16</item>
     </style>
 
+    <style name="Profile.Header.LastVisit" parent="Profile.Header">
+        <item name="android:textSize">@dimen/font_normal_16</item>
+    </style>
+
     <style name="Profile.Metrics" parent="Profile">
         <item name="android:textColor">@android:color/white</item>
     </style>

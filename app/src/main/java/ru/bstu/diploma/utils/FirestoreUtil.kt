@@ -328,4 +328,14 @@ object FirestoreUtil {
                 querySnapshot!!.forEach { chat -> chat.reference.delete() }
             }
     }
+
+    fun loadUserDataFromChat(chatId: String, onComplete: (user: User) -> Unit) {
+        chatsCollectionRef.document(chatId).get().addOnSuccessListener {chat ->
+            val memberIds = chat["memberIds"] as List<String>
+            memberIds.forEach {
+                if(it != FirebaseAuth.getInstance().currentUser!!.uid)
+                    getUserById(it){user -> onComplete(user)}
+            }
+        }
+    }
 }

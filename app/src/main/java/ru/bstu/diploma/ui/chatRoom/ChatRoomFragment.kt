@@ -1,7 +1,6 @@
 package ru.bstu.diploma.ui.chatRoom
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
@@ -13,14 +12,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.auth.FirebaseAuth
 import ru.bstu.diploma.R
 import ru.bstu.diploma.databinding.FragmentChatRoomBinding
 import ru.bstu.diploma.models.data.ChatItem
 import ru.bstu.diploma.models.data.ChatType
-import ru.bstu.diploma.repositories.PreferencesRepository
 import ru.bstu.diploma.ui.adapters.ChatRoomAdapter
-import ru.bstu.diploma.ui.auth.AuthActivity
 import ru.bstu.diploma.viewmodels.ChatRoomViewModel
 import ru.bstu.diploma.viewmodels.ChatRoomViewModelFactory
 
@@ -77,6 +73,7 @@ class ChatRoomFragment: Fragment() {
                     }
                     .create().show()
             }
+            R.id.show_profile -> findNavController().navigate(ChatRoomFragmentDirections.actionChatRoomFragmentToProfileInfoFragment(chatItem.id, null))
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -94,7 +91,9 @@ class ChatRoomFragment: Fragment() {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initViews() {
-        chatRoomAdapter = ChatRoomAdapter(chatItem.chatType)
+        chatRoomAdapter = ChatRoomAdapter(chatItem.chatType){userId ->
+            findNavController().navigate(ChatRoomFragmentDirections.actionChatRoomFragmentToProfileInfoFragment(null, userId))
+        }
 
         binding.etMessage.setOnTouchListener { v, event ->
             val currentVisiblePosition = (binding.rvMessages.getLayoutManager() as LinearLayoutManager).findLastVisibleItemPosition()
@@ -121,7 +120,7 @@ class ChatRoomFragment: Fragment() {
     fun updateRecyclerPosition(isSent: Boolean){
         if(isSent == true){
             binding.rvMessages.scrollToPosition(binding.rvMessages.adapter!!.itemCount - 1)
-            viewModel.reloadIsMessageSent()
+            viewModel.resetIsMessageSent()
         }
     }
 }

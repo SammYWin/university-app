@@ -42,7 +42,7 @@ class ChatRoomViewModel(chatItem: ChatItem): ViewModel() {
         }
     }
 
-    fun reloadIsMessageSent(){ isMessageSent.value = false }
+    fun resetIsMessageSent(){ isMessageSent.value = false }
 
     fun handleExitGroupChat(chatId: String) {
         FirestoreUtil.exitGroupChat(chatId)

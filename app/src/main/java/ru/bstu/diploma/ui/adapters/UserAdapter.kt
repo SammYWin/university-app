@@ -54,7 +54,7 @@ class UserAdapter(val listener: (UserItem)->Unit) : RecyclerView.Adapter<UserAda
             } else{
                 GlideApp.with(itemView)
                     .load(StorageUtil.pathToReference(user.avatar!!))
-                    .placeholder(R.drawable.avatar_default)
+                    //.placeholder(R.drawable.avatar_default)
                     .into(iv_avatar_user)
             }
 

@@ -1,5 +1,6 @@
 package ru.bstu.diploma.ui.adapters
 
+import android.graphics.drawable.Drawable
 import android.text.Layout
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -7,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.RelativeLayout
+import android.widget.Toast
+import androidx.core.content.ContextCompat.getDrawable
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -22,7 +25,7 @@ import ru.bstu.diploma.utils.FirestoreUtil
 import ru.bstu.diploma.utils.StorageUtil
 import ru.bstu.diploma.utils.Utils
 
-class ChatRoomAdapter(val chatType: ChatType): RecyclerView.Adapter<ChatRoomAdapter.MessageItemViewHolder>() {
+class ChatRoomAdapter(val chatType: ChatType, val avatarClicked: (userId: String) -> Unit): RecyclerView.Adapter<ChatRoomAdapter.MessageItemViewHolder>() {
 
     var items: List<BaseMessage> = listOf()
 
@@ -66,6 +69,10 @@ class ChatRoomAdapter(val chatType: ChatType): RecyclerView.Adapter<ChatRoomAdap
                 tv_message_time.text = item.date.shortFormat()
             }
 
+            iv_sender_avatar.setOnClickListener {
+                avatarClicked(item.senderId)
+            }
+
             if(chatType == ChatType.GROUP && item.senderId != FirebaseAuth.getInstance().currentUser!!.uid){
                 tv_sender_name.visibility = View.VISIBLE
                 tv_sender_name.text = item.senderName
@@ -81,12 +88,12 @@ class ChatRoomAdapter(val chatType: ChatType): RecyclerView.Adapter<ChatRoomAdap
                 iv_sender_avatar.visibility = View.VISIBLE
                 FirestoreUtil.getUserById(item.senderId){
                     if(it.avatar == null || it.avatar == "" ){
-                        //GlideApp.with(itemView).clear(iv_sender_avatar)
+                        GlideApp.with(itemView).clear(iv_sender_avatar)
                         iv_sender_avatar.setInitials(Utils.toInitials(it.firstName, it.lastName)!!)
                     }else {
                         GlideApp.with(itemView)
                             .load(StorageUtil.pathToReference(it.avatar!!))
-                            .placeholder(R.drawable.avatar_default)
+                            .placeholder(getDrawable(itemView.context, R.drawable.avatar_default))
                             .into(iv_sender_avatar)
                     }
                 }

@@ -25,7 +25,7 @@ class AvatarImageView @JvmOverloads constructor(
 ) : androidx.appcompat.widget.AppCompatImageView(context, attrs, defStyleAttr) /*View.OnLongClickListener*/ {
 
     companion object {
-        private const val DEFAULT_BORDER_WIDTH = 2
+        private const val DEFAULT_BORDER_WIDTH = 0
         private const val DEFAULT_BORDER_COLOR = Color.WHITE
         private const val DEFAULT_SIZE = 40
 
@@ -107,7 +107,8 @@ class AvatarImageView @JvmOverloads constructor(
             set(viewRect)
             inset(half, half)
         }
-        canvas.drawOval(borderRect.toRectF(), borderPaint)
+        if(borderWidth != 0f)
+         canvas.drawOval(borderRect.toRectF(), borderPaint)
         scaleType = ScaleType.CENTER_CROP
     }
 
