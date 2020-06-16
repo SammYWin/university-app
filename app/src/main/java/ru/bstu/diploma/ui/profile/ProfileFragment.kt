@@ -27,8 +27,10 @@ import ru.bstu.diploma.glide.GlideApp
 import ru.bstu.diploma.models.data.User
 import ru.bstu.diploma.repositories.PreferencesRepository
 import ru.bstu.diploma.ui.auth.AuthActivity
+import ru.bstu.diploma.utils.FirestoreUtil
 import ru.bstu.diploma.utils.StorageUtil
 import java.io.ByteArrayOutputStream
+import java.util.*
 
 class ProfileFragment : Fragment() {
 
@@ -134,6 +136,8 @@ class ProfileFragment : Fragment() {
             .setTitle("Выход")
             .setMessage("Вы уверены?")
             .setPositiveButton("Выйти") { dialog, which ->
+                val user = User(lastVisit = Date(), isOnline = false)
+                FirestoreUtil.updateCurrentUser(user)
                 FirebaseAuth.getInstance().signOut()
                 PreferencesRepository.clearProfilePreferences()
                 startActivity(Intent(context, AuthActivity::class.java))

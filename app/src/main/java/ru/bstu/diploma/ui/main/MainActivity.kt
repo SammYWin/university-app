@@ -8,6 +8,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 import ru.bstu.diploma.R
 import ru.bstu.diploma.models.data.User
 import ru.bstu.diploma.utils.FirestoreUtil
@@ -41,8 +42,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onStart() {
-        val user = User(isOnline = true)
-        FirestoreUtil.updateCurrentUser(user)
+        if(FirebaseAuth.getInstance().uid != null) {
+            val user = User(isOnline = true)
+            FirestoreUtil.updateCurrentUser(user)
+        }
 
         Log.d("M_MainActivity", "onStart")
         super.onStart()
@@ -61,8 +64,10 @@ class MainActivity : AppCompatActivity() {
     override fun onStop() {
         Log.d("M_MainActivity", "onStop")
 
-        val user = User(lastVisit = Date(), isOnline = false)
-        FirestoreUtil.updateCurrentUser(user)
+        if(FirebaseAuth.getInstance().uid != null) {
+            val user = User(lastVisit = Date(), isOnline = false)
+            FirestoreUtil.updateCurrentUser(user)
+        }
 
         super.onStop()
     }
