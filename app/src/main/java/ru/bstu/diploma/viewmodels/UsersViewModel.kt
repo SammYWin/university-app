@@ -65,7 +65,7 @@ class UsersViewModel : ViewModel(){
     private fun loadUsers(): List<UserItem> {
         var _userItems = listOf<UserItem>()
         userListenerRegistration = FirestoreUtil.addUsersListener{
-            _userItems =  it.map { it.toUserItem() }
+            _userItems =  it.map { it.toUserItem() }.also { it.forEach { if(it.isGroupLeader == true) it.fullName +=  " (ст. ${it.group})" } }
             userItems.value = _userItems
         }
 

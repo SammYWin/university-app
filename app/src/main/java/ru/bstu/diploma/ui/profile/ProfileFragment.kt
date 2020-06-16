@@ -10,14 +10,12 @@ import android.util.Log
 import android.view.*
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.firebase.auth.FirebaseAuth
 import dmax.dialog.SpotsDialog
 import ru.bstu.diploma.R
@@ -228,7 +226,19 @@ class ProfileFragment : Fragment() {
                 v.text = it[k].toString()
             }
         }
-        Log.d("M_ProfileFragment", "updateUI called")
+
+        if(profile.isGroupLeader == true){
+            with(binding.ivAvatar){
+                setBorderWidth(2)
+                setBorderColor(resources.getColor(R.color.color_avatar_border_leader))
+            }
+        }else if (profile.isProfessor == true){
+            with(binding.ivAvatar){
+                setBorderWidth(2)
+                setBorderColor(resources.getColor(R.color.color_avatar_border_professor))
+            }
+        }
+
         avatarPath = profile.avatar
         if(avatarPath == "")
             updateDefaultAvatar(profile)

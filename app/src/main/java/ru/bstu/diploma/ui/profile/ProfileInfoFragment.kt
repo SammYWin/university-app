@@ -58,6 +58,14 @@ class ProfileInfoFragment: Fragment() {
             else -> "Был в сети ${user.lastVisit.humanizeDiff()}"
         }
 
+        if(user.isGroupLeader == true) {
+            binding.ivAvatar.setBorderColor(resources.getColor(R.color.color_avatar_border_leader))
+            binding.ivAvatar.setBorderWidth(2)
+        }else if (user.isProfessor == true){
+            binding.ivAvatar.setBorderColor(resources.getColor(R.color.color_avatar_border_professor))
+            binding.ivAvatar.setBorderWidth(2)
+        }
+
         if(user.avatar == "" || user.avatar == null)
             Utils.toInitials(user.firstName, user.lastName)?.let {
                 binding.ivAvatar.setInitials(it)

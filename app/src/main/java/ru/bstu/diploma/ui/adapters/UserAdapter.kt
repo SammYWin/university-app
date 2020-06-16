@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.item_chat_single.*
 import kotlinx.android.synthetic.main.item_user_list.*
+import kotlinx.android.synthetic.main.item_user_list.sv_indicator
 import ru.bstu.diploma.R
 import ru.bstu.diploma.glide.GlideApp
 import ru.bstu.diploma.models.data.UserItem
@@ -48,6 +50,22 @@ class UserAdapter(val listener: (UserItem)->Unit) : RecyclerView.Adapter<UserAda
         get() = itemView
 
         fun bind(user: UserItem, listener: (UserItem) -> Unit){
+            if(user.isGroupLeader == true){
+                with(iv_avatar_user){
+                    setBorderWidth(2)
+                    setBorderColor(resources.getColor(R.color.color_avatar_border_leader))
+                }
+            }else if(user.isProfessor == true){
+                with(iv_avatar_user){
+                    setBorderWidth(2)
+                    setBorderColor(resources.getColor(R.color.color_avatar_border_professor))
+                }
+            }else{
+                with(iv_avatar_user){
+                    setBorderWidth(0)
+                }
+            }
+
             if(user.avatar == ""){
                 Glide.with(itemView).clear(iv_avatar_user)
                 iv_avatar_user.setInitials(user.initials ?: "??")

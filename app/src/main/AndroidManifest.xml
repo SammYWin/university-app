@@ -24,7 +24,7 @@
         </activity>
 
         <activity android:name="ru.bstu.diploma.ui.main.MainActivity"/>
-        <activity android:name="ru.bstu.diploma.ui.auth.AuthActivity" android:theme="@style/AuthTheme"/>
+        <activity android:name="ru.bstu.diploma.ui.auth.AuthActivity" android:theme="@style/AuthTheme" />
 
 
 

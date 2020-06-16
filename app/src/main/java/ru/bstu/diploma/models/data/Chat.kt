@@ -47,11 +47,15 @@ data class Chat(
                 id,
                 otherUser.avatar,
                 Utils.toInitials(otherUser.firstName, otherUser.lastName) ?: "??",
-                "${otherUser.firstName ?: ""} ${otherUser.lastName ?: ""}",
+                "${otherUser.firstName ?: ""} ${otherUser.lastName ?:""}", //+
+                        //" ${if(otherUser.isGroupLeader == true) "(ст. ${otherUser.group})" else ""}",
                 messages.lastOrNull()?.senderId ?: "",
                 lastMessageShort().first,
                 unreadCount,
                 lastMessageDate()?.shortFormat(),
+                otherUser.group,
+                otherUser.isProfessor,
+                otherUser.isGroupLeader,
                 otherUser.isOnline
             )
         } else {
@@ -64,6 +68,9 @@ data class Chat(
                 lastMessageShort().first,
                 unreadCount,
                 lastMessageDate()?.shortFormat(),
+                null,
+                false,
+                false,
                 false,
                 ChatType.GROUP,
                 lastMessageShort().second
@@ -85,7 +92,8 @@ data class Chat(
             archivedChats.sumBy { it.unreadCount },
             archivedChats.last().lastMessageDate()?.shortFormat(),
             chatType = ChatType.ARCHIVE,
-            author = archivedChats.last().lastMessageShort().second
+            author = archivedChats.last().lastMessageShort().second,
+            group = null
         )
     }
 }

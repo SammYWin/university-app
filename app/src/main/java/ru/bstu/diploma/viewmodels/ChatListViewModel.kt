@@ -22,6 +22,7 @@ class ChatListViewModel : ViewModel() {
             if(archivedChats.isEmpty()){
                 return@map chats
                     .map { it.toChatItem() }
+                    .also { it.forEach { if(it.isGroupLeader == true) it.title +=  " (ст. ${it.group})" } }
             } else{
                 val chatsWithArchiveItem = mutableListOf<ChatItem>()
                 chatsWithArchiveItem.add(0, archivedChats.last())

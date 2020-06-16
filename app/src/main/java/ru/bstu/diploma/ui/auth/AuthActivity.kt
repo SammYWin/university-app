@@ -41,21 +41,6 @@ class AuthActivity : AppCompatActivity() {
        }.attach()
     }
 
-    private fun createSignInIntent(){
-        val providers = listOf(
-            AuthUI.IdpConfig.EmailBuilder().build()
-        )
-
-        startActivityForResult(
-            AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setAvailableProviders(providers)
-                .setTheme(R.style.AppTheme)
-                .build()
-            , RC_SIGN_IN
-        )
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 

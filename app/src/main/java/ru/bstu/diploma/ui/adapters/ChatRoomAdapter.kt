@@ -93,7 +93,7 @@ class ChatRoomAdapter(val chatType: ChatType, val avatarClicked: (userId: String
                     }else {
                         GlideApp.with(itemView)
                             .load(StorageUtil.pathToReference(it.avatar!!))
-                            .placeholder(getDrawable(itemView.context, R.drawable.avatar_default))
+                           // .placeholder(getDrawable(itemView.context, R.drawable.avatar_default))
                             .into(iv_sender_avatar)
                     }
                 }

@@ -96,6 +96,23 @@ class ChatListAdapter(val listener : (ChatItem)->Unit) : RecyclerView.Adapter<Ch
 
 
         override fun bind(item: ChatItem, listener : (ChatItem)->Unit) {
+            if(item.isGroupLeader == true){
+                with(iv_avatar_single){
+                    setBorderWidth(2)
+                    setBorderColor(resources.getColor(R.color.color_avatar_border_leader))
+                }
+            }else if(item.isProfessor == true){
+                with(iv_avatar_single){
+                    setBorderWidth(2)
+                    setBorderColor(resources.getColor(R.color.color_avatar_border_professor))
+                }
+            }else{
+                item.title = item.title
+                with(iv_avatar_single){
+                    setBorderWidth(0)
+                }
+            }
+
             if (item.avatar == null || item.avatar == "") {
                 Glide.with(itemView).clear(iv_avatar_single)
                 iv_avatar_single.setInitials(item.initials)

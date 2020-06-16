@@ -15,6 +15,7 @@ object PreferencesRepository
     private const val ABOUT = "ABOUT"
     private const val GROUP = "GROUP"
     private const val APP_THEME = "APP_THEME"
+    private const val SCHEDULE = "SCHEDULE"
 
     private val prefs: SharedPreferences by lazy {
         val ctx = App.applicationContext()
@@ -25,7 +26,7 @@ object PreferencesRepository
         putValue(APP_THEME to theme)
     }
 
-    fun getAppTheme() : Int = prefs.getInt(APP_THEME,AppCompatDelegate.MODE_NIGHT_NO)
+    fun getAppTheme() : Int = prefs.getInt(APP_THEME, AppCompatDelegate.MODE_NIGHT_NO)
 
     fun getProfile(): Profile = Profile(
         prefs.getString(FIRST_NAME, "")!!,
@@ -74,4 +75,10 @@ object PreferencesRepository
         }
         apply()
     }
+
+    fun saveSchedule(schedule: String){
+        putValue(SCHEDULE to schedule)
+    }
+
+    fun getSchedule(): String = prefs.getString(SCHEDULE, "")!!
 }

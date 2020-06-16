@@ -59,6 +59,7 @@ object FirestoreUtil {
     fun getCurrentUser(onComplete: (User) -> Unit){
         currentUserDocRef.get().addOnSuccessListener {
             it.toObject(User::class.java)?.let { user ->
+                user.isOnline = it["isOnline"] as Boolean?
                 onComplete(user) }
         }
     }
@@ -66,7 +67,9 @@ object FirestoreUtil {
     fun getUserById(id: String, onComplete: (user: User) -> Unit){
         firestoreInstance.collection("user").document(id).get()
             .addOnSuccessListener {
-                it.toObject(User::class.java)?.let { user -> onComplete(user) }
+                it.toObject(User::class.java)?.let { user ->
+                    user.isOnline = it["isOnline"] as Boolean?
+                    onComplete(user) }
             }
     }
 
@@ -76,6 +79,7 @@ object FirestoreUtil {
             firestoreInstance.collection("user").document(id).get()
                 .addOnSuccessListener {
                     it.toObject(User::class.java)?.let { user ->
+                        user.isOnline = it["isOnline"] as Boolean?
                         users.add(user)
                         if(users.size == ids.size)
                             onComplete(users)
@@ -95,7 +99,7 @@ object FirestoreUtil {
                 val users = mutableListOf<User>()
                 querySnapshot?.documents?.forEach {
                     if(it.id != FirebaseAuth.getInstance().currentUser?.uid)
-                        users.add(it.toObject(User::class.java)!!)
+                        users.add(it.toObject(User::class.java)!!.also { user ->  user.isOnline = it["isOnline"] as Boolean? })
                 }
                 onListen(users)
             }

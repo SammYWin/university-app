@@ -29,7 +29,9 @@ class ProfileViewModel : ViewModel()
                 user.nickName!!,
                 user.avatar!!,
                 user.about!!,
-                user.group!!
+                user.group!!,
+                user.isGroupLeader,
+                user.isProfessor
             )
             if(!profileData.value!!.equals(profile)) {
                 profileData.value = profile

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import ru.bstu.diploma.network.ScheduleApi
+import ru.bstu.diploma.repositories.PreferencesRepository
 
 class ScheduleViewModel: ViewModel() {
 
@@ -19,7 +20,10 @@ class ScheduleViewModel: ViewModel() {
                 .getSchedule(namedata, period, group, teacher)
             try {
                 val schedule = getScheduleDeferred.await()
-                scheduleData.value = schedule.body()!!.string()
+                val data = schedule.body()!!.string()
+                scheduleData.value = data
+                PreferencesRepository.saveSchedule(data)
+
             }catch (t: Throwable){
                 scheduleData.value = "Ошибка"
             }

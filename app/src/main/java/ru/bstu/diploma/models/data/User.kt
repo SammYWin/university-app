@@ -22,8 +22,12 @@ data class User
     var isActivated: Boolean? = true
     )
 {
-    constructor(): this(
+    constructor() : this(
         "", null, null, null, null,null, null, null, null, null, null, null
+    )
+
+    constructor(lastVisit: Date? = null, isOnline: Boolean? = false) : this(
+        "", null, null, null, null,null, null, lastVisit, isOnline, null, null, null
     )
 
     constructor(id: String, firstName: String?, lastName: String?) : this(
@@ -55,7 +59,7 @@ data class User
         val lastActivity = when{
             lastVisit == null -> "Ещё ни разу не заходил"
             isOnline == true -> "online"
-            else -> "Последний раз был ${lastVisit.humanizeDiff()}"
+            else -> "Был в сети ${lastVisit.humanizeDiff()}"
         }
 
         return UserItem(
@@ -63,9 +67,12 @@ data class User
             "${firstName.orEmpty()} ${lastName.orEmpty()}",
             Utils.toInitials(firstName, lastName),
             avatar,
+            group,
             lastActivity,
             false,
-            isOnline
+            isOnline,
+            isProfessor,
+            isGroupLeader
         )
     }
 

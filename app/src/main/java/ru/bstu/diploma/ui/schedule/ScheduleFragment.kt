@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -12,6 +13,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import ru.bstu.diploma.R
 import ru.bstu.diploma.databinding.FragmentScheduleBinding
+import ru.bstu.diploma.repositories.PreferencesRepository
 import ru.bstu.diploma.viewmodels.ScheduleViewModel
 
 class ScheduleFragment : Fragment() {
@@ -43,18 +45,23 @@ class ScheduleFragment : Fragment() {
             schedule = it
             schedule = schedule.replace(Regex("<[aA].*?>"),"<span>")
             schedule = schedule.replace(Regex("</[aA]>"),"</span>")
+
+            val theme = PreferencesRepository.getAppTheme()
             val data =
                 "<html>\n" +
                         "<head>\n" +
                         "<style> \n" +
+                        "body { background-color: ${if(theme == AppCompatDelegate.MODE_NIGHT_NO) "white" else "101010"};}" +
                         ".contless {width: 100%;border-collapse: collapse;}\n" +
-                            "\t.daeweek{padding:30px 0 10px;font-size: 20px; border-bottom: solid 1px lightgrey;}\n" +
-                            "\t.itmles {padding: 25px 10px;vertical-align: middle;border-bottom: solid 1px lightgrey;}\n" +
-                                "\t\t.schtype{font-style: italic;color: de3e3e;}\n" +
-                            "\ttd.itmles.schteacher {min-width: 130px;}\n" +
-                            "\t.schtime{background-color: eef2f7;text-align: center;min-width:110px;border-left: solid 1px lightgrey;}\n" +
-                            "\t.schclass{border-right: solid 1px lightgrey;min-width: 80px;}\n" +
-                       "</style>\n" +
+                        "\t.daeweek{color: ${if(theme == AppCompatDelegate.MODE_NIGHT_NO) "black" else "white"};" +
+                        "           padding:30px 0 10px;font-size: 20px; border-bottom: solid 1px lightgrey;}\n" +
+                        "\t.itmles {padding: 25px 10px;vertical-align: middle;border-bottom: solid 1px lightgrey; color: ${if(theme == AppCompatDelegate.MODE_NIGHT_NO) "black" else "white"};}\n" +
+                        "\t\t.schtype{font-style: italic;color:${if(theme == AppCompatDelegate.MODE_NIGHT_NO) " de3e3e" else "2196F3"};}\n" +
+                        "\ttd.itmles.schteacher {min-width: 130px;}\n" +
+                        "\t.schtime{background-color: ${if(theme == AppCompatDelegate.MODE_NIGHT_NO) "eef2f7" else "272727"};" +
+                        "text-align: center; color: ${if(theme == AppCompatDelegate.MODE_NIGHT_NO) "black" else "white"}; min-width:110px;border-left: solid 1px lightgrey;}\n" +
+                        "\t.schclass{border-right: solid 1px lightgrey;min-width: 80px;}\n" +
+                        "</style>\n" +
                         "</head>\n" +
                         "<body>\n" +
                         schedule +
@@ -69,6 +76,37 @@ class ScheduleFragment : Fragment() {
     }
 
     private fun initViews() {
+        schedule = PreferencesRepository.getSchedule()
+        schedule = schedule.replace(Regex("<[aA].*?>"),"<span>")
+        schedule = schedule.replace(Regex("</[aA]>"),"</span>")
+
+        val theme = PreferencesRepository.getAppTheme()
+        val data =
+            "<html>\n" +
+                    "<head>\n" +
+                    "<style> \n" +
+                    "body { background-color: ${if(theme == AppCompatDelegate.MODE_NIGHT_NO) "white" else "101010"};}" +
+                    ".contless {width: 100%;border-collapse: collapse;}\n" +
+                    "\t.daeweek{color: ${if(theme == AppCompatDelegate.MODE_NIGHT_NO) "black" else "white"};" +
+                    "           padding:30px 0 10px;font-size: 20px; border-bottom: solid 1px lightgrey;}\n" +
+                    "\t.itmles {padding: 25px 10px;vertical-align: middle;border-bottom: solid 1px lightgrey; color: ${if(theme == AppCompatDelegate.MODE_NIGHT_NO) "black" else "white"};}\n" +
+                    "\t\t.schtype{font-style: italic;color:${if(theme == AppCompatDelegate.MODE_NIGHT_NO) " de3e3e" else "2196F3"};}\n" +
+                    "\ttd.itmles.schteacher {min-width: 130px;}\n" +
+                    "\t.schtime{background-color: ${if(theme == AppCompatDelegate.MODE_NIGHT_NO) "eef2f7" else "272727"};" +
+                                "text-align: center; color: ${if(theme == AppCompatDelegate.MODE_NIGHT_NO) "black" else "white"}; min-width:110px;border-left: solid 1px lightgrey;}\n" +
+                    "\t.schclass{border-right: solid 1px lightgrey;min-width: 80px;}\n" +
+                    "</style>\n" +
+                    "</head>\n" +
+                    "<body>\n" +
+                    schedule +
+                    "</body>\n" +
+                    "</html>"
+        with(binding.webView) {
+            setInitialScale(180)
+            settings.domStorageEnabled = true
+            loadData(data, "text/html", "UTF-8")
+        }
+
         binding.btnChooseTimetable.setOnClickListener {
             val bottomSheetDialog = BottomSheetDialog(requireContext()).apply {
                 setContentView(R.layout.dialog_bottom_sheet)

@@ -6,7 +6,9 @@ data class Profile(
     val nickName: String = "$firstName $lastName",
     val avatar: String = "",
     val about: String,
-    var group: String
+    var group: String,
+    val isGroupLeader: Boolean? = false,
+    val isProfessor: Boolean? = false
 )
 {
     fun toMap(): Map<String, Any> = mapOf(
